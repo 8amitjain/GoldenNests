@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+        <!--=============== basic  ===============-->
+        <meta charset="UTF-8">
+        <title>GoldenNest</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="robots" content="index, follow"/>
+        <meta name="keywords" content=""/>
+        <meta name="description" content=""/>
+        <!--=============== css  ===============-->
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/reset.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/plugins.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/style.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/color.css' %}">
+        <!--=============== favicons ===============-->
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    </head>
+<body>
+
+{% block content %}{% endblock content %}
+<script src="{% static 'home/js/jquery.min.js' %}"></script>
+<script src="{% static 'home/js/plugins.js' %}"></script>
+<script src="{% static 'home/js/scripts.js' %}"></script>
+</body>
+
+
+</html>
