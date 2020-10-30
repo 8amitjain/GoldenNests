@@ -5,18 +5,42 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.views.generic.list import ListView
 
-from .models import FoodOrder, FoodItem
+from .models import FoodOrder, FoodItem, PlateItems
 
 
-class Home(TemplateView):
-    template_name = "home/index.html"
+def food_item(request):
+    menu = FoodItem.objects.all()
+    order = PlateItems.objects.filter(user=request.user, ordered=False)
+    context = {
+        'menu': menu,
+        'order_items': order,
+    }
+    return render(request, 'home/index.html', context)
+
+
+# class FoodItemView(ListView):
+#     model = FoodItem
+#     paginate_by = 5
+#     # template_name = "home/index.html"
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         try:
+#             order = PlateItems.objects.get(user=self.request.user, ordered=False)
+#             context.update({
+#                 'order_items': order,
+#             })
+#         except:
+#             pass
+#         return context
 
 
 class CartView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = FoodOrder.objects.get(user=self.request.user, ordered=False)
+            order = PlateItems.objects.get(user=self.request.user, ordered=False)
             context = {
                 'object': order,
             }
@@ -29,7 +53,7 @@ class CartView(LoginRequiredMixin, View):
 @login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(FoodItem, slug=slug)
-    order_item, created = FoodItem.objects.get_or_create(
+    order_item, created = PlateItems.objects.get_or_create(
         item=item,
         user=request.user,
         ordered=False,
@@ -41,7 +65,7 @@ def add_to_cart(request, slug):
             order_item.quantity += 1
             order_item.save()
             messages.info(request, "Item qty was updated.")
-            return redirect("store:store-cart")
+            return redirect("/")
         else:
             order.items.add(order_item)
             order.save()
@@ -56,80 +80,79 @@ def add_to_cart(request, slug):
         order.items.add(order_item)
         order.save()
         messages.info(request, "Item was added to your cart.")
-    return redirect('store:store-product', slug=item.id)
+    return redirect('/', slug=item.id)
 
-#  return redirect("store:store-cart")
-
-
-@login_required
-def remove_from_cart(request, slug):
-    item = get_object_or_404(FoodItem, slug=slug)
-    order_qs = Order.objects.filter(
-        user=request.user,
-        ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item = FoodItem.objects.filter(
-                item=item,
-                user=request.user,
-                ordered=False
-            )[0]
-            order_item.quantity = 1
-            order_item.save()
-            order.items.remove(order_item)
-            try:
-                mini_order = MiniOrder.objects.filter(order_item=order_item, ordered=False)
-                mini_order.delete()
-            except ObjectDoesNotExist:
-                pass
-            messages.info(request, "Item was removed from your cart.")
-            return redirect("store:store-cart")
-        else:
-            # add a message saying the user dosent have an order
-            messages.info(request, "Item was not in your cart.")
-            return redirect("store:store-cart", slug=slug)
-    else:
-
-        # add a message saying the user dosent have an order
-        messages.info(request, "You don't have an active order.")
-        return redirect("store:store-cart", slug=slug)
-
-
+#
+# @login_required
+# def remove_from_cart(request, slug):
+#     item = get_object_or_404(FoodItem, slug=slug)
+#     order_qs = Order.objects.filter(
+#         user=request.user,
+#         ordered=False)
+#     if order_qs.exists():
+#         order = order_qs[0]
+#         # check if the order item is in the order
+#         if order.items.filter(item__slug=item.slug).exists():
+#             order_item = FoodItem.objects.filter(
+#                 item=item,
+#                 user=request.user,
+#                 ordered=False
+#             )[0]
+#             order_item.quantity = 1
+#             order_item.save()
+#             order.items.remove(order_item)
+#             try:
+#                 mini_order = MiniOrder.objects.filter(order_item=order_item, ordered=False)
+#                 mini_order.delete()
+#             except ObjectDoesNotExist:
+#                 pass
+#             messages.info(request, "Item was removed from your cart.")
+#             return redirect("store:store-cart")
+#         else:
+#             # add a message saying the user dosent have an order
+#             messages.info(request, "Item was not in your cart.")
+#             return redirect("store:store-cart", slug=slug)
+#     else:
+#
+#         # add a message saying the user dosent have an order
+#         messages.info(request, "You don't have an active order.")
+#         return redirect("store:store-cart", slug=slug)
+#
+#
 @login_required
 def remove_single_item_from_cart(request, slug):
     item = get_object_or_404(FoodItem, slug=slug)
-    order_qs = Order.objects.filter(
+    order_qs = FoodOrder.objects.filter(
         user=request.user,
         ordered=False)
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
+        print('as')
+
         if order.items.filter(item__slug=item.slug).exists():
-            order_item = FoodItem.objects.filter(
+            print('asdfasdf')
+            order_item = PlateItems.objects.filter(
                 item=item,
                 user=request.user,
                 ordered=False
             )[0]
-            if order_item.quantity > 1:
-                order_item.quantity -= 1
-                order_item.save()
-            else:
-                order.items.remove(order_item)
-                try:
-                    mini_order = MiniOrder.objects.get(order_item=order_item, ordered=False)
-                    mini_order.delete()
-                except ObjectDoesNotExist:
-                    pass
+            # if order_item.quantity > 1:
+            #     order_item.quantity -= 1
+            #     order_item.save()
+            # else:
+            order.items.remove(order_item)
+            PlateItems.objects.get()
             messages.info(request, "This item quantity was updated.")
-            return redirect("store:store-cart")
+            return redirect("/")
         else:
+            print('aa')
             # add a message saying the user dosent have an order
             messages.info(request, "Item was not in your cart.")
-            return redirect("store:store-cart", slug=slug)
+            return redirect("/", slug=slug)
     else:
+        print('aaaa')
         # add a message saying the user dosent have an order
         messages.info(request, "You don't have an active order.")
-        return redirect("store:store-cart", slug=slug)
+        return redirect("/", slug=slug)
 

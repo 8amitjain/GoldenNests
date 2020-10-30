@@ -26,7 +26,7 @@ class FoodItem(models.Model):
     slug = models.SlugField(unique=True)
 
     short_description = models.TextField(help_text='To describe product in short', null=True)
-    image_main = models.ImageField(null=True)
+    image = models.ImageField(null=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -43,12 +43,7 @@ class FoodItem(models.Model):
         })
 
     def get_remove_from_cart_url(self):
-        return reverse("remove-single-item-from-cart", kwargs={
-            'slug': self.slug
-        })
-
-    def get_remove_single_item_from_cart_url(self):
-        return reverse("get_remove_single_item_from_cart_url", kwargs={
+        return reverse("remove-from-cart", kwargs={
             'slug': self.slug
         })
 
