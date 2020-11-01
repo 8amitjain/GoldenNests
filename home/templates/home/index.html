@@ -30,7 +30,7 @@
                             <a href="" class="logo-holder ajax"><img src="{% static 'home/images/logo.PNG' %}" alt=""></a>
                             <div class="show-reserv_button show-rb"><span>Reservation</span> <i class="fal fa-bookmark"></i></div>
                             <div class="show-share-btn htact"><i class="fal fa-phone"></i> <span class="header-tooltip">+91 8208208205</span></div>
-                            <div class="show-cart sc_btn htact"><img src="{% static 'home/images/menu/plate.png' %}" style="width: 30px;"><span class="show-cart_count">3</span><span class="header-tooltip">Your Plate</span></div>
+                            <div class="show-cart sc_btn htact"><img src="{% static 'home/images/menu/plate.png' %}" style="width: 30px;"><span class="show-cart_count">{{order_items_count}}</span><span class="header-tooltip">Your Plate</span></div>
                             <!-- nav-button-wrap-->
                             <div class="nav-button-wrap">
                                 <div class="nav-button">
@@ -85,17 +85,18 @@
                                     </ul>
                                 </nav>
                             </div>
-                            <!-- navigation  end -->                        
+                            <!-- navigation  end -->
                             <!-- header-cart_wrap  -->
                             <div class="header-cart_wrap novis_cart">
-                                <div class="header-cart_title">Your Plate <span>8 items</span></div>
+                                <div class="header-cart_title">Your Plate <span>{{order_items_count}} items</span></div>
                                 <div class="header-cart_wrap_container fl-wrap">
                                     <div class="box-widget-content">
                                         <div class="widget-posts fl-wrap">
                                             <ol>
                                                 {% for food_item in order_items %}
                                                 <li class="clearfix">
-                                                    <a href="{{ food_item.item.image.url}}"  class="widget-posts-img"><img src="{{ food_item.item.image.url}}" class="respimg" alt=""></a>
+                                            <a href={{food_item.item.image.url}} class="widget-posts-img" ><img src={{food_item.item.image.url}} class="respimg" alt=""></a>
+<!--                                                    <a href="{{ food_item.item.image.url}}"  class="widget-posts-img"><img src="{{ food_item.item.image.url}}" class="respimg" alt=""></a>-->
                                                     <div class="widget-posts-descr">
                                                         <a href="#" title="">{{ food_item.item.title}}</a>
                                                         <div class="widget-posts-descr_calc clearfix">{{ food_item.quantity}}<span>x</span>Rs{{ food_item.item.price}}</div>
@@ -124,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="header-cart_wrap_total fl-wrap">
-                                    <div class="header-cart_wrap_total_item">Subtotal : <span>$147</span></div>
+                                    <div class="header-cart_wrap_total_item">Subtotal : <span>₹{{order.get_total}}</span></div>
                                 </div>
                                 <div class="header-cart_wrap_footer fl-wrap">
                                     <a href="cart.html"> View Cart</a>
@@ -155,7 +156,8 @@
                                     <!-- swiper-slide-->
                                     <div class="swiper-slide">
                                         <div class="fs-slider-item fl-wrap">
-                                            <div class="bg"  data-bg="{% static 'home/images/bg/19.jpg' %}" data-swiper-parallax="40%"></div>
+<!--                                            <div class="bg"  data-bg="{% static 'home/images/bg/19.jpg' %}" data-swiper-parallax="40%"></div>-->
+                                            <div class="bg"  data-bg="{% static 'home/images/home2.jpeg' %}" data-swiper-parallax="40%"></div>
                                             <div class="overlay"></div>
                                             <div class="grid-carousel-title">
                                                 <h3>Welcome To Our Restaurant </h3>
@@ -185,7 +187,7 @@
                                     <!-- swiper-slide-->
                                     <div class="swiper-slide"  >
                                         <div class="fs-slider-item fl-wrap">
-                                            <div class="bg"  data-bg="{% static 'home/images/bg/5.jpg' %}" data-swiper-parallax="40%"></div>
+                                            <div class="bg"  data-bg="{% static 'home/images/table.jpeg' %}" data-swiper-parallax="40%"></div>
                                             <div class="overlay"></div>
                                             <div class="grid-carousel-title">
                                                 <h3>Book Table</h3>
@@ -200,7 +202,7 @@
                                     <!-- swiper-slide-->
                                     <div class="swiper-slide"  >
                                         <div class="fs-slider-item fl-wrap">
-                                            <div class="bg"  data-bg="{% static 'home/images/bg/17.jpg' %}" data-swiper-parallax="40%"></div>
+                                            <div class="bg"  data-bg="{% static 'home/images/room.jpg' %}" data-swiper-parallax="40%"></div>
                                             <div class="overlay"></div>
                                             <div class="grid-carousel-title">
                                                 <h3>Explore Room's</h3>
@@ -435,12 +437,12 @@
                                     <div class="col-md-3">
                                         <div class="hero-menu_header fl-wrap">
                                             <ul class="tabs-menu     no-list-style change_bg">
-                                                <li class="current"><a href="#tab-1" data-bgtab="images/bg/4.jpg' %}"><span>01.</span>Starter</a></li>
-                                                <li><a href="#tab-2" data-bgtab="images/bg/6.jpg' %}"><span>02.</span>Main Course</a></li>
-                                                                                                <li><a href="#tab-3" data-bgtab="images/bg/4.jpg' %}"><span>03.</span>Rice & Biryani</a></li>
-                                                <li><a href="#tab-4" data-bgtab="images/bg/5.jpg' %}"><span>04.</span>Breads</a></li>
-                                                <li><a href="#tab-4" data-bgtab="images/bg/5.jpg' %}"><span>05.</span>Sea Food</a></li>
-                                                <li><a href="#tab-5" data-bgtab="images/bg/9.jpg' %}"><span>06.</span>Drinks</a></li>
+                                                <li class="current"><a href="#tab-1" data-bgtab="images/bg/4.jpg' %}">Starter</a></li>
+                                                <li><a href="#tab-2" data-bgtab="images/bg/6.jpg' %}">Main Course</a></li>
+                                                                                                <li><a href="#tab-3" data-bgtab="images/bg/4.jpg' %}">Rice & Biryani</a></li>
+                                                <li><a href="#tab-4" data-bgtab="images/bg/5.jpg' %}">Breads</a></li>
+                                                <li><a href="#tab-4" data-bgtab="images/bg/5.jpg' %}">Sea Food</a></li>
+                                                <li><a href="#tab-5" data-bgtab="images/bg/9.jpg' %}">Drinks</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -463,7 +465,7 @@
                                                                <div class="add_cart"> <a href="{{ food_item.get_add_to_cart_url }}"><span style="margin-top: -2em;">Add To Plate</span></a></div>
                                                             </div>
                                                             <div class="hero-menu-item-details">
-                                                                <p>{{food_item.short_description}}</p>
+                                                                <<p>{{food_item.short_description}}</p>>
                                                             </div>
                                                         </div>
                                                         {% endfor %}
@@ -506,52 +508,20 @@
                                                     <div class="tab">
                                                         <div id="tab-2" class="tab-content">
                                                             <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>01.</span>Fried Potatoes</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">$29</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Granny help you treat yourself with a different meal everyday</p>
-                                                                </div>
+                                                                   {% for food_item in menu %}
+                                                        <div class="hero-menu-item">
+                                                            <a href={{food_item.image.url}} class="hero-menu-item-img image-popup" style="margin-left: -6.3em;margin-top:-0.8em"><img src={{food_item.image.url}}  alt=""></a>
+                                                            <div class="hero-menu-item-title fl-wrap">
+                                                                <h6>{{food_item.title}}</h6>
+                                                                <div class="hmi-dec"></div>
+                                                                <span class="hero-menu-item-price">Rs {{food_item.price}}</span>
+                                                               <div class="add_cart"> <a href="{{ food_item.get_add_to_cart_url }}"><span style="margin-top: -2em;">Add To Plate</span></a></div>
                                                             </div>
-                                                            <!-- header-menu-item end-->
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>02.</span>Doner Burger</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">$19</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                                </div>
+                                                            <div class="hero-menu-item-details">
+                                                                <p>{{food_item.short_description}}</p>
                                                             </div>
-                                                            <!-- header-menu-item end-->                                                         
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>03.</span>Steak Filet</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 200</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                                </div>
-                                                            </div>
-                                                            <!-- header-menu-item end-->                                                         
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>04.</span>Cayenne Shrimp</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 290</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                                </div>
-                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
                                                             <!-- header-menu-item end-->                                                          
                                                         </div>
                                                     </div>
@@ -560,52 +530,20 @@
                                                     <div class="tab">
                                                         <div id="tab-3" class="tab-content">
                                                             <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>01.</span>Soft shell crab</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Granny help you treat yourself with a different meal everyday</p>
-                                                                </div>
+                                                                     {% for food_item in menu %}
+                                                        <div class="hero-menu-item">
+                                                            <a href={{food_item.image.url}} class="hero-menu-item-img image-popup" style="margin-left: -6.3em;margin-top:-0.8em"><img src={{food_item.image.url}}  alt=""></a>
+                                                            <div class="hero-menu-item-title fl-wrap">
+                                                                <h6>{{food_item.title}}</h6>
+                                                                <div class="hmi-dec"></div>
+                                                                <span class="hero-menu-item-price">Rs {{food_item.price}}</span>
+                                                               <div class="add_cart"> <a href="{{ food_item.get_add_to_cart_url }}"><span style="margin-top: -2em;">Add To Plate</span></a></div>
                                                             </div>
-                                                            <!-- header-menu-item end-->
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>02.</span>Tarte Tatin</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                                </div>
+                                                            <div class="hero-menu-item-details">
+                                                                <p>{{food_item.short_description}}</p>
                                                             </div>
-                                                            <!-- header-menu-item end-->                                                         
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>03.</span>Creme Brulee</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 304</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                                </div>
-                                                            </div>
-                                                            <!-- header-menu-item end-->                                                         
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>04.</span>Lemon Meringue</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 230</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                                </div>
-                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
                                                             <!-- header-menu-item end-->                                                          
                                                         </div>
                                                     </div>
@@ -614,28 +552,20 @@
                                                     <div class="tab">
                                                         <div id="tab-4" class="tab-content">
                                                             <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>01.</span> Lobster with melted mozarella</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Granny help you treat yourself with a different meal everyday</p>
-                                                                </div>
+                                                                     {% for food_item in menu %}
+                                                        <div class="hero-menu-item">
+                                                            <a href={{food_item.image.url}} class="hero-menu-item-img image-popup" style="margin-left: -6.3em;margin-top:-0.8em"><img src={{food_item.image.url}}  alt=""></a>
+                                                            <div class="hero-menu-item-title fl-wrap">
+                                                                <h6>{{food_item.title}}</h6>
+                                                                <div class="hmi-dec"></div>
+                                                                <span class="hero-menu-item-price">Rs {{food_item.price}}</span>
+                                                               <div class="add_cart"> <a href="{{ food_item.get_add_to_cart_url }}"><span style="margin-top: -2em;">Add To Plate</span></a></div>
                                                             </div>
-                                                            <!-- header-menu-item end-->
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>02.</span> Butterfly fried shrimps platter</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                                </div>
+                                                            <div class="hero-menu-item-details">
+                                                                <p>{{food_item.short_description}}</p>
                                                             </div>
+                                                        </div>
+                                                        {% endfor %}
                                                             <!-- header-menu-item end-->                                                         
                                                         </div>
                                                     </div>
@@ -644,52 +574,20 @@
                                                     <div class="tab">
                                                         <div id="tab-5" class="tab-content">
                                                             <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>01.</span>Kiwi Coctail</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Granny help you treat yourself with a different meal everyday</p>
-                                                                </div>
+                                                                    {% for food_item in menu %}
+                                                        <div class="hero-menu-item">
+                                                            <a href={{food_item.image.url}} class="hero-menu-item-img image-popup" style="margin-left: -6.3em;margin-top:-0.8em"><img src={{food_item.image.url}}  alt=""></a>
+                                                            <div class="hero-menu-item-title fl-wrap">
+                                                                <h6>{{food_item.title}}</h6>
+                                                                <div class="hmi-dec"></div>
+                                                                <span class="hero-menu-item-price">Rs {{food_item.price}}</span>
+                                                               <div class="add_cart"> <a href="{{ food_item.get_add_to_cart_url }}"><span style="margin-top: -2em;">Add To Plate</span></a></div>
                                                             </div>
-                                                            <!-- header-menu-item end-->
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>02.</span>Summer Beer</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                                </div>
+                                                            <div class="hero-menu-item-details">
+                                                                <p>{{food_item.short_description}}</p>
                                                             </div>
-                                                            <!-- header-menu-item end-->                                                         
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>03.</span>Red Mojitos</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                                </div>
-                                                            </div>
-                                                            <!-- header-menu-item end-->                                                         
-                                                            <!-- header-menu-item-->
-                                                            <div class="hero-menu-item">
-                                                                <div class="hero-menu-item-title fl-wrap">
-                                                                    <h6><span>04.</span>Cabernet Sauvignon</h6>
-                                                                    <div class="hmi-dec"></div>
-                                                                    <span class="hero-menu-item-price">Rs 300</span>
-                                                                </div>
-                                                                <div class="hero-menu-item-details">
-                                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                                </div>
-                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
                                                             <!-- header-menu-item end-->                                                         
                                                         </div>
                                                     </div>
@@ -701,7 +599,7 @@
                                     </div>
                                     <!--  hero-menu_content end  -->
                                     <div class="clearfix"></div>
-                                    <a href="menu.html" class="hero_btn" style="margin-left:60em;">View Full Menu <i class="fal fa-long-arrow-right"></i></a>
+                                    <a href="{% url 'menu' %}" class="hero_btn" style="margin-left:60em;">View Full Menu <i class="fal fa-long-arrow-right"></i></a>
                                     <!--<a href="#" class="pdf-link">Dowload PDF</a>-->
                                 </div>
                             </div>
