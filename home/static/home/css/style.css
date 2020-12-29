@@ -2302,21 +2302,23 @@ section.parallax-section.hero-section .section-title h2 {
 }
 .add_cart {
 	position:absolute;
-	bottom:-60px;
+	bottom:-40px;
 	right:0;
 	font-size:12px;
 	font-weight:600;
 	font-family: 'Playfair Display', cursive;
 	background:#fff;
-	border:1px solid #000;
+	border:1px solid #eee;
 	padding:5px 10px;
 	cursor:pointer;
+	opacity:0;
+	visibility:hidden;
 	transition: all .2s ease-in-out;
 }
 .add_cart:hover {
 	color:#fff;
 }
-.single-menu .hero-menu-item:hover  , .add_cart .scroll-nav li a:hover span{
+.single-menu .hero-menu-item:hover .add_cart , .scroll-nav li a:hover span{
 	opacity:1;
 	visibility:visible;
 }
@@ -4758,7 +4760,6 @@ section {
 }
 .add_cart {
 	bottom:0;
-        visibility:visible;
 }
 .menu-wrapper.single-menu .hero-menu-item:nth-child(even)  , .menu-wrapper.single-menu .hero-menu-item:nth-child(even) {
 	padding-right:0;
