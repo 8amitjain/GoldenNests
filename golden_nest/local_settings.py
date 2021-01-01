@@ -5,7 +5,7 @@ Email_Pass = 'xplcwpoproktynae'
 
 
 #  To do while using this project
-# set a number of day for return date in order views default 10 days
+# Change website name in user utils and user models
 
 # Deployment settings
 # Debug Should be False in Deployment

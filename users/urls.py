@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic import TemplateView
 
 from . import views
+from . import api
 
 urlpatterns = [
     # Login and Register
@@ -38,6 +39,23 @@ urlpatterns = [
     path('password-reset-complete/',
          auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
+
+    # Rest Api
+    # Login and Register
+    path('api/register/', api.RegisterAPI.as_view(), name='api-customer-register'),
+    path('api/login/', api.LoginAPI.as_view(), name='api-customer-login'),
+
+    # Update
+    path('api/user/update/<int:pk>/', api.UpdateUpdateAPI.as_view(), name='api-customer-update'),
+
+    # Username Verification
+    path('api/resend-confirmation/<str:email>/', api.ResendEmailConfirmationAPI.as_view(),
+         name='api-resend-username-confirmation'),
+
+    # Password
+    path('api/password/change/', api.ChangePasswordAPI.as_view(), name='api-customer-password-change'),
+    path('api/password/reset/', include('django_rest_passwordreset.urls', namespace='api-password-reset')),
+
 ]
 
 if settings.DEBUG:

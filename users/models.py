@@ -5,6 +5,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
+from django.dispatch import receiver
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.conf import settings
 
 from .managers import UserManager
 
@@ -18,6 +21,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(_('active'), default=False)
     is_verified = models.BooleanField(_('verified'), default=False)
     is_staff = models.BooleanField(_('staff'), default=False)
+
+    token = models.TextField(_('token'), blank=True, null=True)  # Used in DRF
 
     objects = UserManager()
 
@@ -44,4 +49,21 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    # Used in DRF
+    @receiver(reset_password_token_created)
+    def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+        email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'),
+                                                       reset_password_token.key)
+
+        send_mail(
+            # title:
+            "Password Reset for {title}".format(title="Some website title"),
+            # message:
+            email_plaintext_message,
+            # from:
+            settings.AUTH_USER_MODEL,
+            # to:
+            [reset_password_token.user.email]
+        )
 

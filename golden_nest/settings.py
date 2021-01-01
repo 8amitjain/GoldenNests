@@ -16,13 +16,38 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # # Install apps
-    # 'ckeditor',  # Rich Text Editor
+    # Install apps
+    'crispy_forms',  # crispy forms
+    'rest_framework',  # DRF
+    'rest_framework.authtoken',  # DRF
+    'django_rest_passwordreset',  # DRF Password Reset
+    'knox',  # DRF Token verification
 
     # Django Apps
     'home',
     'users',
 ]
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# DRF
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.s
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',  # Knox DRF
+        'rest_framework.authentication.SessionAuthentication',  # DRF Authentication
+        'rest_framework.authentication.TokenAuthentication',  # DRF Authentication
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'  # Basic DRF
+    # ]
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

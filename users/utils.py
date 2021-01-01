@@ -28,11 +28,11 @@ def send_activation_mail(request, message, user):
         'token': account_activation_token.make_token(user),
     }
 
-    link = reverse('user:activate', kwargs={'uidb64': email_body['uid'], 'token': email_body['token']})
+    link = reverse('activate', kwargs={'uidb64': email_body['uid'], 'token': email_body['token']})
 
-    activate_url = 'https://' + current_site.domain + link
+    activate_url = 'http://' + current_site.domain + link
 
-    email_subject = 'Welcome to Vowsnviews'
+    email_subject = 'Welcome to '
     email_body_message = 'Please click the link and login to active your account'
     email_body = 'Hi ' + user.name + ', ' + email_body_message + '. \n\n <a href=' + \
                  activate_url + '>activate</a>'

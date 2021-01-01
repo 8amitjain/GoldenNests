@@ -36,8 +36,6 @@ class SignUpView(SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         user = form.instance
         user.save()
-
-        # Check if email is phone number or email (if email send mail)
         message = 'Account successfully created Please click the link in your mail and login to active your account.'
         send_activation_mail(self.request, message, user)
         return super().form_valid(form)
@@ -136,7 +134,7 @@ class ResendMailConfirmationView(SuccessMessageMixin, FormView):
 # User Update View
 class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = User
-    fields = ['email', 'first_name', 'last_name', 'phone_number']
+    fields = ['email', 'name', 'phone_number']
     # template_name = 'users/user_form_.html'
 
     # template name user_form
