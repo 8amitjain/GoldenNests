@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',  # DRF
     'django_rest_passwordreset',  # DRF Password Reset
     'knox',  # DRF Token verification
+    'coverage',  # DRF Token verification
 
     # Django Apps
     'home',

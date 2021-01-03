@@ -104,13 +104,10 @@ class EmailVerificationView(View):
 # Resend Mail or SMS for verification
 class ResendMailConfirmationView(SuccessMessageMixin, FormView):
     form_class = EmailForm
-    template_name = 'users/login.html'
+    template_name = 'users/resend_mail.html'
     success_url = '/'
 
     def form_valid(self, form):
-        # Validate email and send mail or SMS
-        # TODO Send SMS
-
         # Get the user
         credentials = form.cleaned_data
         try:
