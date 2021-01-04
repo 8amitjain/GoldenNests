@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from django.core import exceptions
 from django.core.validators import validate_email
@@ -18,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 # # User Update Serializer
 class UserUpdateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = ('name', 'phone_number')
@@ -55,12 +57,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User(**validated_data)
         password = validated_data['password']
         email = validated_data['email']
+        phone_number = validated_data['phone_number']
         errors = dict()
 
         try:
             validate_email(email)
         except exceptions.ValidationError as e:
             errors['email'] = f'{email} is not an valid email'
+
+        try:
+            if len(str(phone_number)) != 10:
+                raise Exception
+        except Exception as e:
+            errors['phone_number'] = f'{phone_number} is not an valid phone_number'
 
         try:
             validators.validate_password(password=password, user=User)

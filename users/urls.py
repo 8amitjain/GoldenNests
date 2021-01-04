@@ -42,18 +42,18 @@ urlpatterns = [
 
     # Rest Api
     # Login and Register
-    path('api/register/', api.RegisterAPI.as_view(), name='api-customer-register'),
-    path('api/login/', api.LoginAPI.as_view(), name='api-customer-login'),
+    path('api/register/', api.RegisterAPI.as_view(), name='api-register'),
+    path('api/login/', api.LoginAPI.as_view(), name='api-login'),
 
     # Update
-    path('api/user/update/<int:pk>/', api.UpdateUpdateAPI.as_view(), name='api-customer-update'),
+    path('api/user/update/', api.UpdateUpdateAPI.as_view(), name='api-update'),
 
     # Username Verification
     path('api/resend-confirmation/<str:email>/', api.ResendEmailConfirmationAPI.as_view(),
          name='api-resend-username-confirmation'),
 
     # Password
-    path('api/password/change/', api.ChangePasswordAPI.as_view(), name='api-customer-password-change'),
+    path('api/password/change/', api.ChangePasswordAPI.as_view(), name='api-password-change'),
     path('api/password/reset/', include('django_rest_passwordreset.urls', namespace='api-password-reset')),
 
 ]
