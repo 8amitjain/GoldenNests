@@ -2,28 +2,24 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import (
-    ObjectDoesNotExist, ValidationError
-)
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import validate_email
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.utils.encoding import force_text
-from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic.edit import (
-    FormView, CreateView, UpdateView, DeleteView
+    FormView, CreateView, UpdateView
 )
-from django.views.generic.list import ListView
 from django.utils.http import urlsafe_base64_decode
+from datetime import datetime, timedelta
 
 from .forms import (
     RegistrationForm, LoginForm, EmailForm
 )
-from users.models import User
-
 from .utils import (
     account_activation_token, send_activation_mail
 )
+from users.models import User
 
 
 # Customer registration view
@@ -100,8 +96,7 @@ class EmailVerificationView(View):
         return redirect('login')
 
 
-# TODO set a limit on verification sending
-# Resend Mail or SMS for verification
+# Resend Mail
 class ResendMailConfirmationView(SuccessMessageMixin, FormView):
     form_class = EmailForm
     template_name = 'users/resend_mail.html'
@@ -113,15 +108,24 @@ class ResendMailConfirmationView(SuccessMessageMixin, FormView):
         try:
             user = User.objects.get(email=credentials['email'])
         except ObjectDoesNotExist:
-            messages.error(self.request, 'email is not correct')
+            messages.warning(self.request, 'Email is not correct')
             return redirect('resend-email-confirmation')
 
         # Check if user is active and send mail
+        now = datetime.now()
+        before_10_min = now + timedelta(minutes=-10)
         if not user.is_active:
+            if user.date_confirmation_mail_sent > before_10_min:
+                message = \
+                    'Verification mail was just sent few minutes ago please check you mail or wait to resend again'
+                messages.warning(self.request, message)
+                return redirect('resend-email-confirmation')
             message = 'Verification Mail Resend!, Please click the link in your mail and login to active \
                        your account.'
+            user.date_confirmation_mail_sent = now
+            user.save()
             send_activation_mail(self.request, message, user)
-            messages.info(self.request, 'Verification Mail Resend Successfully')
+            messages.success(self.request, 'Verification mail sent successfully')
             return redirect('login')
         else:
             messages.info(self.request, 'User is already active. Please Login!')
@@ -131,8 +135,8 @@ class ResendMailConfirmationView(SuccessMessageMixin, FormView):
 # User Update View
 class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = User
-    fields = ['email', 'name', 'phone_number']
-    # template_name = 'users/user_form_.html'
+    fields = ['name', 'phone_number']
+    template_name = 'users/update.html'
 
     # template name user_form
     def form_valid(self, form):
@@ -142,7 +146,10 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if len(str(phone)) == 10:
             user = form.instance
             user.save()
-            return redirect('profile')
+            messages.success(self.request, 'Details Updated!')
+            return redirect('update', pk=self.kwargs.get('pk'))
+        messages.warning(self.request, 'Invalid Phone Number')
+        return redirect('update', pk=self.kwargs.get('pk'))
 
     def test_func(self):
         model = self.get_object()

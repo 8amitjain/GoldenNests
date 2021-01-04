@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
 from django_rest_passwordreset.signals import reset_password_token_created
 from django.conf import settings
+from django.utils import timezone
 
 from .managers import UserManager
 
@@ -17,6 +18,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(_('Name'), max_length=70)
     phone_number = models.BigIntegerField(help_text='Provide an mobile number without +91')
 
+    date_confirmation_mail_sent = models.DateTimeField(_('date confirmation mail sent'), default=timezone.now)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=False)
     is_verified = models.BooleanField(_('verified'), default=False)

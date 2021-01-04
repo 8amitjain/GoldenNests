@@ -110,7 +110,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Calcutta'  # Indian time
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+# USE_TZ = True
 
 # User Model
 AUTH_USER_MODEL = 'users.User'  # Custom User Model
