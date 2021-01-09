@@ -38,47 +38,89 @@
             </center>
 
         <!--  section  -->
-        <section class="hidden-section big-padding con-sec" data-scrollax-parent="true" id="sec3">
-            <div class="container">
-                <div class="row">
-                    <div >
-                        <div class="section-title text-align_left">
-                            <h2>Login</h2>
-                            <div class="dots-separator fl-wrap"><span></span></div>
-                        </div>
-                        <div class="text-block ">
-                        </div>
-                        <div class="contactform-wrap">
-                            <div id="message"></div>
-                            <form  class="custom-form" name="contactform" method="post">
-                                {% csrf_token %}
-                                <fieldset>
-                                <div id="message2"></div>
-                                    <div class="row">
-                                       <div class="col-sm-6">
-                                            <input type="text" name="email" id="id_email" placeholder="Email Address *" value="" required/>
-                                        </div>
-                                         <div class="col-sm-6">
-                                            <input type="password" name="password" id="id_password" placeholder="Password *" value="" required/>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <button class="btn float-btn flat-btn color-bg" id="submit_cnt">LOGIN <i class="fal fa-long-arrow-right"></i></button>
 
-                                    <div class="u-s-m-b-30">
-                                        <a class="gl-link" href="{% url 'password_reset' %}" style="color:#fff;" >Forgot Password?</a>
+        <section class="hidden-section big-padding con-sec" data-scrollax-parent="true" id="sec3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="section-title text-align_left">
+                                        <h2>Login</h2>
+                                        <div class="dots-separator fl-wrap"><span></span></div>
                                     </div>
-                                </fieldset>
-                            </form>
+                                    <div class="text-block ">
+                                        <p>By login to your account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.
+
+                                        </p>
+                                    </div>
+                                    <div class="contactform-wrap">
+                                        <div id="message"></div>
+                                         <form  class="custom-form" name="contactform" method="post">
+                                           {% csrf_token %}
+                                            <fieldset>
+                                            <div id="message2"></div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <input type="text" name="email" id="id_email" placeholder="Email Address *" value="" required style="width: 80%;"/>
+                                                    </div>
+                                                     <div class="col-sm-12">
+                                                        <input type="password" name="password" id="id_password" placeholder="Password *" value="" required style="width: 80%;"/>
+                                                    </div>
+
+                                                     <div class="col-sm-12">
+                                        <a href="{% url 'password_reset' %}" style="color:#fff;margin-left: -45em;" >Forgot Password?</a>
+
+                                                    </div>
+
+
+
+                                                <div class="col-sm-12">
+                                                <button type="submit" class="btn float-btn flat-btn color-bg" id="submit_cnt" style="margin-left: 1em;">Login <i class="fal fa-long-arrow-right"></i></button>
+                                                </div></div></fieldset>
+                                        </form>
+                                    </div>
+                                    <div class="section-dec sec-dec_top"></div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="column-text_inside fl-wrap dark-bg" >
+                                        <div class="column-text">
+                                            <div class="section-title">
+                                                <h4>Call For Reservations</h4>
+                                                <h2>Opening Hours</h2>
+                                                <div class="dots-separator fl-wrap"><span></span></div>
+                                            </div>
+                                            <div class="work-time fl-wrap">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h3>Sunday to Tuesday</h3>
+                                                        <div class="hours">
+                                                            09:00<br>
+                                                            22:00
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h3>Friday to Saturday</h3>
+                                                        <div class="hours">
+                                                            11:00<br>
+                                                            19:00
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="bold-separator"><span></span></div>
+                                            <div class="big-number"><a href="#">+7(111)123456789</a></div>
+                                        </div>
+                                        <div class="illustration_bg">
+                                            <div class="bg"  data-bg="images/bg/dec/6.png"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="section-dec sec-dec_top"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="section-bg">
-                <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
-            </div>
-        </section>
+                        <div class="section-bg">
+                            <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+                        </div>
+                    </section>
         <!--  section end  -->
         <div class="brush-dec2 brush-dec_bottom"></div>
 </div>

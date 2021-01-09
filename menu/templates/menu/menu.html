@@ -1,0 +1,78 @@
+<!--TODO show per option and show available size -->
+<!--TODO fix filter -->
+{% extends 'home/base.html' %}
+{% block content %}
+    <div class="content">
+         <!--  section  -->
+        <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+            <div class="bg par-elem "  data-bg="images/bg/12.jpg" data-scrollax="properties: { translateY: '30%' }"></div>
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="section-title">
+                    <h4>Enjoy your time in our restaurant with pleasure.</h4>
+                    <h2>Discover Our Menu</h2>
+                    <div class="dots-separator fl-wrap"><span></span></div>
+                </div>
+            </div>
+            <div class="hero-section-scroll">
+                <div class="mousey">
+                    <div class="scroller"></div>
+                </div>
+            </div>
+            <div class="brush-dec"></div>
+        </section>
+        <!--  section  end-->
+
+        <!--  section  -->
+        <section class="hidden-section" data-scrollax-parent="true" id="sec2">
+            <div class="container">
+                <div class="gallery_filter-button btn">Show Filters <i class="fal fa-long-arrow-down"></i></div>
+                <!-- gallery-filters -->
+                <div class="gallery-filters gth">
+<!--                    <a href="#" class="gallery-filter gallery-filter-active"  data-filter="*"><span>01.</span>All Dishes</a>-->
+                    {% for category in category_list %}
+                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a>
+                    {% endfor %}
+<!--                    <a href="#" class="gallery-filter" data-filter=".desserts"><span>03.</span>Desserts</a>-->
+<!--                    <a href="#" class="gallery-filter" data-filter=".seafood"><span>04.</span>Sea Food</a>-->
+<!--                    <a href="#" class="gallery-filter" data-filter=".drinks"><span>05.</span>Drinks</a>-->
+                </div>
+                <!-- gallery-filters end-->
+                <!-- gallery start -->
+                <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">
+
+                    <!-- gallery-item-->
+                    {% for product in object_list %}
+                    <div class="gallery-item {{ product.category.title }}">
+                        <div class="grid-item-holder hov_zoom">
+                            <a href="{{ product.image.url }}" class="box-media-zoom   popup-image"><i class="fal fa-search"></i></a>
+                            <img  src="{{ product.image.url }}" alt="">
+                        </div>
+                        <div class="grid-item-details">
+                            <h3>{{ product.title }} {% if product.label %}<span>{{ product.label }}</span>{% endif %} </h3>
+                            <p>{{ product.description|safe }}</p>
+                            <div class="grid-item_price">
+                                <span>₹{{ product.price }}</span>
+                                <a href="{{ product.get_add_to_cart_url }}"><div class="add_cart">Add To Cart</div></a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- gallery-item end-->
+
+                </div>
+                <!-- gallery end -->
+                <div class="clearfix"></div>
+                <div class="bold-separator bold-separator_dark"><span></span></div>
+                <div class="clearfix"></div>
+                <a href="#" class="btn  ">Download menu in PDF<i class="fal fa-long-arrow-right"></i></a>
+            </div>
+            <div class="section-bg">
+                <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+            </div>
+        </section>
+        <!--  section end  -->
+
+        <div class="brush-dec2 brush-dec_bottom"></div>
+    </div>
+{% endblock %}

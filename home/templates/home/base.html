@@ -47,9 +47,8 @@
                     <div class="container">
                         <div class="header-container fl-wrap">
                             <a href="/" class="logo-holder ajax"><img src="images/logo.png" alt="GOLDENEST"></a>
-                            <button class="show-reserv_button show-rb" style="background-color:#29292;" onclick="showReservation()"><span>Reservation</span> <i class="fal fa-bookmark"></i></button>
-                            <button class="show-reserv_button show-rb" style="background-color:#29292;" onclick="showLogin()"><span>Login / SignUp</span> <i class="fal fa-bookmark"></i></button>
-                            <div class="show-cart sc_btn htact"><i class="fal fa-shopping-bag"></i><span class="show-cart_count">3</span><span class="header-tooltip">Your Cart</span></div>
+                            <div class="show-reserv_button show-rb"><span>Reservation</span> <i class="fal fa-bookmark"></i></div>
+                            <div class="show-cart sc_btn htact"><i class="fal fa-shopping-bag"></i><span class="show-cart_count">{{ cart_count }}</span><span class="header-tooltip">Your Cart</span></div>
                             <!-- nav-button-wrap-->
                             <div class="nav-button-wrap">
                                 <div class="nav-button">
@@ -62,8 +61,8 @@
                                 <nav>
                                     <ul>
                                         <li><a href="/" class="act-link">Home</a></li>
-                                        <li><a href="{% url 'home:menu' %}">Menu</a></li>
-                                        <li><a href="{% url 'home:menu' %}">Rooms</a></li>
+                                        <li><a href="{% url 'menu:menu' %}">Menu</a></li>
+                                        <li><a href="{% url 'menu:menu' %}">Rooms</a></li>
                                         <li><a href="contact.html">Contact</a></li>
 <!--                                        <li>-->
 <!--                                            <a href="#">Pages<i class="fas fa-caret-down"></i></a>-->
@@ -84,48 +83,37 @@
                             </div>
                             <!-- navigation  end -->
                             <!-- header-cart_wrap  -->
-                            <div class="header-cart_wrap novis_cart">
-                                <div class="header-cart_title">Your Cart <span>4 items</span></div>
+
+                            {% if cart_list %}
+                                <div class="header-cart_wrap novis_cart">
+                                <div class="header-cart_title">Your Cart <span>{{ cart_count }} items</span></div>
                                 <div class="header-cart_wrap_container fl-wrap">
                                     <div class="box-widget-content">
                                         <div class="widget-posts fl-wrap">
                                             <ol>
-                                                <li class="clearfix">
-                                                    <a href="#"  class="widget-posts-img"><img src="images/menu/1.jpg" class="respimg" alt=""></a>
-                                                    <div class="widget-posts-descr">
-                                                        <a href="#" title="">Grilled Steaks</a>
-                                                        <div class="widget-posts-descr_calc clearfix">1 <span>x</span> $45</div>
-                                                    </div>
-                                                    <div class="clear-cart_button"><i class="fal fa-times"></i></div>
-                                                </li>
-                                                <li class="clearfix">
-                                                    <a href="#"  class="widget-posts-img"><img src="images/menu/2.jpg" class="respimg" alt=""></a>
-                                                    <div class="widget-posts-descr">
-                                                        <a href="#" title="">Cripsy Lobster & Shrimp Bites</a>
-                                                        <div class="widget-posts-descr_calc clearfix">2 <span>x</span> $22</div>
-                                                    </div>
-                                                    <div class="clear-cart_button"><i class="fal fa-times"></i></div>
-                                                </li>
-                                                <li class="clearfix">
-                                                    <a href="#"  class="widget-posts-img"><img src="images/menu/3.jpg" class="respimg" alt=""></a>
-                                                    <div class="widget-posts-descr">
-                                                        <a href="#" title="">Chicken tortilla soup</a>
-                                                        <div class="widget-posts-descr_calc clearfix">1 <span>x</span> $37</div>
-                                                    </div>
-                                                    <div class="clear-cart_button"><i class="fal fa-times"></i></div>
-                                                </li>
+                                                {% for cart in cart_list %}
+                                                    <li class="clearfix">
+                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="{{ cart.product.image.url }}" class="respimg" alt=""></a>
+                                                        <div class="widget-posts-descr">
+                                                            <a href="{% url 'menu:menu' %}" title="">{{ cart.product.title }}</a>
+                                                            <div class="widget-posts-descr_calc clearfix">{{ cart.quantity }} <span>x</span>₹{{ cart.product.price }}</div>
+                                                        </div>
+                                                        <a href="{{ cart.get_delete_cart_url }}"><div class="clear-cart_button" style="margin-top:2em;"><i class="fal fa-times"></i></div></a>
+                                                    </li>
+                                                {% endfor %}
                                             </ol>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="header-cart_wrap_total fl-wrap">
-                                    <div class="header-cart_wrap_total_item">Subtotal : <span>$147</span></div>
+                                    <div class="header-cart_wrap_total_item">Subtotal : <span>₹{{ order.get_total }}</span></div>
                                 </div>
                                 <div class="header-cart_wrap_footer fl-wrap">
-                                    <a href="cart.html"> View Cart</a>
-                                    <a href="checkout.html">  Checkout</a>
+                                    <a href="{% url 'order:cart' %}"> View Cart</a>
+                                    <a href="{% url 'order:checkout' %}">  Checkout</a>
                                 </div>
                             </div>
+                            {% endif %}
                             <!-- header-cart_wrap end  -->
                         </div>
                     </div>
@@ -205,7 +193,7 @@
                         </div>
                         <!-- footer-widget-wrap end-->
                         <div class="footer-bottom fl-wrap">
-                            <div class="copyright">&#169; Golden Nest 2020 . All rights reserved. </div>
+                            <div class="copyright">&#169; Golden Nest {{ current_year }} . All rights reserved. </div>
                             <div class="to-top"><span>Back To Top </span><i class="fal fa-angle-double-up"></i></div>
                         </div>
                     </div>
@@ -213,16 +201,17 @@
                 <!-- footer end-->
             </div>
             <!-- wrapper end -->
+
             <!-- reservation-modal-wrap-->
-            <div class="reservation-modal-wrap" id="ShowReservation" style="display:none;">
+            <div class="reservation-modal-wrap">
                 <div class="reserv-overlay crm">
                     <div class="cd-reserv-overlay-layer" data-frame="25">
                         <div class="reserv-overlay-layer"></div>
                     </div>
                 </div>
-                <div class="reservation-modal-container bot-element" id="ShowReservation2">
+                <div class="reservation-modal-container bot-element">
                     <div class="reservation-modal-item fl-wrap">
-                        <button id="HideReservation" onclick="hideReservation()"><div class="close-reservation-modal crm"><i class="fal fa-times"></i></div></button>
+                        <div class="close-reservation-modal crm"><i class="fal fa-times"></i></div>
                         <div class="reservation-bg"></div>
                         <div class="section-title">
                             <h4>Don't forget to book a table</h4>
@@ -231,7 +220,7 @@
                         </div>
                         <div class="reservation-wrap">
                             <div id="reserv-message"></div>
-                            <form  class="custom-form" name="reservationform" id="reservationform">
+                            <form  class="custom-form" action="http://restabook.kwst.net/dark/php/reservation.php" name="reservationform" id="reservationform">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -295,48 +284,6 @@
             </div>
             <!-- reservation-modal-wrap end-->
 
-             <!-- user-modal-wrap-->
-            <div class="reservation-modal-wrap" id="ShowLogin" >
-                <div class="reserv-overlay crm" id="ShowLogin3">
-                    <div class="cd-reserv-overlay-layer" data-frame="25">
-                        <div class="reserv-overlay-layer"></div>
-                    </div>
-                </div>
-                <div class="reservation-modal-container bot-element" id="ShowLogin2">
-                    <div class="reservation-modal-item fl-wrap">
-                        <div class="close-reservation-modal crm"><i class="fal fa-times"></i></div>
-                        <div class="reservation-bg"></div>
-                        <div class="section-title">
-                            <h4>Don't forget to book a table</h4>
-                            <h2>Register</h2>
-                            <div class="dots-separator fl-wrap"><span></span></div>
-                        </div>
-                        <div class="reservation-wrap">
-                            <div id="reserv-message"></div>
-                            <form  class="custom-form" action="" name="reservationform">
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <input type="text" name="name" id="name" placeholder="Your Name *" value=""/>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="text"  name="email" id="email" placeholder="Email Address *" value=""/>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="text"  name="phone" id="phone" placeholder="Phone *" value=""/>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <button class="btn color-bg" id="reservation-submit">Reserve Table  <i class="fal fa-long-arrow-right"></i></button>
-                                </fieldset>
-                            </form>
-                        </div>
-                        <!-- reservation-wrap end-->
-                    </div>
-                </div>
-            </div>
-            <!-- user-modal-wrap end-->
-
             <!-- cursor-->
             <div class="element" id="Element">
                 <div class="element-item"></div>
@@ -348,67 +295,6 @@
         <script src="{% static 'home/js/jquery.min.js' %}"></script>
         <script src="{% static 'home/js/plugins.js' %}"></script>
         <script src="{% static 'home/js/scripts.js' %}"></script>
-
-        <script>
-        function showLogin() {
-          var show_login = document.getElementById("ShowLogin");
-          show_login.style.display = "block";
-
-          var show_login_2 = document.getElementById("ShowLogin2");
-          show_login_2.style.display = "block";
-          show_login_2.style.opacity = 1;
-
-          var show_login_3 = document.getElementById("ShowLogin3");
-          show_login_3.style.display = "block";
-          show_login_3.style.opacity = 0.9;
-
-          var show_reservation = document.getElementById("ShowReservation");
-          show_reservation.style.display = "none";
-          show_reservation.style.opacity = 0;
-
-          var show_reservation_3 = document.getElementById("ShowReservation3");
-          show_reservation_3.style.display = "none";
-          show_reservation_3.style.opacity = 0;
-
-          var show_reservation_2 = document.getElementById("ShowReservation2");
-          show_reservation_2.style.display = "none";
-          show_reservation_2.style.opacity = 0;
-        }
-
-         function showReservation() {
-          var show_login = document.getElementById("ShowLogin");
-          show_login.style.display = "none";
-          show_login.style.opacity = 0;
-
-          var show_login_2 = document.getElementById("ShowLogin2");
-          show_login_2.style.display = "none";
-          show_login_2.style.opacity = 0;
-
-          var show_login_3 = document.getElementById("ShowLogin3");
-          show_login_3.style.display = "none";
-          show_login_3.style.opacity = 0;
-
-          var show_reservation = document.getElementById("ShowReservation");
-          show_reservation.style.display = "block";
-          show_reservation.style.opacity = 1;
-
-          var show_reservation_2 = document.getElementById("ShowReservation2");
-          show_reservation_2.style.display = "block";
-          show_reservation_2.style.opacity = 1;
-
-          var show_reservation_3 = document.getElementById("ShowReservation3");
-          show_reservation_3.style.display = "block";
-          show_reservation_3.style.opacity = 0.9;
-
-        }
-
-         function hideReservation() {
-            var location = document.getElementById("HideReservation");
-            location.href = "/";
-         }
-
-        </script>
-
     </body>
 
 

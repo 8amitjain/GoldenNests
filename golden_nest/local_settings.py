@@ -12,3 +12,7 @@ Email_Pass = 'xplcwpoproktynae'
 # Secret key to be changed
 
 
+# TODO show message
+# TODO cart list qty
+# TODO show order's
+

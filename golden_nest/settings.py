@@ -8,6 +8,7 @@ SECRET_KEY = '!wzd+ws1+apy$n6bby-2s)==s@aj6-xf-(a1&f3a%vt)fhl&bb'
 DEBUG = True
 ALLOWED_HOSTS = []
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -23,12 +24,15 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',  # DRF Password Reset
     'knox',  # DRF Token verification
     'coverage',  # DRF Token verification
+    'ckeditor',  # Rich text editor
+    'django_filters',  # Filters
 
     # Django Apps
     'home',
+    'menu',
     'users',
+    'order',
 ]
-
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -73,6 +77,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'order.context_processors.cart_details',  # show cart in all page
+                'home.context_processors.get_current_year_to_context',  # current year
             ],
         },
     },

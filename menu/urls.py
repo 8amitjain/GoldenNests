@@ -4,13 +4,13 @@ from django.conf import settings
 
 from . import views
 
-app_name = 'home'
+app_name = 'menu'
 
 urlpatterns = [
-    path('', views.Home.as_view()),
-    path('contact/', views.Contact.as_view(), name='contact'),
+    path('', views.MenuListView.as_view(), name='menu'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

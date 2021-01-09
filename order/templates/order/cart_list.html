@@ -1,0 +1,156 @@
+{% extends 'home/base.html' %}
+{% block content %}
+
+<div class="content">
+      <!--  section  -->
+    <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+        <div class="bg par-elem "  data-bg="images/bg/17.jpg" data-scrollax="properties: { translateY: '30%' }"></div>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="section-title">
+                <h4>Order food with home delivery</h4>
+                <h2>Your Cart</h2>
+                <div class="dots-separator fl-wrap"><span></span></div>
+            </div>
+        </div>
+        <div class="hero-section-scroll">
+            <div class="mousey">
+                <div class="scroller"></div>
+            </div>
+        </div>
+        <div class="brush-dec"></div>
+    </section>
+    <!--  section  end-->
+
+    <!--  section  -->
+    <section class="hidden-section">
+        <div class="container">
+            <!-- CHECKOUT TABLE -->
+            <div class="row">
+                <div class="col-md-8">
+                    {% if cart %}
+                        <h4 class="cart-title">Your cart <span>{{ cart_count }} items</span></h4>
+                    {% endif %}
+                    <table class="table table-border checkout-table">
+                        <tbody>
+                            <tr>
+                                <th class="hidden-xs">Item</th>
+                                <th>Description</th>
+                                <th class="hidden-xs">Price</th>
+                                <th>Count</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                            {% for cart in object_list %}
+                                <tr>
+                                    <td class="hidden-xs">
+                                        <a href="{% url 'menu:menu' %}"><img src="{{ cart.product.image.url }}" alt="" class="respimg"></a>
+                                    </td>
+                                    <td>
+                                        <h5 class="product-name">{{ cart.product.title }}</h5>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <h5 class="order-money">₹{{ cart.product.price }}</h5>
+                                    </td>
+                                    <td>
+
+                                        <input type="number" name="cartin1" value="{{ cart.quantity }}" max="50" min="0" class="order-count">
+                                    </td>
+                                    <td>
+                                        <h5 class="order-money">₹{{ cart.get_total_item_price }}</h5>
+                                    </td>
+                                    <td class="pr-remove">
+<!--                                        <a href="{{ cart.get_remove_from_cart_url }}" title="Remove"><i class="fal fa-times"></i></a>-->
+                                        <a href="{{ cart.cart.get_delete_cart_url }}" title="Remove"><i class="fal fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+<!--                            <tr>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <a href="#"><img src="images/menu/2.jpg" alt="" class="respimg"></a>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="product-name">Cripsy Lobster & Shrimp Bites</h5>-->
+<!--                                </td>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <h5 class="product-title order-money">$22.00</h5>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <input type="number" name="cartin2" value="2" max="50" min="1" class="order-count">-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="order-money">$22.00</h5>-->
+<!--                                </td>-->
+<!--                                <td class="pr-remove">-->
+<!--                                    <a href="#" title="Remove"><i class="fal fa-times"></i></a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <a href="#"><img src="images/menu/3.jpg" alt="" class="respimg"></a>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="product-name">Chicken tortilla soup</h5>-->
+<!--                                </td>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <h5 class="product-title order-money">$37.00</h5>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <input type="number" name="cartin3" value="1" max="50" min="1" class="order-count">-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="order-money">$37.00</h5>-->
+<!--                                </td>-->
+<!--                                <td class="pr-remove">-->
+<!--                                    <a href="#" title="Remove"><i class="fal fa-times"></i></a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                        </tbody>
+                    </table>
+                    <!-- COUPON -->
+                    <div class="coupon-holder">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="code" id="id_code" placeholder="Coupon code">
+                            <button type="submit" class="btn-a">Apply</button>
+                        </form>
+<!--                        <button type="submit" class="pull-right btn-uc">Update Cart</button>-->
+                    </div>
+                    <!-- /COUPON -->
+                </div>
+                <div class="col-md-4">
+                    <!-- CART TOTALS  -->
+                    <div class="cart-totals dark-bg fl-wrap">
+                        <h3>Cart totals</h3>
+                        <table class="total-table">
+                            <tbody>
+                                <tr>
+                                    <th>Cart Subtotal:</th>
+                                    <td>₹{{ order.get_total_without_coupon }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Coupon Discount:</th>
+                                    <td>₹{{ order.get_coupon_total }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>₹{{ order.get_total }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a href="{% url 'order:checkout' %}"><button type="submit" class="cart-totals_btn color-bg">Proceed to Checkout</button></a>
+                    </div>
+                    <!-- /CART TOTALS  -->
+                </div>
+            </div>
+            <!-- /CHECKOUT TABLE -->
+        </div>
+        <div class="section-bg">
+            <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+        </div>
+    </section>
+    <!--  section end  -->
+
+    <div class="brush-dec2 brush-dec_bottom"></div>
+</div>
+{% endblock content %}

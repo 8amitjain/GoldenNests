@@ -33,8 +33,6 @@ class RegistrationForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        # TODO email should be not editable or require Confirmation
-        # TODO show phone number filed is email is not phone number
         fields = ('email', 'name', 'phone_number')
 
     def clean_email(self):
