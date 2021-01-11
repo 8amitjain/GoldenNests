@@ -16,7 +16,7 @@ from menu.models import Product
 from .filters import OrderFilter
 from .forms import CouponCustomerForm
 from .models import (
-    Cart, Order, MiniOrder, Payment, CancelMiniOrder, CouponCustomer, Coupon
+    Cart, Order, Payment, CancelMiniOrder, CouponCustomer, Coupon
 )
 
 # from vowsnviews.local_settings import razorpay_api, razorpay_secret
@@ -40,7 +40,6 @@ def add_to_cart(request, slug, size=None):
         if order.cart.filter(product=product).exists():
             cart.quantity += 1
             cart.save()
-            # m_order = MiniOrder.objects.filter(order_ref_number=order.order_ref_number)
             messages.info(request, "Quantity was updated.")
             return redirect("order:cart")
         else:
@@ -117,7 +116,6 @@ def delete_cart(request, pk):
     return redirect("order:cart")
 
 
-# TODO COUPON Integration
 # Show Products in cart
 class CartListView(LoginRequiredMixin, ListView):
     model = Cart
@@ -226,24 +224,24 @@ class CancelMiniOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         cancel_form.user = self.request.user
         cancel_form.save()
 
-        mini_order = MiniOrder.objects.get(id=self.kwargs.get('pk'))
-        mini_order.cancel_requested = True
-        mini_order.save()
+        order = Order.objects.get(id=self.kwargs.get('pk'))
+        order.cancel_requested = True
+        order.save()
 
-        cancel_form.cancel_mini_order = mini_order
+        cancel_form.cancel_mini_order = order
         cancel_form.save()
 
         return super().form_valid(form)
 
     def test_func(self):
-        mini_order = MiniOrder.objects.get(id=self.kwargs.get('pk'))
-        if not mini_order.user == self.request.user:
+        order = Order.objects.get(id=self.kwargs.get('pk'))
+        if not order.user == self.request.user:
             return False
-        elif mini_order.order_status not in ['Preparing', 'Shipping']:
+        elif order.order_status not in ['Preparing', 'Shipping']:
             return False
-        elif mini_order.cancel_requested is True:
+        elif order.cancel_requested is True:
             return False
-        elif mini_order.return_requested is True:
+        elif order.return_requested is True:
             return False
         else:
             return True

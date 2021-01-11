@@ -8,6 +8,7 @@ app_name = 'menu'
 
 urlpatterns = [
     path('', views.MenuListView.as_view(), name='menu'),
+    path('book/table/', views.BookTableView.as_view(), name='book-table'),
 ]
 
 if settings.DEBUG:

@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.shortcuts import reverse
 
 from users.models import User
-from menu.models import Product
+from menu.models import Product, BookTable
 
 import datetime
 
@@ -82,64 +82,9 @@ class CouponCustomer(models.Model):
         return f"{self.code}_{self.user}"
 
 
-class MiniOrder(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-
-    order_ref_number = models.CharField(default='ORD-100000', max_length=15)
-    mini_order_ref_number = models.CharField(unique=True, default='MORN-100000', max_length=15)
-
-    ordered_date_time = models.DateTimeField(default=timezone.now)
-    ordered = models.BooleanField(default=False)
-    order_status = models.CharField(choices=ORDER_STATUS, max_length=50, default='Preparing')
-
-    # delivered = models.BooleanField(default=False, blank=True, null=True)
-    delivered_time = models.DateTimeField(default=timezone.now)  # 10 days Default
-
-    # Return
-    return_window = models.DateTimeField(default=timezone.now)  # 10 days Default
-    return_requested = models.BooleanField(default=False)
-
-    # Cancel
-    cancel_requested = models.BooleanField(default=False)
-
-    # Payment
-    payment_method = models.CharField(default='Online by card', max_length=30)
-
-    def __str__(self):
-        return f"{self.cart.user} Mini_Order"
-
-    @property
-    def is_return_window(self):
-        return timezone.now() < self.return_window
-
-
-class CancelMiniOrder(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-
-    cancel_requested = models.BooleanField(default=True)
-    cancel_status = models.CharField(choices=CANCEL_STATUS, max_length=50, default='Processing Cancel Request')
-    cancel_granted = models.BooleanField(default=False)
-
-    cancel_date = models.DateTimeField(default=timezone.now)
-    cancel_reason = models.CharField(choices=CANCEL_REASON, max_length=50, blank=True, null=True)
-    review_description = models.TextField(help_text='Please Describe in detail reason of cancel.')
-    cancel_mini_order = models.ForeignKey(MiniOrder, on_delete=models.SET_NULL, blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.user}_{self.cancel_reason}_CANCELED"
-
-    def get_absolute_url(self):  # Redirect to this link after filling the form for cancel order
-        return reverse("order-all")
-
-    class Meta:
-        ordering = ['cancel_date']
-
-
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # mini_order = models.ManyToManyField(MiniOrder)
+    table = models.ForeignKey(BookTable, on_delete=models.CASCADE, null=True, blank=True)
     cart = models.ManyToManyField(Cart)
 
     coupon_used = models.BooleanField(default=False)
@@ -190,6 +135,28 @@ class Order(models.Model):
                 return 0
         else:
             return 0
+
+
+class CancelMiniOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    cancel_requested = models.BooleanField(default=True)
+    cancel_status = models.CharField(choices=CANCEL_STATUS, max_length=50, default='Processing Cancel Request')
+    cancel_granted = models.BooleanField(default=False)
+
+    cancel_date = models.DateTimeField(default=timezone.now)
+    cancel_reason = models.CharField(choices=CANCEL_REASON, max_length=50, blank=True, null=True)
+    review_description = models.TextField(help_text='Please Describe in detail reason of cancel.')
+    cancel_mini_order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user}_{self.cancel_reason}_CANCELED"
+
+    def get_absolute_url(self):  # Redirect to this link after filling the form for cancel order
+        return reverse("order-all")
+
+    class Meta:
+        ordering = ['cancel_date']
 
 
 class Payment(models.Model):

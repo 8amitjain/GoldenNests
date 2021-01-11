@@ -3,6 +3,7 @@ from django.shortcuts import reverse
 from django.utils import timezone
 from django.db.models import Q
 from ckeditor.fields import RichTextField
+from django.template.defaultfilters import slugify
 
 from users.models import User
 
@@ -75,12 +76,16 @@ class CategoryManager(models.Manager):
 
 class Category(models.Model):
     title = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='category', null=True, blank=True)  # image of slide ...
     is_active = models.BooleanField(default=True)
 
     objects = CategoryManager()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -113,7 +118,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
     size = models.CharField(choices=SIZE_OPTION, max_length=50, null=True, blank=True)
     cost_per = models.CharField(max_length=200, null=True, blank=True,
@@ -136,6 +141,10 @@ class Product(models.Model):
         db_table = 'products_product'
         ordering = ['title']
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
@@ -151,6 +160,84 @@ class Product(models.Model):
         return reverse("product-detail-view", kwargs={'pk': self.id})
 
 
+class TableCount(models.Model):
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    # def get_absolute_url(self):  # Redirect to this link after adding category , kwargs={'slug': self.slug })
+    #     return reverse("admin-category-list")
 
 
+class TableView(models.Model):
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    # def get_absolute_url(self):  # Redirect to this link after adding category , kwargs={'slug': self.slug })
+    #     return reverse("admin-category-list")
+
+
+class TableTime(models.Model):
+    time = models.TimeField(unique=True)
+
+    def __str__(self):
+        return str(self.time)
+
+
+class Table(models.Model):
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    people_count = models.ForeignKey(TableCount, on_delete=models.CASCADE)
+    sitting_type = models.ForeignKey(TableView, on_delete=models.CASCADE)
+
+    is_available = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
+    trending = models.BooleanField(default=False)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['title']
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class BookTable(models.Model):
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=320)
+    phone_number = models.BigIntegerField()  # TODO add validator
+
+    people_count = models.ForeignKey(TableCount, on_delete=models.CASCADE)
+    sitting_type = models.ForeignKey(TableView, on_delete=models.CASCADE)
+
+    booked_for_date = models.DateField()  # TODO validate only future dates
+    booked_for_time = models.ForeignKey(TableTime, on_delete=models.CASCADE)
+
+    booked_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.table.title}_{self.name}'

@@ -220,61 +220,65 @@
                         </div>
                         <div class="reservation-wrap">
                             <div id="reserv-message"></div>
-                            <form  class="custom-form" action="http://restabook.kwst.net/dark/php/reservation.php" name="reservationform" id="reservationform">
+                            <form  class="custom-form" action="{% url 'menu:book-table' %}" name="" method="post" id="reservation_form">
+                               {% csrf_token %}
                                 <fieldset>
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <input type="text" name="name" id="name" placeholder="Your Name *" value=""/>
+                                        <div class="col-sm-6" style="display:none;">
+                                            <input type="text" name="add_food" id="add_food" value=""/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text"  name="email" id="email" placeholder="Email Address *" value=""/>
+                                            <input type="text" name="name" id="id_name" placeholder="Your Name *" value="" required/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text"  name="phone" id="phone" placeholder="Phone *" value=""/>
+                                            <input type="email"  name="email" id="id_email" placeholder="Email Address *" value="" required/>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="tel"  name="phone_number" id="id_phone_number" placeholder="Phone *" value="" required/>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fl-wrap">
-                                                <select name="numperson" id="persons" data-placeholder="Persons" class="chosen-select no-search-select">
+                                                <select name="people_count" id="id_people_count" data-placeholder="Persons" class="chosen-select no-search-select">
                                                     <option data-display="Persons">Any</option>
-                                                    <option value="1">1 Person</option>
-                                                    <option value="2">2 People</option>
-                                                    <option value="3">3 People</option>
-                                                    <option value="4">4 People</option>
-                                                    <option value="5">5 People</option>
-                                                    <option value="Banquet">Banquet</option>
+                                                    {% for person in people_count_list %}
+                                                        <option value="{{ person.id }}">{{ person.title }} Person</option>
+                                                    {% endfor %}
+<!--                                                    <option value="Banquet">Banquet</option>-->
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="col-sm-6">
                                             <div class="date-container2 fl-wrap">
-                                                <input type="text" placeholder="Date" id="res_date"     name="resdate"   value=""/>
+                                                <input type="date" placeholder="Date" id=id_booked_for_date" name="booked_for_date"  value=""/>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fl-wrap">
-                                                <select name="restime" id="resrv-time" data-placeholder="Time" class="chosen-select no-search-select">
+                                                <select name="booked_for_time" id="id_booked_for_time" data-placeholder="Time" class="chosen-select no-search-select">
                                                     <option data-display="Time">Any</option>
-                                                    <option value="10:00am">10:00 am</option>
-                                                    <option value="11:00am">11:00 am</option>
-                                                    <option value="12:00pm">12:00 pm</option>
-                                                    <option value="1:00pm">1:00 pm</option>
-                                                    <option value="2:00pm">2:00 pm</option>
-                                                    <option value="3:00pm">3:00 pm</option>
-                                                    <option value="4:00pm">4:00 pm</option>
-                                                    <option value="5:00pm">5:00 pm</option>
-                                                    <option value="6:00pm">6:00 pm</option>
-                                                    <option value="7:00pm">7:00 pm</option>
-                                                    <option value="8:00pm">8:00 pm</option>
-                                                    <option value="9:00pm">9:00 pm</option>
-                                                    <option value="10:00pm">10:00 pm</option>
+                                                    {% for time in time_list %}
+                                                        <option value="{{ time.id }}">{{ time.time }}</option>
+                                                    {% endfor %}
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="fl-wrap">
+                                                <select id=id_sitting_type" name="sitting_type" data-placeholder="Dinning Area" class="chosen-select no-search-select">
+                                                    <option data-display="Persons">Any</option>
+                                                    {% for person in sitting_area %}
+                                                        <option value="{{ person.id }}">{{ person.title }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <textarea name="comments"  id="comments" cols="30" rows="3" placeholder="Your Message:"></textarea>
+<!--                                    <textarea name="comments"  id="comments" cols="30" rows="3" placeholder="Your Message:"></textarea>-->
                                     <div class="clearfix"></div>
-                                    <button class="btn color-bg" id="reservation-submit">Reserve Table  <i class="fal fa-long-arrow-right"></i></button>
+                                    <button class="btn color-bg" id="reservation-submit" type="submit">Reserve Table  <i class="fal fa-long-arrow-right"></i></button>
+                                    <button class="btn color-bg" id="reservation-submit" type="submit" onclick="menu_order()" >Reserve Table and Add Food to table <i class="fal fa-long-arrow-right"></i></button>
                                 </fieldset>
                             </form>
                         </div>
@@ -290,6 +294,13 @@
             </div>
             <!-- cursor end-->
         </div>
+
+        <script>
+            function menu_order() {
+                document.getElementById("add_food").value = "add_food";
+                document.getElementById("reservation_form").value = "add_food";
+            }
+        </script>
         <!-- Main end -->
         <!--=============== scripts  ===============-->
         <script src="{% static 'home/js/jquery.min.js' %}"></script>

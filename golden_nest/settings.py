@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'order.context_processors.cart_details',  # show cart in all page
+                'home.context_processors.get_reservation_data',  # show cart in all page
                 'home.context_processors.get_current_year_to_context',  # current year
             ],
         },

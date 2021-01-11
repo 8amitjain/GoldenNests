@@ -16,7 +16,7 @@ from .managers import UserManager
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('Email'), unique=True, max_length=320, help_text='Provide an email for registration')
     name = models.CharField(_('Name'), max_length=70)
-    phone_number = models.BigIntegerField(help_text='Provide an mobile number without +91')
+    phone_number = models.BigIntegerField(help_text='Provide an mobile number without +91')  # TODO add validator
 
     date_confirmation_mail_sent = models.DateTimeField(_('date confirmation mail sent'), default=timezone.now)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
