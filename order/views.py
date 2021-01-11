@@ -18,13 +18,12 @@ from .forms import CouponCustomerForm
 from .models import (
     Cart, Order, Payment, CancelMiniOrder, CouponCustomer, Coupon
 )
-
+from home.models import RestaurantsTiming
 # from vowsnviews.local_settings import razorpay_api, razorpay_secret
 # import razorpay
 
 
-# Cart
-# Add to cart # Test Done
+# TODO add sizes
 @login_required
 def add_to_cart(request, slug, size=None):
     product = get_object_or_404(Product, slug=slug)
@@ -32,32 +31,24 @@ def add_to_cart(request, slug, size=None):
         product=product,
         user=request.user,
         ordered=False,
-        size=size,
+        # size=size,
     )
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
         if order.cart.filter(product=product).exists():
-            cart.quantity += 1
-            cart.save()
-            messages.info(request, "Quantity was updated.")
-            return redirect("order:cart")
+            if cart.quantity >= 10:
+                messages.info(request, "Maximum quantity added.")
+                return redirect("order:cart")
+            else:
+                cart.quantity += 1
+                cart.save()
+                messages.success(request, "Quantity was updated.")
+                return redirect("order:cart")
         else:
             order.cart.add(cart)
-            # cart.save()
             order.save()
-
-            # ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-            # m_order = MiniOrder.objects.create(
-            #     ordered_date_time=ordered_date_time, user=request.user,
-            #     order_ref_number=order.order_ref_number, cart=cart)
-            # m_order.mini_order_ref_number = f"MORN-{100000 + int(m_order.id)}"
-            # m_order.save()
-
-            # order.mini_order.add(m_order)
-            # order.save()
-            messages.info(request, "product was added to your cart.")
+            messages.success(request, "Food Item was added to your cart.")
             return redirect('menu:menu')
     else:
         ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -67,56 +58,50 @@ def add_to_cart(request, slug, size=None):
         order.order_ref_number = ORN
         order.cart.add(cart)
         order.save()
-
-        # m_order = MiniOrder.objects.create(
-        #     ordered_date_time=ordered_date_time, user=request.user,
-        #     order_ref_number=ORN, cart=cart)
-        # m_order.mini_order_ref_number = f"MORN-{100000 + int(m_order.id)}"
-        # m_order.save()
-
-        # order.mini_order.add(m_order)
-        # user_address = request.user.address.filter(default=True).first()
-        # if user_address:
-        #     order.address = user_address
-        order.save()
-        messages.info(request, "product was added to your cart.")
-    return redirect('menu:menu')
+        messages.success(request, "Food Item was added to your cart.")
+        return redirect('menu:menu')
 
 
-@login_required
-def remove_product_from_cart(request, pk):
-    cart = Cart.objects.get(id=pk)
-    order_qs = Order.objects.filter(
-        user=request.user,
-        ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
-        if cart.quantity > 1:
-            cart.quantity -= 1
-            cart.save()
+class RemoveFromCart(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, *args, **kwargs):
+        cart = Cart.objects.get(id=self.kwargs.get('pk'))
+        order_qs = Order.objects.filter(
+            user=self.request.user,
+            ordered=False)
+        if order_qs.exists():
+            order = order_qs[0]
+            if cart.quantity > 1:
+                cart.quantity -= 1
+                cart.save()
+                messages.info(self.request, "Quantity was decreased.")
+            else:
+                order.cart.remove(cart)
+                cart.delete()
+                # Mini Order gets deleted automatic after deleting cart
+                messages.info(self.request, "Dish was removed from plate.")
+            return redirect("order:cart")
         else:
-            order.cart.remove(cart)
-            cart.delete()
-            # Mini Order gets deleted automatic after deleting cart
-        messages.info(request, "Quantity was decreased.")
-        return redirect("order:cart")
-    else:
-        messages.info(request, "You don't have any product in your plate.")
-        return redirect("/")
+            messages.info(self.request, "You don't have any product in your plate.")
+            return redirect("/")
+
+    def test_func(self):
+        cart = Cart.objects.get(id=self.kwargs.get('pk'))
+        return self.request.user == cart.user
 
 
-@login_required
-def delete_cart(request, pk):
-    cart = Cart.objects.get(id=pk)
-    if cart.user == request.user:
+class DeleteCart(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, *args, **kwargs):
+        cart = Cart.objects.get(id=self.kwargs.get('pk'))
         cart.delete()
-        messages.info(request, "Food Item was removed form cart.")
-    else:
-        messages.info(request, "Not Authorized.")
-    return redirect("order:cart")
+        messages.info(self.request, "Food Item was removed form cart.")
+        return redirect("order:cart")
+
+    def test_func(self):
+        cart = Cart.objects.get(id=self.kwargs.get('pk'))
+        return self.request.user == cart.user
 
 
-# Show Products in cart
+# TODO Test
 class CartListView(LoginRequiredMixin, ListView):
     model = Cart
     # Template name cart_list.html
@@ -169,8 +154,6 @@ class CartListView(LoginRequiredMixin, ListView):
         return redirect("order:cart")
 
 
-# Order
-# Show all order
 class OrderListView(LoginRequiredMixin, ListView):
     model = Order
     paginate_by = 20
@@ -196,7 +179,6 @@ class OrderListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-# Detail Order
 class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Order
     # Template name order_detail.html
@@ -213,7 +195,7 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return self.request.user == model.user
 
 
-# Cancel Mini Order
+# TODO Test
 class CancelMiniOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = CancelMiniOrder
     fields = ['cancel_reason', 'review_description']
@@ -247,7 +229,7 @@ class CancelMiniOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return True
 
 
-# Checkout
+# TODO Test
 class CheckoutView(LoginRequiredMixin, View):
     # def get(self, *args, **kwargs):
     #     cart = Cart.objects.filter(user=self.request.user, ordered=False)

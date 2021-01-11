@@ -8,13 +8,13 @@ app_name = 'order'
 
 urlpatterns = [
     # Cart
-    path('cart/', views.CartListView.as_view(), name='cart'),  # TD
-    path('cart/add/<slug>/', views.add_to_cart, name='add-to-cart'),  # TD
-    path('cart/remove/<pk>/', views.remove_product_from_cart, name='remove-from-cart'),  # TD
-    path('cart/delete/<pk>/', views.delete_cart, name='delete-cart'),  # TD
+    path('cart/', views.CartListView.as_view(), name='cart'),
+    path('cart/add/<slug>/', views.add_to_cart, name='add-to-cart'),
+    path('cart/remove/<pk>/', views.RemoveFromCart.as_view(), name='remove-from-cart'),
+    path('cart/delete/<pk>/', views.DeleteCart.as_view(), name='delete-cart'),
 
     # Order
-    path('list/', views.OrderListView.as_view(), name='order-list'),
+    path('list/', views.OrderListView.as_view(), name='list'),
     path('detail/<int:pk>/', views.OrderDetailView.as_view(), name='detail'),
 
     # Order Return

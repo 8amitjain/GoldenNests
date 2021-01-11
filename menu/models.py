@@ -59,7 +59,6 @@ class CategoryQuerySet(models.QuerySet):
         qs = self
         if query is not None:
             or_lookup = (Q(title__icontains=query) |
-                         Q(description__icontains=query) |
                          Q(slug__icontains=query)
                          )
             qs = qs.filter(or_lookup).distinct()  # distinct() is often necessary with Q lookups
@@ -77,7 +76,6 @@ class CategoryManager(models.Manager):
 class Category(models.Model):
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='category', null=True, blank=True)  # image of slide ...
     is_active = models.BooleanField(default=True)
 

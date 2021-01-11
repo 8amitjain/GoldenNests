@@ -41,6 +41,12 @@ class Cart(models.Model):
     quantity = models.IntegerField(default=1)
     size = models.CharField(max_length=200, null=True, blank=True)
 
+    # If qty is greater than 10 then make it 10
+    def save(self, *args, **kwargs):
+        if self.quantity > 10:
+            self.quantity = 10
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.quantity} of {self.product.title}"
 
