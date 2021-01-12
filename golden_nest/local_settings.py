@@ -15,7 +15,11 @@ Email_Pass = 'xplcwpoproktynae'
 # Update email and pass
 
 
+# TODO order test
+# TODO add timing for food order while checkout
+# TODO check order place data and time
+# TODO ATC size
+# TODO add add food to table button
+# TODO show review form after visit to hotel
 # TODO show message
-# TODO cart list qty
-# TODO show order's
-
+# TODO order detail page html and list page

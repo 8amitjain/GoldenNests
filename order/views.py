@@ -16,7 +16,7 @@ from menu.models import Product
 from .filters import OrderFilter
 from .forms import CouponCustomerForm
 from .models import (
-    Cart, Order, Payment, CancelMiniOrder, CouponCustomer, Coupon
+    Cart, Order, Payment, CancelOrder, CouponCustomer, Coupon
 )
 from home.models import RestaurantsTiming
 # from vowsnviews.local_settings import razorpay_api, razorpay_secret
@@ -101,7 +101,6 @@ class DeleteCart(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user == cart.user
 
 
-# TODO Test
 class CartListView(LoginRequiredMixin, ListView):
     model = Cart
     # Template name cart_list.html
@@ -125,32 +124,36 @@ class CartListView(LoginRequiredMixin, ListView):
     def post(self, form, **kwargs):
         form = CouponCustomerForm(self.request.POST)
         if form.is_valid():
+            coupon_form = form.save(commit=False)
             try:
-                coupon_form = form.save(commit=False)
-                coupon_form.user = self.request.user
-                coupon_form.save()
-                coupon = coupon_form
-            except :
-                coupon_form = form.save(commit=False)
                 coupon = CouponCustomer.objects.get(code=coupon_form.code, user=self.request.user)
                 if coupon.used is True:
                     messages.info(self.request, f'Coupon Already Used!')
                     return redirect("order:cart")
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            # coupon.discount_amount = 0
+            except:
+                coupon_form.user = self.request.user
+                coupon_form.save()
+                coupon = coupon_form
+            order = Order.objects.filter(user=self.request.user, ordered=False).first()
             order_amount = order.get_total_without_coupon()
-            # coupon.save()
+
             vendor_coupon = Coupon.objects.get(code=coupon.code)
             if order_amount >= vendor_coupon.minimum_order_amount:
-                coupon.discount_amount = int(float(order_amount) * (float(vendor_coupon.discount_percent) / 100))
+                discount_amount = int(float(order_amount) * (float(vendor_coupon.discount_percent) / 100))
+                if discount_amount > vendor_coupon.max_discount_amount:
+                    coupon.discount_amount = vendor_coupon.max_discount_amount
+                else:
+                    coupon.discount_amount = discount_amount
                 coupon.coupon = vendor_coupon
                 coupon.save()
 
                 # Adding Coupon to order
                 order.coupon_customer = coupon
-                order.coupon_used = True
+                # order.coupon_used = True
                 order.save()
                 messages.success(self.request, f'Coupon Applied!')
+            else:
+                messages.info(self.request, f'Minimum order amount should be {vendor_coupon.minimum_order_amount}!')
         return redirect("order:cart")
 
 
@@ -196,10 +199,10 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
 
 # TODO Test
-class CancelMiniOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    model = CancelMiniOrder
+class CancelOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = CancelOrder
     fields = ['cancel_reason', 'review_description']
-    # template name cancelminiorder_form.html
+    # template name cancelorder_form.html
 
     def form_valid(self, form):
         cancel_form = form.instance
@@ -210,7 +213,7 @@ class CancelMiniOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         order.cancel_requested = True
         order.save()
 
-        cancel_form.cancel_mini_order = order
+        cancel_form.order = order
         cancel_form.save()
 
         return super().form_valid(form)
@@ -219,11 +222,9 @@ class CancelMiniOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         order = Order.objects.get(id=self.kwargs.get('pk'))
         if not order.user == self.request.user:
             return False
-        elif order.order_status not in ['Preparing', 'Shipping']:
+        elif order.order_status not in ['Processing', 'Preparing']:
             return False
         elif order.cancel_requested is True:
-            return False
-        elif order.return_requested is True:
             return False
         else:
             return True
@@ -248,7 +249,7 @@ class CheckoutView(LoginRequiredMixin, View):
         amount = int(order.get_total())
 
         payment_id = self.request.POST.get('payment_id', False)
-        if payment_id: # add not
+        if payment_id:  # add not
             return redirect('order-checkout')
         else:
             # elif self.request.user.address.all().exists():

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from menu.models import Product, Category
 from order.models import (
-    Cart, Order, Payment, CancelMiniOrder, CouponCustomer, Coupon
+    Cart, Order, Payment, CancelOrder, CouponCustomer, Coupon
 )
 from users.models import User
 
@@ -48,9 +48,24 @@ class BaseTest(TestCase):
             price=1000.00,
             image='http://127.0.0.1:8000/MK8-unsplash.jpg',
         )
+        # Creating a coupon
+        self.coupon = Coupon.objects.create(
+            code="#GN10",
+            discount_percent=10.00,
+            minimum_order_amount=1000.00,
+            max_discount_amount=100
+        )
+        self.coupon_2 = Coupon.objects.create(
+            code="#GN20",
+            discount_percent=20.00,
+            minimum_order_amount=1000.00,
+            max_discount_amount=400
+        )
 
         self.menu_url = reverse('menu:menu')
         self.cart_url = reverse('order:cart')
+        self.checkout_url = reverse('order:checkout')
+        self.order_detail_url = reverse('order:detail', kwargs={'pk': 1})
         self.add_to_cart_url = reverse('order:add-to-cart', kwargs={'slug': self.product.slug})
         self.add_to_cart_2_url = reverse('order:add-to-cart', kwargs={'slug': self.product_2.slug})
         self.add_to_cart_invalid_url = reverse('order:add-to-cart', kwargs={'slug': 'self.product_2.slug'})
@@ -353,5 +368,248 @@ class OrderDetailTest(BaseTest):
         self.client.login(email="pytest_tests2@gmail.com", password="Test@321")
         response = self.client.get(self.order_detail_url)
         self.assertEqual(response.status_code, 403)
+
+
+class CartCouponTest(BaseTest):
+
+    def base(self):
+        # Logging User
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+
+        # Checking no order's are there
+        order = Order.objects.all().last()
+        self.assertEqual(order, None)
+
+        # Creating a cart with 2 products
+        self.client.get(self.add_to_cart_url)
+        self.client.get(self.add_to_cart_url)
+        self.client.get(self.add_to_cart_2_url)
+
+    def test_cart_non_auth(self):
+        # Testing Anonymous User
+        response = self.client.get(self.cart_url)
+
+        # since user in not logged in should redirect to login page
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/user/login/?next=' + self.cart_url)
+
+    def test_cart_working_case(self):
+        self.base()
+
+        # Checking get response
+        response = self.client.get(self.cart_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'order/cart_list.html')
+
+        # Checking post response
+        response = self.client.post(self.cart_url, {'code': '#GN10'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 2000)
+        self.assertEqual(order.get_coupon_total(), 100)
+        self.assertEqual(order.get_total(), 1900)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Coupon Applied!")  # Checking the message
+
+    def test_cart_invalid_case1(self):
+        # Case1
+        # cart total to be below max discount amount
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+        # Checking post response
+        self.client.get(self.add_to_cart_url)
+        self.client.get(self.add_to_cart_url)
+        response = self.client.post(self.cart_url, {'code': '#GN10'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 1000)
+        self.assertEqual(order.get_coupon_total(), 100)
+        self.assertEqual(order.get_total(), 900)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Coupon Applied!")  # Checking the message
+
+        # Case2
+        # coupon already used but not ordered
+        self.client.get(self.add_to_cart_url)
+
+        response = self.client.post(self.cart_url, {'code': '#GN10'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 1500)
+        self.assertEqual(order.get_coupon_total(), 100)
+        self.assertEqual(order.get_total(), 1400)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Coupon Applied!")  # Checking the message
+
+        # Case 3
+        # Using other coupon after applying a coupon
+        response = self.client.post(self.cart_url, {'code': '#GN20'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 1500)
+        self.assertEqual(order.get_coupon_total(), 300)
+        self.assertEqual(order.get_total(), 1200)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Coupon Applied!")  # Checking the message
+
+        response = self.client.post(self.cart_url, {'code': '#GN10'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 1500)
+        self.assertEqual(order.get_coupon_total(), 100)
+        self.assertEqual(order.get_total(), 1400)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Coupon Applied!")  # Checking the message
+
+        # coupon already used and ordered
+        # Case 3
+        # coupon already used and ordered
+        self.client.get(self.checkout_url)
+        order_count = Order.objects.filter(user=self.user, ordered=True).count()
+        order_ordered = Order.objects.filter(user=self.user, ordered=True).first()
+        self.assertEqual(order_count, 1)
+        self.assertEqual(order_ordered.coupon_customer.coupon.code, "#GN10")
+        self.assertEqual(order_ordered.coupon_customer.discount_amount, 100)
+
+        self.client.get(self.add_to_cart_url)
+        # Case 4
+        # below minimum order value
+        response = self.client.post(self.cart_url, {'code': '#GN20'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 500)
+        self.assertEqual(order.get_coupon_total(), 0)
+        self.assertEqual(order.get_total(), 500)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'info')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Minimum order amount should be 1000.0!")  # Checking the message
+
+        # Case 5
+        # checking unordered code is working
+        self.client.get(self.add_to_cart_url)
+        self.client.get(self.add_to_cart_url)
+        response = self.client.post(self.cart_url, {'code': '#GN20'})
+        order = Order.objects.filter(user=self.user, ordered=False).first()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.get_total_without_coupon(), 1500)
+        self.assertEqual(order.get_coupon_total(), 300)
+        self.assertEqual(order.get_total(), 1200)
+        self.assertRedirects(response, self.cart_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Coupon Applied!")  # Checking the message
+
+
+class CancelOrderTest(BaseTest):
+
+    def base(self):
+        # Logging User
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+
+        # Checking no order's are there
+        order = Order.objects.all().last()
+        self.assertEqual(order, None)
+
+        # Creating a cart with 2 products
+        self.client.get(self.add_to_cart_url)
+        self.client.get(self.add_to_cart_url)
+        self.client.get(self.add_to_cart_2_url)
+        self.client.get(self.checkout_url)
+
+        order = Order.objects.all().first()
+        self.cancel_order_url = reverse('order:cancel', kwargs={'pk': order.id})
+
+    def test_cart_non_auth(self):
+        self.base()
+        self.client.logout()
+        # Testing Anonymous User
+        response = self.client.post(self.cancel_order_url)
+
+        # since user in not logged in should redirect to login page
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/user/login/?next=' + self.cancel_order_url)
+
+    def test_cart_working_case(self):
+        self.base()
+
+        # Checking get response
+        response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        order = Order.objects.all().last()
+        cancel_order = CancelOrder.objects.all().last()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.order_detail_url)
+        self.assertEqual(order.cancel_requested, True)
+        self.assertEqual(cancel_order.order, order)
+
+    def test_cart_invalid_case(self):
+        self.base()
+        self.client.logout()
+
+        # Case 1
+        # order user is different than login user
+        self.client.login(email="pytest_tests2@gmail.com", password="Test@321")
+        response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        self.assertEqual(response.status_code, 403)
+        self.client.logout()
+
+        # Case 2
+        # Order cancel request is already true
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+        self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        self.assertEqual(response.status_code, 403)
+
+        # Case 3
+        # order status is ready
+        self.client.get(self.add_to_cart_2_url)
+        self.client.get(self.checkout_url)
+        order = Order.objects.all().first()
+        order.order_status = 'Ready'
+
+        self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        self.assertEqual(response.status_code, 403)
+
+        # order status is ready
+        self.client.get(self.add_to_cart_2_url)
+        self.client.get(self.checkout_url)
+        order = Order.objects.all().first()
+        order.order_status = 'Delivered'
+
+        self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        self.assertEqual(response.status_code, 403)
+
+        # order status is ready
+        self.client.get(self.add_to_cart_2_url)
+        self.client.get(self.checkout_url)
+        order = Order.objects.all().first()
+        order.order_status = 'CANCELED'
+
+        self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
+        self.assertEqual(response.status_code, 403)
+
+
 
 

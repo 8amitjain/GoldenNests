@@ -9,7 +9,7 @@ import datetime
 
 # Order
 ORDER_STATUS = (
-    ('Placed', 'Placed'),
+    ('Processing', 'Processing'),
     ('Preparing', 'Preparing'),
     ('Ready', 'Ready'),
     ('Delivered', 'Delivered'),
@@ -20,14 +20,13 @@ ORDER_STATUS = (
 # Cancel
 CANCEL_REASON = (
     ('Not Needed', 'Not Needed'),
-    ('Ordered Wrong Product', 'Ordered Wrong Product'),
+    ('Ordered Wrong Dishes', 'Ordered Wrong Dishes'),
     ('Receiving To Late', 'Receiving To Late'),
-    ('Select Different Payment Method', 'Select Different Payment Method'),
     ('Other', 'Other')
 )
 
 CANCEL_STATUS = (
-    ('Processing Cancel Request', 'Processing Cancel Request'),
+    ('Processing Request', 'Processing Request'),
     ('CANCEL Denied', 'CANCEL Denied'),
     ('Cancel Granted', 'Cancel Granted'),
 )
@@ -68,6 +67,7 @@ class Coupon(models.Model):
     code = models.CharField(max_length=15, unique=True)
     discount_percent = models.FloatField()
     minimum_order_amount = models.FloatField()
+    max_discount_amount = models.FloatField()
 
     def __str__(self):
         return self.code
@@ -75,7 +75,7 @@ class Coupon(models.Model):
 
 class CouponCustomer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, null=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True)
     code = models.CharField(max_length=15)
     discount_amount = models.FloatField(null=True)
     used = models.BooleanField(default=False)
@@ -98,14 +98,16 @@ class Order(models.Model):
 
     order_ref_number = models.CharField(unique=True, default='ORD-100000', max_length=15)
     ordered_date_time = models.DateTimeField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    # timestamp = models.DateTimeField(auto_now_add=True)
 
     ordered = models.BooleanField(default=False)
+    order_status = models.CharField(choices=ORDER_STATUS, max_length=50, default='Processing')
 
-    payment = models.ForeignKey(
-        'Payment', on_delete=models.SET_NULL, blank=True, null=True)
-    received = models.BooleanField(default=False, blank=True, null=True)
+    payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
     payment_method = models.CharField(default='Online by card', max_length=30)
+
+    received = models.BooleanField(default=False)
+    cancel_requested = models.BooleanField(default=False)
     taxes = models.FloatField(default=0)
 
     class Meta:
@@ -133,8 +135,11 @@ class Order(models.Model):
             vendor_coupon = Coupon.objects.get(code=self.coupon_customer.coupon.code)
             total = self.get_total_without_coupon()
             if total >= vendor_coupon.minimum_order_amount:
-                self.coupon_customer.coupon.discount_amount = float(total) * \
-                                                              (vendor_coupon.discount_percent / 100)
+                discount_amount = float(total) * (vendor_coupon.discount_percent / 100)
+                if discount_amount > vendor_coupon.max_discount_amount:
+                    self.coupon_customer.coupon.discount_amount = vendor_coupon.max_discount_amount
+                else:
+                    self.coupon_customer.coupon.discount_amount = discount_amount
             try:
                 return self.coupon_customer.coupon.discount_amount
             except AttributeError:
@@ -143,8 +148,9 @@ class Order(models.Model):
             return 0
 
 
-class CancelMiniOrder(models.Model):
+class CancelOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
 
     cancel_requested = models.BooleanField(default=True)
     cancel_status = models.CharField(choices=CANCEL_STATUS, max_length=50, default='Processing Cancel Request')
@@ -153,13 +159,12 @@ class CancelMiniOrder(models.Model):
     cancel_date = models.DateTimeField(default=timezone.now)
     cancel_reason = models.CharField(choices=CANCEL_REASON, max_length=50, blank=True, null=True)
     review_description = models.TextField(help_text='Please Describe in detail reason of cancel.')
-    cancel_mini_order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user}_{self.cancel_reason}_CANCELED"
 
     def get_absolute_url(self):  # Redirect to this link after filling the form for cancel order
-        return reverse("order-all")
+        return reverse("order:detail", kwargs={'pk': self.order.id})
 
     class Meta:
         ordering = ['cancel_date']

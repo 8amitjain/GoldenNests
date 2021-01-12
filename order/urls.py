@@ -18,7 +18,7 @@ urlpatterns = [
     path('detail/<int:pk>/', views.OrderDetailView.as_view(), name='detail'),
 
     # Order Return
-    path('mini/cancel/<int:pk>/', views.CancelMiniOrderView.as_view(), name='mini-cancel'),
+    path('cancel/<int:pk>/', views.CancelOrderView.as_view(), name='cancel'),
 
     # Payment
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
