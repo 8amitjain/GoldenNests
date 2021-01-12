@@ -159,7 +159,7 @@ class Product(models.Model):
 
 
 class TableCount(models.Model):
-    title = models.CharField(max_length=200, unique=True)
+    title = models.IntegerField(unique=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -167,7 +167,7 @@ class TableCount(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     # def get_absolute_url(self):  # Redirect to this link after adding category , kwargs={'slug': self.slug })
     #     return reverse("admin-category-list")
@@ -202,7 +202,7 @@ class Table(models.Model):
     people_count = models.ForeignKey(TableCount, on_delete=models.CASCADE)
     sitting_type = models.ForeignKey(TableView, on_delete=models.CASCADE)
 
-    is_available = models.BooleanField(default=True)
+    # is_available = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     trending = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -230,12 +230,8 @@ class BookTable(models.Model):
 
     booked_for_date = models.DateField()  # TODO validate only future dates
     booked_for_time = models.ForeignKey(TableTime, on_delete=models.CASCADE)
-
     booked_at = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-
-        super().save(*args, **kwargs)
+    is_booked = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.table.title}_{self.name}'

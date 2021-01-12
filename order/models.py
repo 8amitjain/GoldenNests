@@ -91,7 +91,7 @@ class CouponCustomer(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     table = models.ForeignKey(BookTable, on_delete=models.CASCADE, null=True, blank=True)
-    cart = models.ManyToManyField(Cart)
+    cart = models.ManyToManyField(Cart, blank=True)
 
     coupon_used = models.BooleanField(default=False)
     coupon_customer = models.ForeignKey(CouponCustomer, on_delete=models.CASCADE, null=True, blank=True)
@@ -104,7 +104,7 @@ class Order(models.Model):
     order_status = models.CharField(choices=ORDER_STATUS, max_length=50, default='Processing')
 
     payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
-    payment_method = models.CharField(default='Online by card', max_length=30)
+    payment_method = models.CharField(max_length=30, blank=True, null=True)
 
     received = models.BooleanField(default=False)
     cancel_requested = models.BooleanField(default=False)

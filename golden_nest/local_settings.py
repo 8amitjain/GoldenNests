@@ -15,11 +15,20 @@ Email_Pass = 'xplcwpoproktynae'
 # Update email and pass
 
 
-# TODO order test
+# Backend End TO DO's
 # TODO add timing for food order while checkout
 # TODO check order place data and time
+# TODO Remove table from order
+# TODO Null true and blank true fixes
 # TODO ATC size
-# TODO add add food to table button
+
 # TODO show review form after visit to hotel
-# TODO show message
-# TODO order detail page html and list page
+# TODO make reservation form with ajax and show only available timing and sitting (OPT)
+
+# Front End TO DO's
+# TODO ATC Button menu
+# TODO reservation date cannot be past and timing should be of +6 hr
+# TODO show message in all page
+# TODO order detail page html and order list page cancel form
+# TODO if table is reserved and user opts to add food to table show table in cart list page and also should be able to
+#  remove that table booking

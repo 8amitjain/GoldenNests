@@ -53,7 +53,7 @@ def add_to_cart(request, slug, size=None):
     else:
         ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         order = Order.objects.create(
-            user=request.user, ordered_date_time=ordered_date_time)  # vendor=product.sold_by
+            user=request.user, ordered_date_time=ordered_date_time)
         ORN = f"ORN-{100000 + int(order.id)}"
         order.order_ref_number = ORN
         order.cart.add(cart)
@@ -289,6 +289,10 @@ class CheckoutView(LoginRequiredMixin, View):
                 coupon_customer.save()
             cart.update(ordered=True)
 
+            if order.table:
+                table = order.table
+                table.is_booked = True
+                table.save()
             order.payment = payment
             order.ordered = True
             order.order_id = payment.order_id

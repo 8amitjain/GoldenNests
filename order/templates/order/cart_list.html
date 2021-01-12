@@ -44,7 +44,9 @@
                             {% for cart in object_list %}
                                 <tr>
                                     <td class="hidden-xs">
-                                        <a href="{% url 'menu:menu' %}"><img src="{{ cart.product.image.url }}" alt="" class="respimg"></a>
+                                        {% if cart.product.image %}
+                                            <a href="{% url 'menu:menu' %}"><img src="{{ cart.product.image.url }}" alt="" class="respimg"></a>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <h5 class="product-name">{{ cart.product.title }}</h5>

@@ -1,5 +1,3 @@
-<!--TODO show per option and show available size -->
-<!--TODO fix filter -->
 {% extends 'home/base.html' %}
 {% block content %}
     <div class="content">
@@ -26,46 +24,82 @@
         <!--  section  -->
         <section class="hidden-section" data-scrollax-parent="true" id="sec2">
             <div class="container">
-                <div class="gallery_filter-button btn">Show Filters <i class="fal fa-long-arrow-down"></i></div>
-                <!-- gallery-filters -->
-                <div class="gallery-filters gth">
-<!--                    <a href="#" class="gallery-filter gallery-filter-active"  data-filter="*"><span>01.</span>All Dishes</a>-->
-                    {% for category in category_list %}
-                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a>
-                    {% endfor %}
-<!--                    <a href="#" class="gallery-filter" data-filter=".desserts"><span>03.</span>Desserts</a>-->
-<!--                    <a href="#" class="gallery-filter" data-filter=".seafood"><span>04.</span>Sea Food</a>-->
-<!--                    <a href="#" class="gallery-filter" data-filter=".drinks"><span>05.</span>Drinks</a>-->
-                </div>
-                <!-- gallery-filters end-->
-                <!-- gallery start -->
-                <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">
+<!--                <div class="row">-->
+<!--                    <div class="col-md-3">-->
+<!--                <div class="gallery_filter-button btn">Show Filters <i class="fal fa-long-arrow-down"></i></div>-->
+<!--                &lt;!&ndash; gallery-filters &ndash;&gt;-->
+<!--                <div class="gallery-filters gth">-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter gallery-filter-active"  data-filter="*"><span>01.</span>All Dishes</a>&ndash;&gt;-->
+<!--                    {% for category in category_list %}-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                    {% endfor %}-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".desserts"><span>03.</span>Desserts</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".seafood"><span>04.</span>Sea Food</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".drinks"><span>05.</span>Drinks</a>&ndash;&gt;-->
+<!--                </div>-->
+<!--                        </div>-->
+<!--                &lt;!&ndash; gallery-filters end&ndash;&gt;-->
+<!--                &lt;!&ndash; gallery start &ndash;&gt;-->
+<!--                     <div class="col-md-9">-->
+<!--                <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">-->
 
-                    <!-- gallery-item-->
-                    {% for product in object_list %}
-                    <div class="gallery-item {{ product.category.title }}">
-                        <div class="grid-item-holder hov_zoom">
-                            <a href="{{ product.image.url }}" class="box-media-zoom   popup-image"><i class="fal fa-search"></i></a>
-                            <img  src="{{ product.image.url }}" alt="">
-                        </div>
-                        <div class="grid-item-details">
-                            <h3>{{ product.title }} {% if product.label %}<span>{{ product.label }}</span>{% endif %} </h3>
-                            <p>{{ product.description|safe }}</p>
-                            <div class="grid-item_price">
-                                <span>₹{{ product.price }}</span>
-                                <a href="{{ product.get_add_to_cart_url }}"><div class="add_cart">Add To Cart</div></a>
+<!--                    &lt;!&ndash; gallery-item&ndash;&gt;-->
+
+<!--                    &lt;!&ndash; gallery-item end&ndash;&gt;-->
+
+<!--                </div>-->
+<!--                     </div>-->
+
+                    <div class="menu-wrapper single-menu fl-wrap" id="menu-section-1" data-scrollax-parent="true">
+                        {% for category in category_list %}
+                                <div class="menu-wrapper-title fl-wrap">
+                                    <div class="menu-wrapper-title-item">
+                                        <h4>{{ category.title }}</h4>
+                                        <h5>Pellentesque eros mi, faucibus tempor scelerisque nec, efficitur nec nunc.</h5>
+                                    </div>
+                                    {% if category.image %}
+                                     <div class="bg par-elem "  data-bg="{{ category.image.url }}" data-scrollax="properties: { translateY: '40%' }"></div>
+                                    {% endif %}
+                                    <div class="overlay"></div>
+                                    <span class="menu-wrapper-title_number">01.</span>
+                                </div>
+                                <!-- hero-menu-item-->
+
+                            <!-- gallery-filters end-->
+                            <!-- gallery start -->
+                            <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">
+                                <!-- gallery-item-->
+                                {% for product in category.product_set.all %}
+                                    {% if product.is_active %}
+                                        <div class="gallery-item desserts">
+                                            <div class="grid-item-holder hov_zoom">
+                                                <a href="{{product.image.url}}" class="box-media-zoom   popup-image"><i class="fal fa-search"></i></a>
+                                                <img  src="{{product.image.url}}"  style="height: 300px;width: 100%;object-fit: cover;"  alt="">
+                                            </div>
+                                            <div class="grid-item-details">
+                                                <h3>{{ product.title }} </h3>
+                                                <p>Seasoned with an herb crust, served with au jus and handcarved to order. </p>
+                                                <div class="grid-item_price">
+                                                    <span>₹{{ product.price }}</span>
+                                                     <a href="{{ product.get_add_to_cart_url }}"><div class="add_cart">Add To Cart</div></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                    <!-- gallery-item end-->
 
-                </div>
                 <!-- gallery end -->
                 <div class="clearfix"></div>
                 <div class="bold-separator bold-separator_dark"><span></span></div>
                 <div class="clearfix"></div>
                 <a href="#" class="btn  ">Download menu in PDF<i class="fal fa-long-arrow-right"></i></a>
+            </div>
             </div>
             <div class="section-bg">
                 <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>

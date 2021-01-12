@@ -40,13 +40,13 @@ class BaseTest(TestCase):
             category=self.category,
             title='test product',
             price=500.00,
-            image='http://127.0.0.1:8000/MK8-unsplash.jpg',
+            image='http://127.0.0.1:8000/media/products/PriceAlertt_EO1nBiY.jpg',
         )
         self.product_2 = Product.objects.create(
             category=self.category,
             title='test product 2',
             price=1000.00,
-            image='http://127.0.0.1:8000/MK8-unsplash.jpg',
+            image='http://127.0.0.1:8000/media/products/PriceAlertt_EO1nBiY.jpg',
         )
         # Creating a coupon
         self.coupon = Coupon.objects.create(

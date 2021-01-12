@@ -178,7 +178,7 @@
                                         <div class="footer-widget-title">Subscribe</div>
                                         <div class="footer-widget-content">
                                             <div class="subcribe-form fl-wrap">
-                                                <p>Want to be notified when we launch a new template or an update. Just sign up and we'll send you a notification by email.</p>
+                                                <p>Want to be notified when we launch a new template or an udpate. Just sign up and we'll send you a notification by email.</p>
                                                 <form id="subscribe" class="fl-wrap">
                                                     <input class="enteremail" name="email" id="subscribe-email" placeholder="Your Email" spellcheck="false" type="text">
                                                     <button type="submit" id="subscribe-button" class="subscribe-button color-bg">Send </button>
@@ -220,7 +220,7 @@
                         </div>
                         <div class="reservation-wrap">
                             <div id="reserv-message"></div>
-                            <form  class="custom-form" action="{% url 'menu:book-table' %}" name="" method="post" id="table_form">
+                            <form  class="custom-form" action="{% url 'menu:book-table' %}" name="" method="post" id="reservation_form">
                                {% csrf_token %}
                                 <fieldset>
                                     <div class="row">
@@ -238,8 +238,8 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fl-wrap">
-                                                <select name="people_count" id="id_people_count" data-placeholder="Persons" class="chosen-select no-search-select" required>
-<!--                                                    <option data-display="Persons">Select</option>-->
+                                                <select name="people_count" id="id_people_count" data-placeholder="Persons" class="chosen-select no-search-select">
+                                                    <option data-display="Persons">Any</option>
                                                     {% for person in people_count_list %}
                                                         <option value="{{ person.id }}">{{ person.title }} Person</option>
                                                     {% endfor %}
@@ -250,13 +250,13 @@
                                         <div class="clearfix"></div>
                                         <div class="col-sm-6">
                                             <div class="date-container2 fl-wrap">
-                                                <input type="date" placeholder="Date" id="id_booked_for_date" name="booked_for_date" value="" required/>
+                                                <input type="date" placeholder="Date" id=id_booked_for_date" name="booked_for_date"  value=""/>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fl-wrap">
-                                                <select name="booked_for_time" id="id_booked_for_time" data-placeholder="Time" class="chosen-select no-search-select" required>
-<!--                                                    <option data-display="Time">Select</option>-->
+                                                <select name="booked_for_time" id="id_booked_for_time" data-placeholder="Time" class="chosen-select no-search-select">
+                                                    <option data-display="Time">Any</option>
                                                     {% for time in time_list %}
                                                         <option value="{{ time.id }}">{{ time.time }}</option>
                                                     {% endfor %}
@@ -266,8 +266,8 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fl-wrap">
-                                                <select id=id_sitting_type" name="sitting_type" data-placeholder="Dinning Area" class="chosen-select no-search-select" required>
-<!--                                                    <option data-display="Dinning Area">Select</option>-->
+                                                <select id=id_sitting_type" name="sitting_type" data-placeholder="Dinning Area" class="chosen-select no-search-select">
+                                                    <option data-display="Persons">Any</option>
                                                     {% for person in sitting_area %}
                                                         <option value="{{ person.id }}">{{ person.title }}</option>
                                                     {% endfor %}
@@ -277,8 +277,8 @@
                                     </div>
 <!--                                    <textarea name="comments"  id="comments" cols="30" rows="3" placeholder="Your Message:"></textarea>-->
                                     <div class="clearfix"></div>
-                                    <button class="btn color-bg"  type="submit">Reserve Table  <i class="fal fa-long-arrow-right"></i></button>
-                                    <button class="btn color-bg"  type="submit" onclick="menu_order()" >Reserve Table and Add Food to table <i class="fal fa-long-arrow-right"></i></button>
+                                    <button class="btn color-bg" id="reservation-submit" type="submit">Reserve Table  <i class="fal fa-long-arrow-right"></i></button>
+                                    <button class="btn color-bg" id="reservation-submit" type="submit" onclick="menu_order()" >Reserve Table and Add Food to table <i class="fal fa-long-arrow-right"></i></button>
                                 </fieldset>
                             </form>
                         </div>
@@ -297,10 +297,8 @@
 
         <script>
             function menu_order() {
-               if (document.getElementById("table_form").checkValidity()) {
                 document.getElementById("add_food").value = "add_food";
                 document.getElementById("reservation_form").value = "add_food";
-              }
             }
         </script>
         <!-- Main end -->
@@ -308,7 +306,6 @@
         <script src="{% static 'home/js/jquery.min.js' %}"></script>
         <script src="{% static 'home/js/plugins.js' %}"></script>
         <script src="{% static 'home/js/scripts.js' %}"></script>
-
     </body>
 
 
