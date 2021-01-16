@@ -8,6 +8,7 @@ from order.models import (
     Cart, Order, Payment, CancelOrder, CouponCustomer, Coupon
 )
 from users.models import User
+from home.models import RestaurantsTiming
 
 
 class BaseTest(TestCase):
@@ -62,6 +63,11 @@ class BaseTest(TestCase):
             max_discount_amount=400
         )
 
+        self.timing = RestaurantsTiming.objects.create(
+            opening_time='6:00:00',
+            closing_time='23:00:00'
+        )
+
         self.menu_url = reverse('menu:menu')
         self.cart_url = reverse('order:cart')
         self.checkout_url = reverse('order:checkout')
@@ -98,7 +104,7 @@ class AddToCartTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.cart.last().product.title, self.product.title)
         self.assertEqual(order.cart.last().quantity, 1)
-        self.assertEqual(order.get_total(), 500.00)
+        self.assertEqual(order.get_total(), 500.00 + order.get_tax_total())
         self.assertEqual(order.get_total_without_coupon(), 500.00)
         self.assertEqual(order.get_coupon_total(), 0)
         self.assertRedirects(response, self.menu_url)
@@ -115,7 +121,7 @@ class AddToCartTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.cart.last().product.title, self.product.title)
         self.assertEqual(order.cart.last().quantity, 2)
-        self.assertEqual(order.get_total(), 1000.00)
+        self.assertEqual(order.get_total(), 1000.00 + order.get_tax_total())
         self.assertEqual(order.get_total_without_coupon(), 1000.00)
         self.assertEqual(order.get_coupon_total(), 0)
         self.assertRedirects(response, self.cart_url)
@@ -132,7 +138,7 @@ class AddToCartTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.cart.last().product.title, self.product_2.title)
         self.assertEqual(order.cart.last().quantity, 1)
-        self.assertEqual(order.get_total(), 2000.00)
+        self.assertEqual(order.get_total(), 2000.00 + order.get_tax_total())
         self.assertEqual(order.get_total_without_coupon(), 2000.00)
         self.assertEqual(order.get_coupon_total(), 0)
         self.assertRedirects(response, self.menu_url)
@@ -142,8 +148,6 @@ class AddToCartTest(BaseTest):
         self.assertEqual(str(messages[-1]), "Food Item was added to your cart.")  # Checking the message
 
     def test_add_to_cart_invalid_cases(self):
-        # TODO user is request user
-                #
         # Logging User
         self.client.login(email="pytest_tests@gmail.com", password="Test@321")
 
@@ -408,7 +412,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 2000)
         self.assertEqual(order.get_coupon_total(), 100)
-        self.assertEqual(order.get_total(), 1900)
+        self.assertEqual(order.get_total(), 1900 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -428,7 +432,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 1000)
         self.assertEqual(order.get_coupon_total(), 100)
-        self.assertEqual(order.get_total(), 900)
+        self.assertEqual(order.get_total(), 900 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -444,7 +448,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 1500)
         self.assertEqual(order.get_coupon_total(), 100)
-        self.assertEqual(order.get_total(), 1400)
+        self.assertEqual(order.get_total(), 1400 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -458,7 +462,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 1500)
         self.assertEqual(order.get_coupon_total(), 300)
-        self.assertEqual(order.get_total(), 1200)
+        self.assertEqual(order.get_total(), 1200 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -470,7 +474,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 1500)
         self.assertEqual(order.get_coupon_total(), 100)
-        self.assertEqual(order.get_total(), 1400)
+        self.assertEqual(order.get_total(), 1400 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -495,7 +499,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 500)
         self.assertEqual(order.get_coupon_total(), 0)
-        self.assertEqual(order.get_total(), 500)
+        self.assertEqual(order.get_total(), 500 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -511,7 +515,7 @@ class CartCouponTest(BaseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(order.get_total_without_coupon(), 1500)
         self.assertEqual(order.get_coupon_total(), 300)
-        self.assertEqual(order.get_total(), 1200)
+        self.assertEqual(order.get_total(), 1200 + order.get_tax_total())
         self.assertRedirects(response, self.cart_url)
         # Checking message
         messages = list(get_messages(response.wsgi_request))  # Get the messages
@@ -609,7 +613,5 @@ class CancelOrderTest(BaseTest):
         self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
         response = self.client.post(self.cancel_order_url, {'cancel_reason': 'Other', 'review_description': 'test'})
         self.assertEqual(response.status_code, 403)
-
-
 
 

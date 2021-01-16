@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone, dateformat
-from datetime import datetime
 from datetime import timedelta
 
 
@@ -13,8 +12,9 @@ class RestaurantsTiming(models.Model):
 
     def is_restaurant_open(self):
         now = dateformat.format(timezone.now(), 'H:i:s')
-        now = now + str(timedelta(minutes=30))
-        return self.opening_time.strftime('%H:%M:%S') < now and now > self.closing_time.strftime('%H:%M:%S')
+        # now = now + str(timedelta(minutes=30)) # Not working
+        return self.opening_time.strftime('%H:%M:%S') < now < self.closing_time.strftime('%H:%M:%S')
+
 
 
 

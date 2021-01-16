@@ -16,12 +16,10 @@ Email_Pass = 'xplcwpoproktynae'
 
 
 # Backend End TO DO's
-# TODO add timing for food order while checkout
-# TODO check order place data and time
-# TODO Remove table from order
-# TODO Null true and blank true fixes
-# TODO ATC size
+# TODO while booking table if order already have table don't allow to book another
 
+
+# TODO ATC size if needed
 # TODO show review form after visit to hotel
 # TODO make reservation form with ajax and show only available timing and sitting (OPT)
 

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import Product, Category, Table, BookTable
 from .forms import BookTableForm
@@ -47,11 +47,11 @@ class BookTableView(LoginRequiredMixin, View):
             ).exclude(booktable__in=book_table)
 
             if table_available:
-                table_form.table = table_available.first()
-                table_form.save()
-
                 # getting or creating a order
                 order = Order.objects.filter(user=self.request.user, ordered=False).first()
+                if order and order.table:
+                    messages.info(self.request, 'Table already added to order')
+                    return redirect('order:cart')
                 if not order:
                     ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     order = Order.objects.create(
@@ -59,6 +59,9 @@ class BookTableView(LoginRequiredMixin, View):
                     ORN = f"ORN-{100000 + int(order.id)}"
                     order.order_ref_number = ORN
                     order.save()
+
+                table_form.table = table_available.first()
+                table_form.save()  # saving book table here for order
 
                 order.table = table_form
                 order.save()
@@ -84,3 +87,18 @@ class BookTableView(LoginRequiredMixin, View):
 
         messages.warning(self.request, 'Invalid data in From')
         return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
+
+
+class RemoveTableOrder(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, *args, **kwargs):
+        order = Order.objects.filter(ordered=False, user=self.request.user).first()
+        BookTable.objects.get(id=order.table.id).delete()
+        messages.info(self.request, "Table was removed form order.")
+        return redirect("order:cart")
+
+    def test_func(self):
+        order = Order.objects.filter(ordered=False, user=self.request.user).first()
+        if order:
+            return not order.table.is_booked
+        else:
+            return False

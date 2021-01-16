@@ -8,6 +8,7 @@ from order.models import (
     Cart, Order, Payment, CancelOrder, CouponCustomer, Coupon
 )
 from users.models import User
+from home.models import RestaurantsTiming
 
 
 class BaseTest(TestCase):
@@ -74,8 +75,16 @@ class BaseTest(TestCase):
             people_count=self.table_count_2,
             sitting_type=self.table_view,
         )
+
+        self.timing = RestaurantsTiming.objects.create(
+            opening_time='6:00:00',
+            closing_time='23:00:00'
+        )
         self.menu_url = reverse('menu:menu')
         self.book_table_url = reverse('menu:book-table')
+        self.remove_table = reverse('menu:remove-table')
+
+        self.cart_url = reverse('order:cart')
         self.checkout_url = reverse('order:checkout')
         self.order_detail_url = reverse('order:detail', kwargs={'pk': 1})
         self.add_to_cart_url = reverse('order:add-to-cart', kwargs={'slug': self.product.slug})
@@ -289,3 +298,177 @@ class TableBookTest(BaseTest):
         order = Order.objects.filter(ordered=True).count()
         self.assertEqual(order, 2)
         self.assertEqual(book_table, 1)
+
+    def test_book_table_invalid_case_3(self):
+        # Logging User
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+
+        # Table already added to order
+        book_table = BookTable.objects.count()
+        order = Order.objects.filter(ordered=False).count()
+        self.assertEqual(order, 0)
+        self.assertEqual(book_table, 0)
+
+        self.client.get(self.add_to_cart_url)
+        # Book table and add food
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time.id,
+            'add_food': 'add_food'
+        })
+        self.assertEqual(response.status_code, 302)
+        book_table = BookTable.objects.count()
+        order = Order.objects.filter(ordered=False).count()
+        self.assertEqual(order, 1)
+        self.assertEqual(book_table, 1)
+
+        # Book table and add food
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time.id,
+            'add_food': 'add_food'
+        })
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'info')  # Checking the tag
+        self.assertEqual(str(messages[-1]), 'Table already added to order')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.cart_url)
+
+        book_table = BookTable.objects.count()
+        order = Order.objects.filter(ordered=False).count()
+        self.assertEqual(order, 1)
+        self.assertEqual(book_table, 1)
+
+
+class DeleteTableTest(BaseTest):
+
+    def base_remove(self):
+        # Logging User
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+
+        # Checking no order's are there
+        order = Order.objects.all().last()
+        self.assertEqual(order, None)
+
+        self.client.get(self.add_to_cart_url)
+
+    def test_remove_table_from_order_working_case(self):
+        self.base_remove()
+        # Book table and add food
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time.id,
+            'add_food': 'add_food'
+        })
+        self.assertEqual(response.status_code, 302)
+        order = Order.objects.filter(ordered=False).last()
+        self.assertEqual(order.table.is_booked, False)
+
+        # Remove Table from order
+        response = self.client.get(self.remove_table)
+        self.assertEqual(response.status_code, 302)
+        order = Order.objects.filter(ordered=False).last()
+        self.assertEqual(order.table, None)
+
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'info')  # Checking the tag
+        self.assertEqual(str(messages[-1]), 'Table was removed form order.')
+
+    def test_remove_table_from_order_non_working_case(self):
+        self.base_remove()
+
+        # Case 1  trying to remove table after order is complete
+        # Book table and add food
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time.id,
+            'add_food': 'add_food'
+        })
+        self.assertEqual(response.status_code, 302)
+        order = Order.objects.filter(ordered=False).last()
+        self.assertEqual(order.table.is_booked, False)
+        self.client.get(self.checkout_url)
+
+        # Remove Table from order
+        response = self.client.get(self.remove_table)
+        self.assertEqual(response.status_code, 403)
+        order = Order.objects.filter(ordered=True).last()
+        self.assertNotEqual(order.table, None)
+
+    def test_remove_table_from_order_non_working_case_2(self):
+        self.base_remove()
+
+        # Case 2  trying to remove table from other user
+        # Book table and add food
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time.id,
+            'add_food': 'add_food'
+        })
+        self.assertEqual(response.status_code, 302)
+        order = Order.objects.filter(ordered=False).last()
+        self.assertEqual(order.table.is_booked, False)
+
+        self.client.logout()
+        self.client.login(email="pytest_tests2@gmail.com", password="Test@321")
+        # Remove Table from order from other user
+        response = self.client.get(self.remove_table)
+        self.assertEqual(response.status_code, 403)
+
+    def test_remove_table_from_order_non_working_case_3(self):
+        self.base_remove()
+
+        # Case 3 checking book table object is deleted or not
+        # Book table and add food
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time.id,
+            'add_food': 'add_food'
+        })
+        self.assertEqual(response.status_code, 302)
+        order = Order.objects.filter(ordered=False).last()
+        self.assertEqual(order.table.is_booked, False)
+        self.client.get(self.checkout_url)
+
+        # Remove Table from order
+        response = self.client.get(self.remove_table)
+        self.assertEqual(response.status_code, 403)
+        self.client.logout()
+
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+        self.assertNotEqual(order.table, None)
+
+

@@ -52,6 +52,10 @@ class Cart(models.Model):
     def get_total_item_price(self):
         return self.quantity * self.product.price
 
+    def get_tax(self):
+        amt = self.get_total_item_price()
+        return amt * 18 // 100
+
     def get_absolute_url(self):  # Redirect to this link after changing quantity in cart  , kwargs={'slug': self.slug })
         return reverse("order-add-to-cart", kwargs={'slug': self.product.slug})
 
@@ -75,9 +79,9 @@ class Coupon(models.Model):
 
 class CouponCustomer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     code = models.CharField(max_length=15)
-    discount_amount = models.FloatField(null=True)
+    discount_amount = models.FloatField(null=True, blank=True)
     used = models.BooleanField(default=False)
     # applicable = models.BooleanField(default=False)
 
@@ -90,7 +94,7 @@ class CouponCustomer(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    table = models.ForeignKey(BookTable, on_delete=models.CASCADE, null=True, blank=True)
+    table = models.ForeignKey(BookTable, on_delete=models.SET_NULL, null=True, blank=True)
     cart = models.ManyToManyField(Cart, blank=True)
 
     coupon_used = models.BooleanField(default=False)
@@ -103,12 +107,11 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     order_status = models.CharField(choices=ORDER_STATUS, max_length=50, default='Processing')
 
-    payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
-    payment_method = models.CharField(max_length=30, blank=True, null=True)
+    payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, blank=True)
+    payment_method = models.CharField(max_length=30, null=True, blank=True)
 
     received = models.BooleanField(default=False)
     cancel_requested = models.BooleanField(default=False)
-    taxes = models.FloatField(default=0)
 
     class Meta:
         ordering = ['-ordered_date_time']
@@ -122,7 +125,14 @@ class Order(models.Model):
             total += order_item.get_total_item_price()
         if self.coupon_customer:
             total = float(total) - self.get_coupon_total()
-        return total
+        tax = self.get_tax_total()
+        return float(total) + float(tax)
+
+    def get_tax_total(self):
+        total = 0
+        for order_item in self.cart.all():
+            total += order_item.get_tax()
+        return float(total)
 
     def get_total_without_coupon(self):
         total = 0
@@ -149,15 +159,15 @@ class Order(models.Model):
 
 
 class CancelOrder(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
 
     cancel_requested = models.BooleanField(default=True)
     cancel_status = models.CharField(choices=CANCEL_STATUS, max_length=50, default='Processing Cancel Request')
     cancel_granted = models.BooleanField(default=False)
 
     cancel_date = models.DateTimeField(default=timezone.now)
-    cancel_reason = models.CharField(choices=CANCEL_REASON, max_length=50, blank=True, null=True)
+    cancel_reason = models.CharField(choices=CANCEL_REASON, max_length=50, null=True, blank=True)
     review_description = models.TextField(help_text='Please Describe in detail reason of cancel.')
 
     def __str__(self):
@@ -173,7 +183,7 @@ class CancelOrder(models.Model):
 class Payment(models.Model):
     order_id = models.CharField(max_length=200)
     payment_id = models.CharField(max_length=200)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.FloatField()
     amount_paid = models.FloatField()
     paid = models.BooleanField(default=False)

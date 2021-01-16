@@ -9,7 +9,6 @@ from django.views.generic import View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
-
 import datetime
 
 from menu.models import Product
@@ -198,7 +197,6 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return self.request.user == model.user
 
 
-# TODO Test
 class CancelOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = CancelOrder
     fields = ['cancel_reason', 'review_description']
@@ -248,11 +246,12 @@ class CheckoutView(LoginRequiredMixin, View):
         order = Order.objects.filter(user=self.request.user, ordered=False).first()
         amount = int(order.get_total())
 
-        payment_id = self.request.POST.get('payment_id', False)
-        if payment_id:  # add not
-            return redirect('order-checkout')
-        else:
-            # elif self.request.user.address.all().exists():
+        # payment_id = self.request.POST.get('payment_id', False)
+        # if payment_id:  # add not
+        #     return redirect('order-checkout')
+        # else:
+        timing = RestaurantsTiming.objects.first()
+        if timing.is_restaurant_open():
             # client = razorpay.Client(auth=(razorpay_api, razorpay_secret))
             # razorpay_payment = client.order.create(
             #     {
@@ -261,38 +260,36 @@ class CheckoutView(LoginRequiredMixin, View):
             #         'payment_capture': 1
             #     }
             # )
+
+            # Adding Payment
             payment = Payment()
             payment.user = self.request.user
             payment.amount = amount
             payment.order_id = f'{self.request.user.id}_{timezone.datetime.now()}'
             payment.payment_id = f'{self.request.user.id}_{timezone.datetime.now()}'
             payment.amount_paid = order.get_total()
-            # payment.razor_pay_id = razorpay_payment['id']
+            # payment.payment_id = razorpay_payment['id']
             # payment.amount_paid = razorpay_payment['amount_paid']
             payment.save()
-
-            cart = order.cart.all()
-            # for cart_object in cart:
-            #     cart_object.order = True
-            #     cart_object.save()
-                # if cart_object.product.stock_no:
-                #     cart_object.product.stock_no = int(cart_object.product.stock_no) - cart_object.quantity
-                #     cart_object.product.save()
-
-            ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            order.ordered_date_time = ordered_date_time
 
             # Checking if coupon is applied.
             if order.coupon_used:
                 coupon_customer = CouponCustomer.objects.get(id=order.coupon_customer.id)
                 coupon_customer.used = True
                 coupon_customer.save()
+
+            # Updating cart
+            cart = order.cart.all()
             cart.update(ordered=True)
 
             if order.table:
                 table = order.table
                 table.is_booked = True
                 table.save()
+
+            ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            order.ordered_date_time = ordered_date_time
             order.payment = payment
             order.ordered = True
             order.order_id = payment.order_id
@@ -303,9 +300,9 @@ class CheckoutView(LoginRequiredMixin, View):
             # payment.save()
 
             messages.success(self.request, "Your order was successful!")
+            return redirect('order:detail', pk=order.id)
+        else:
+            messages.info(self.request, "Restaurant is closed")
             return redirect('/')
-        # else:
-        #     messages.warning(self.request, "Please select or add delivery address!")
-        #     return redirect('order-checkout')
 
 
