@@ -19,9 +19,12 @@ Email_Pass = 'xplcwpoproktynae'
 # TODO while booking table if order already have table don't allow to book another (check in checkout view if table
 #  is available)
 # Product get by pk rest api
+# Order cancel reason rest api
+# order detail ie cart api's
+# Cart total
+# Order total
+# Checkout
 
-
-# TODO ATC size if needed
 # TODO show review form after visit to hotel
 # TODO make reservation form with ajax and show only available timing and sitting (OPT)
 

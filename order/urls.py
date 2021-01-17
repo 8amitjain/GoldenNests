@@ -35,6 +35,15 @@ urlpatterns = [
     path('api/list/', api.OrderListAPI.as_view(), name='api-list'),
     path('api/detail/<int:pk>/', api.OrderDetailAPI.as_view(), name='api-detail'),
 
+    # Cancel Order
+    path('api/cancel/<int:pk>/', api.CancelOrderAPI.as_view(), name='api-cancel-order'),
+
+    # Coupon
+    path('api/coupon/', api.AddCouponOrderAPI.as_view(), name='api-coupon-order'),
+
+    # Checkout
+    path('api/checkout/', api.CheckoutAPI.as_view(), name='api-checkout'),
+
 ]
 
 if settings.DEBUG:
