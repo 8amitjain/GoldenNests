@@ -16,7 +16,9 @@ Email_Pass = 'xplcwpoproktynae'
 
 
 # Backend End TO DO's
-# TODO while booking table if order already have table don't allow to book another
+# TODO while booking table if order already have table don't allow to book another (check in checkout view if table
+#  is available)
+# Product get by pk rest api
 
 
 # TODO ATC size if needed

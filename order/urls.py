@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from . import views
+from . import api
 
 app_name = 'order'
 
@@ -23,6 +24,17 @@ urlpatterns = [
     # Payment
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
     # path('payment/', views.PaymentView.as_view(), name='payment'),
+
+    # Rest Api
+    # Cart
+    path('api/cart/', api.CartListAPI.as_view(), name='api-cart'),
+    path('api/add_to_cart/<slug>/', api.AddToCartAPI.as_view(), name='api-cart'),
+    path('api/cart/<int:cart_pk>/<int:qty>/', api.CartQuantityUpdateAPI.as_view(), name='api-cart-qty-update'),
+
+    # Order
+    path('api/list/', api.OrderListAPI.as_view(), name='api-list'),
+    path('api/detail/<int:pk>/', api.OrderDetailAPI.as_view(), name='api-detail'),
+
 ]
 
 if settings.DEBUG:
