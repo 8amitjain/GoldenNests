@@ -17,10 +17,10 @@ urlpatterns = [
     # Remove Table from order
     path('table/remove/', views.RemoveTableOrder.as_view(), name='remove-table'),
 
-
     # Rest Api URL
     # Menu
-    path('api/', api.MenuListAPI.as_view(), name='api-menu'),
+    path('api/', api.ProductListAPI.as_view(), name='api-menu'),
+    path('api/product/<int:pk>/', api.ProductAPI.as_view(), name='api-product'),
     path('api/category/list/', api.CategoryListAPI.as_view(), name='api-category-list'),
     path('api/category/<int:pk>/', api.CategoryAPI.as_view(), name='api-category'),
 

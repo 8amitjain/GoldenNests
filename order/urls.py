@@ -30,19 +30,25 @@ urlpatterns = [
     path('api/cart/', api.CartListAPI.as_view(), name='api-cart'),
     path('api/add_to_cart/<slug>/', api.AddToCartAPI.as_view(), name='api-cart'),
     path('api/cart/<int:cart_pk>/<int:qty>/', api.CartQuantityUpdateAPI.as_view(), name='api-cart-qty-update'),
+    path('api/cart/total/<int:pk>/', api.CartTotalAPI.as_view(), name='api-cart-total'),
+    path('api/cart/detail/<int:pk>/', api.CartDetailAPI.as_view(), name='api-cart-detail'),
 
     # Order
     path('api/list/', api.OrderListAPI.as_view(), name='api-list'),
     path('api/detail/<int:pk>/', api.OrderDetailAPI.as_view(), name='api-detail'),
+    path('api/order/total/<int:pk>/', api.OrderTotalAPI.as_view(), name='api-total'),
 
     # Cancel Order
     path('api/cancel/<int:pk>/', api.CancelOrderAPI.as_view(), name='api-cancel-order'),
+    # Cancel Reason
+    path('api/cancel/reason/', api.OrderCancelReasonAPI.as_view(), name='api-cancel-reason'),
 
     # Coupon
     path('api/coupon/', api.AddCouponOrderAPI.as_view(), name='api-coupon-order'),
 
     # Checkout
     path('api/checkout/', api.CheckoutAPI.as_view(), name='api-checkout'),
+    path('api/payment/<int:pk>/', api.PaymentDetailAPI.as_view(), name='api-payment-detail'),
 
 ]
 

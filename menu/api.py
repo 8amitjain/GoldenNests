@@ -8,8 +8,14 @@ from .serializers import ProductSerializer, CategorySerializer, TableTimeSeriali
 from order.models import Order
 
 
-class MenuListAPI(generics.ListAPIView):
+class ProductListAPI(generics.ListAPIView):
     queryset = Product.objects.filter(is_active=True)
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class ProductAPI(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
 

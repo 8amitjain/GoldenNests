@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404
 
 from menu.models import Product
 from home.models import RestaurantsTiming
-from .models import Cart, Order, CancelOrder, CouponCustomer, Coupon, Payment
-from .serializers import CartSerializer, OrderSerializer
+from .models import Cart, Order, CancelOrder, CouponCustomer, Coupon, Payment, CANCEL_REASON
+from .serializers import CartSerializer, OrderSerializer, PaymentSerializer
 
 
 class CartListAPI(generics.ListAPIView):
@@ -166,7 +166,7 @@ class OrderListAPI(generics.ListAPIView):
 class OrderDetailAPI(generics.RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes =[permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class CheckoutAPI(views.APIView):
@@ -237,3 +237,60 @@ class CheckoutAPI(views.APIView):
                 'data': "Restaurant is closed",
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderCancelReasonAPI(views.APIView):
+
+    @staticmethod
+    def get(self):
+        return Response(CANCEL_REASON, status=status.HTTP_200_OK)
+
+
+class CartDetailAPI(generics.RetrieveAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class PaymentDetailAPI(generics.RetrieveAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class OrderTotalAPI(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, *args, **kwargs):
+
+        order = Order.objects.get(id=self.kwargs.get('pk'))
+        if order.user == self.request.user:
+            response = {
+                'order_total': order.get_total(),
+                'tax_total': order.get_tax_total(),
+                'total_without_coupon': order.get_total_without_coupon(),
+                'coupon_total': order.get_coupon_total()
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        response = {
+            'data' 'FORBIDDEN'
+        }
+        return Response(response, status=status.HTTP_403_FORBIDDEN)
+
+
+class CartTotalAPI(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, *args, **kwargs):
+
+        cart = Cart.objects.get(id=self.kwargs.get('pk'))
+        if cart.user == self.request.user:
+            response = {
+                'cart_total': cart.get_total_item_price(),
+                'cart_tax': cart.get_tax()
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        response = {
+            'data' 'FORBIDDEN'
+        }
+        return Response(response, status=status.HTTP_403_FORBIDDEN)

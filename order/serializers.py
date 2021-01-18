@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Cart, Order
+from .models import Cart, Order, Payment
 
 
 # Cart Serializer
@@ -17,4 +17,8 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
+# Payment Serializer
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'
