@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
-from menu.models import Product
+from menu.models import Product, BookTable, Table
 from home.models import RestaurantsTiming
 from .models import Cart, Order, CancelOrder, CouponCustomer, Coupon, Payment, CANCEL_REASON
 from .serializers import CartSerializer, OrderSerializer, PaymentSerializer
@@ -182,6 +182,33 @@ class CheckoutAPI(views.APIView):
         # else:
         timing = RestaurantsTiming.objects.first()
         if timing.is_restaurant_open():
+            if order.table:
+                # Rechecking if table is available
+
+                # Getting the booked tabled for given date and time
+                book_table = BookTable.objects.filter(booked_for_date=order.table.booked_for_date,
+                                                      booked_for_time=order.table.booked_for_time, is_booked=True)
+
+                # Get the non booked tabled for given date and time by filtering
+                table_available = Table.objects.filter(
+                    people_count=order.table.people_count, sitting_type=order.table.sitting_type
+                ).exclude(booktable__in=book_table)
+                if table_available:
+                    table = table_available.first()
+
+                    book_table_order = BookTable.objects.get(id=order.table.id)
+                    book_table_order.table = table
+                    book_table_order.is_booked = True
+                    book_table_order.save()
+
+                    order.table = book_table_order
+                    order.save()
+                else:
+                    BookTable.objects.get(id=order.table.id).delete()
+                    response = {
+                        'data': "Table is already booked choose, Please book another table",
+                    }
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
             # client = razorpay.Client(auth=(razorpay_api, razorpay_secret))
             # razorpay_payment = client.order.create(
             #     {
@@ -211,11 +238,6 @@ class CheckoutAPI(views.APIView):
             # Updating cart
             cart = order.cart.all()
             cart.update(ordered=True)
-
-            if order.table:
-                table = order.table
-                table.is_booked = True
-                table.save()
 
             ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 

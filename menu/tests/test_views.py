@@ -64,6 +64,9 @@ class BaseTest(TestCase):
         self.table_time = TableTime.objects.create(
             time=timezone.datetime.now().strftime('%H:%M:%S'),
         )
+        self.table_time_2 = TableTime.objects.create(
+            time='11:22:33',
+        )
 
         self.table_1 = Table.objects.create(
             title='1',
@@ -155,10 +158,21 @@ class TableBookTest(BaseTest):
         # Checking the message
 
         self.client.get(self.add_to_cart_url)
-        self.client.get(self.checkout_url)
+        order = Order.objects.filter(ordered=False).last()
+        self.assertEqual(order.cart.count(), 1)
 
-        book_table = BookTable.objects.all().last()
-        order = Order.objects.filter(ordered=True).last()
+        response = self.client.get(self.checkout_url)
+
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'success')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Your order was successful!")
+        # Checking the message
+
+        order = Order.objects.filter(ordered=True, user=self.user).last()
+        book_table = BookTable.objects.filter(is_booked=True, table=order.table.table).last()
+
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(BookTable.objects.count(), 1)
 
         self.assertEqual(order.cart.count(), 1)
         self.assertEqual(order.table.is_booked, True)
@@ -256,6 +270,7 @@ class TableBookTest(BaseTest):
         order = Order.objects.filter(ordered=True).last()
 
         self.assertEqual(order.cart.count(), 1)
+
         self.assertEqual(order.table.is_booked, True)
         self.assertEqual(order.table, book_table)
         self.assertEqual(order.cart.first().product.title, 'test product')
@@ -350,6 +365,65 @@ class TableBookTest(BaseTest):
         order = Order.objects.filter(ordered=False).count()
         self.assertEqual(order, 1)
         self.assertEqual(book_table, 1)
+
+    def test_book_table_invalid_case_4(self):
+        # booking a table then add to order but before booking someone else book's the table
+
+        # Logging User
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+
+        # Table already added to order
+        book_table = BookTable.objects.count()
+        order = Order.objects.filter(ordered=False).count()
+        self.assertEqual(order, 0)
+        self.assertEqual(book_table, 0)
+
+        # Book table and add food
+        self.client.get(self.add_to_cart_url)
+
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time_2.id,
+            'add_food': 'add_food'
+        })
+
+        self.assertEqual(response.status_code, 302)
+        book_table = BookTable.objects.count()
+        order = Order.objects.filter(ordered=False, user=self.user)
+        self.assertEqual(order.count(), 1)
+        self.assertEqual(book_table, 1)
+
+        self.client.logout()
+        self.client.login(email="pytest_tests2@gmail.com", password="Test@321")
+        response = self.client.post(self.book_table_url, {
+            'name': 'TEST',
+            'email': 'test@gamil.com',
+            'phone_number': '8275123023',
+            'people_count': self.table_count_2.id,
+            'sitting_type': self.table_view.id,
+            'booked_for_date': timezone.datetime.now().strftime('%Y-%m-%d'),
+            'booked_for_time': self.table_time_2.id,
+            'add_food': 'add_food'
+        })
+        self.client.get(self.add_to_cart_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.client.get(self.checkout_url)
+        order = Order.objects.filter(ordered=True, user=self.user_2).last()
+        self.assertEqual(order.table.is_booked, True)
+        self.client.logout()
+
+        self.client.login(email="pytest_tests@gmail.com", password="Test@321")
+        response = self.client.get(self.checkout_url)
+        # Checking message
+        messages = list(get_messages(response.wsgi_request))  # Get the messages
+        self.assertEqual(messages[-1].tags, 'warning')  # Checking the tag
+        self.assertEqual(str(messages[-1]), "Table is already booked choose, Please book another table")  # Checking the message
 
 
 class DeleteTableTest(BaseTest):

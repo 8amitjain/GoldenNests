@@ -11,7 +11,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 import datetime
 
-from menu.models import Product
+from menu.models import Product, Table, BookTable
 from .filters import OrderFilter
 from .forms import CouponCustomerForm
 from .models import (
@@ -252,6 +252,31 @@ class CheckoutView(LoginRequiredMixin, View):
         # else:
         timing = RestaurantsTiming.objects.first()
         if timing.is_restaurant_open():
+            if order.table:
+                # Rechecking if table is available
+                # Getting the booked tabled for given date and time
+                book_table = BookTable.objects.filter(booked_for_date=order.table.booked_for_date,
+                                                      booked_for_time=order.table.booked_for_time, is_booked=True)
+
+                # Get the non booked tabled for given date and time by filtering
+                table_available = Table.objects.filter(
+                    people_count=order.table.people_count, sitting_type=order.table.sitting_type
+                ).exclude(booktable__in=book_table)
+                if table_available:
+                    table = table_available.first()
+
+                    book_table_order = BookTable.objects.get(id=order.table.id)
+                    book_table_order.table = table
+                    book_table_order.is_booked = True
+                    book_table_order.save()
+
+                    order.table = book_table_order
+                    order.save()
+                else:
+                    BookTable.objects.get(id=order.table.id).delete()
+                    messages.warning(self.request, "Table is already booked choose, Please book another table")
+                    return redirect('order:cart')
+
             # client = razorpay.Client(auth=(razorpay_api, razorpay_secret))
             # razorpay_payment = client.order.create(
             #     {
@@ -281,11 +306,6 @@ class CheckoutView(LoginRequiredMixin, View):
             # Updating cart
             cart = order.cart.all()
             cart.update(ordered=True)
-
-            if order.table:
-                table = order.table
-                table.is_booked = True
-                table.save()
 
             ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 

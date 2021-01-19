@@ -55,18 +55,18 @@
 
                     <div class="menu-wrapper single-menu fl-wrap" id="menu-section-1" data-scrollax-parent="true">
                         {% for category in category_list %}
-                                <div class="menu-wrapper-title fl-wrap">
-                                    <div class="menu-wrapper-title-item">
-                                        <h4>{{ category.title }}</h4>
-                                        <h5>Pellentesque eros mi, faucibus tempor scelerisque nec, efficitur nec nunc.</h5>
-                                    </div>
-                                    {% if category.image %}
-                                     <div class="bg par-elem "  data-bg="{{ category.image.url }}" data-scrollax="properties: { translateY: '40%' }"></div>
-                                    {% endif %}
-                                    <div class="overlay"></div>
-                                    <span class="menu-wrapper-title_number">01.</span>
+                            <div class="menu-wrapper-title fl-wrap">
+                                <div class="menu-wrapper-title-item">
+                                    <h4>{{ category.title }}</h4>
+                                    <h5>Pellentesque eros mi, faucibus tempor scelerisque nec, efficitur nec nunc.</h5>
                                 </div>
-                                <!-- hero-menu-item-->
+                                {% if category.image %}
+                                 <div class="bg par-elem "  data-bg="{{ category.image.url }}" data-scrollax="properties: { translateY: '40%' }"></div>
+                                {% endif %}
+                                <div class="overlay"></div>
+                                <span class="menu-wrapper-title_number">01.</span>
+                            </div>
+                            <!-- hero-menu-item-->
 
                             <!-- gallery-filters end-->
                             <!-- gallery start -->

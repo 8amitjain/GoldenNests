@@ -28,7 +28,7 @@ urlpatterns = [
     # Rest Api
     # Cart
     path('api/cart/', api.CartListAPI.as_view(), name='api-cart'),
-    path('api/add_to_cart/<slug>/', api.AddToCartAPI.as_view(), name='api-cart'),
+    path('api/add_to_cart/<slug>/', api.AddToCartAPI.as_view(), name='api-add-to-cart'),
     path('api/cart/<int:cart_pk>/<int:qty>/', api.CartQuantityUpdateAPI.as_view(), name='api-cart-qty-update'),
     path('api/cart/total/<int:pk>/', api.CartTotalAPI.as_view(), name='api-cart-total'),
     path('api/cart/detail/<int:pk>/', api.CartDetailAPI.as_view(), name='api-cart-detail'),
