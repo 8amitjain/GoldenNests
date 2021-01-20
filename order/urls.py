@@ -8,6 +8,7 @@ from . import api
 app_name = 'order'
 
 urlpatterns = [
+
     # Cart
     path('cart/', views.CartListView.as_view(), name='cart'),
     path('cart/add/<slug>/', views.add_to_cart, name='add-to-cart'),
@@ -22,14 +23,15 @@ urlpatterns = [
     path('cancel/<int:pk>/', views.CancelOrderView.as_view(), name='cancel'),
 
     # Payment
-    path('checkout/', views.CheckoutView.as_view(), name='checkout'),
-    # path('payment/', views.PaymentView.as_view(), name='payment'),
+    path('checkout/', views.CheckoutView.as_view(), name='checkout'),  # TDT
+
 
     # Rest Api
+
     # Cart
     path('api/cart/', api.CartListAPI.as_view(), name='api-cart'),
-    path('api/add_to_cart/<slug>/', api.AddToCartAPI.as_view(), name='api-add-to-cart'),
     path('api/cart/<int:cart_pk>/<int:qty>/', api.CartQuantityUpdateAPI.as_view(), name='api-cart-qty-update'),
+    path('api/add_to_cart/<slug>/', api.AddToCartAPI.as_view(), name='api-add-to-cart'),
     path('api/cart/total/<int:pk>/', api.CartTotalAPI.as_view(), name='api-cart-total'),
     path('api/cart/detail/<int:pk>/', api.CartDetailAPI.as_view(), name='api-cart-detail'),
 
@@ -47,7 +49,7 @@ urlpatterns = [
     path('api/coupon/', api.AddCouponOrderAPI.as_view(), name='api-coupon-order'),
 
     # Checkout
-    path('api/checkout/', api.CheckoutAPI.as_view(), name='api-checkout'),
+    path('api/checkout/', api.CheckoutAPI.as_view(), name='api-checkout'),  # TDT
     path('api/payment/<int:pk>/', api.PaymentDetailAPI.as_view(), name='api-payment-detail'),
 
 ]

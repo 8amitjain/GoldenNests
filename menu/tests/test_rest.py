@@ -1,10 +1,6 @@
 from django.shortcuts import reverse
 from rest_framework.test import APITestCase
-from rest_framework import status
 from django.utils import timezone
-
-from menu.serializers import CategorySerializer, ProductSerializer, TableCountSerializer, TableViewSerializer, \
-                             TableTimeSerializer
 
 from menu.models import Product, Category, TableCount, TableView, TableTime, Table, BookTable
 from order.models import (

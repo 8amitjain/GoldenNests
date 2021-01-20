@@ -163,10 +163,28 @@ class OrderListAPI(generics.ListAPIView):
         return order
 
 
-class OrderDetailAPI(generics.RetrieveAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+class OrderDetailAPI(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id=self.kwargs.get('pk'))
+        if order.user == self.request.user:
+            return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
+        else:
+            response = {
+                'data': "FORBIDDEN"
+            }
+            return Response(response, status=status.HTTP_200_OK)
+
+
+# class OrderDetailAPI(generics.RetrieveAPIView):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     def get_object(self):
+#         order = Order.objects.get(user=self.request.user, id=self.kwargs.get('id'))
+#         return order
 
 
 class CheckoutAPI(views.APIView):
@@ -230,7 +248,7 @@ class CheckoutAPI(views.APIView):
             payment.save()
 
             # Checking if coupon is applied.
-            if order.coupon_used:
+            if order.coupon_customer:
                 coupon_customer = CouponCustomer.objects.get(id=order.coupon_customer.id)
                 coupon_customer.used = True
                 coupon_customer.save()
@@ -268,16 +286,37 @@ class OrderCancelReasonAPI(views.APIView):
         return Response(CANCEL_REASON, status=status.HTTP_200_OK)
 
 
-class CartDetailAPI(generics.RetrieveAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+class CartDetailAPI(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        cart = Cart.objects.get(id=self.kwargs.get('pk'))
+        if cart.user == self.request.user:
+            return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
+        else:
+            response = {
+                'data': "FORBIDDEN"
+            }
+            return Response(response, status=status.HTTP_200_OK)
 
-class PaymentDetailAPI(generics.RetrieveAPIView):
-    queryset = Payment.objects.all()
-    serializer_class = PaymentSerializer
+
+class PaymentDetailAPI(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        payment = Payment.objects.get(id=self.kwargs.get('pk'))
+        if payment.user == self.request.user:
+            return Response(PaymentSerializer(payment).data, status=status.HTTP_200_OK)
+        else:
+            response = {
+                'data': "FORBIDDEN"
+            }
+            return Response(response, status=status.HTTP_200_OK)
+#
+# class PaymentDetailAPI(generics.RetrieveAPIView):
+#     queryset = Payment.objects.all()
+#     serializer_class = PaymentSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 
 class OrderTotalAPI(views.APIView):
