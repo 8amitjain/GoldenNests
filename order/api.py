@@ -355,3 +355,4 @@ class CartTotalAPI(views.APIView):
             'data' 'FORBIDDEN'
         }
         return Response(response, status=status.HTTP_403_FORBIDDEN)
+
