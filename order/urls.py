@@ -36,7 +36,10 @@ urlpatterns = [
     # Order
     path('api/list/', api.OrderListAPI.as_view(), name='api-list'),
     path('api/detail/<int:pk>/', api.OrderDetailAPI.as_view(), name='api-detail'),
-    path('api/order/total/<int:pk>/', api.OrderTotalAPI.as_view(), name='api-total'),
+    path('api/order/total/'
+         ''
+         ''
+         '/', api.OrderTotalAPI.as_view(), name='api-total'),
 
     # Cancel Order
     path('api/cancel/<int:pk>/', api.CancelOrderAPI.as_view(), name='api-cancel-order'),

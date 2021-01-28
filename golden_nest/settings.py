@@ -6,7 +6,7 @@ import os
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = '!wzd+ws1+apy$n6bby-2s)==s@aj6-xf-(a1&f3a%vt)fhl&bb'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
