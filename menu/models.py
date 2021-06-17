@@ -126,7 +126,7 @@ class Product(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=14, null=True, blank=True,
                              help_text="Food Item is Special, Popular etc or leave it blank for no label. \
                                         (Label will be displayed over a item.)")
-    description = models.TextField(help_text='To describe food item in short', null=True, blank=True)
+    description = RichTextField(help_text='To describe food item in short', null=True, blank=True)
     image = models.ImageField(upload_to='products')
 
     is_active = models.BooleanField(default=True)

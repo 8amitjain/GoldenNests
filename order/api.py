@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
-from menu.models import Product, BookTable, Table
+from menu.models import Product
 from home.models import RestaurantsTiming
 from .models import Cart, Order, CancelOrder, CouponCustomer, Coupon, Payment, CANCEL_REASON
 from .serializers import CartSerializer, OrderSerializer, PaymentSerializer
@@ -163,28 +163,10 @@ class OrderListAPI(generics.ListAPIView):
         return order
 
 
-class OrderDetailAPI(views.APIView):
+class OrderDetailAPI(generics.RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        order = Order.objects.get(id=self.kwargs.get('pk'))
-        if order.user == self.request.user:
-            return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
-        else:
-            response = {
-                'data': "FORBIDDEN"
-            }
-            return Response(response, status=status.HTTP_200_OK)
-
-
-# class OrderDetailAPI(generics.RetrieveAPIView):
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def get_object(self):
-#         order = Order.objects.get(user=self.request.user, id=self.kwargs.get('id'))
-#         return order
 
 
 class CheckoutAPI(views.APIView):
@@ -200,33 +182,6 @@ class CheckoutAPI(views.APIView):
         # else:
         timing = RestaurantsTiming.objects.first()
         if timing.is_restaurant_open():
-            if order.table:
-                # Rechecking if table is available
-
-                # Getting the booked tabled for given date and time
-                book_table = BookTable.objects.filter(booked_for_date=order.table.booked_for_date,
-                                                      booked_for_time=order.table.booked_for_time, is_booked=True)
-
-                # Get the non booked tabled for given date and time by filtering
-                table_available = Table.objects.filter(
-                    people_count=order.table.people_count, sitting_type=order.table.sitting_type
-                ).exclude(booktable__in=book_table)
-                if table_available:
-                    table = table_available.first()
-
-                    book_table_order = BookTable.objects.get(id=order.table.id)
-                    book_table_order.table = table
-                    book_table_order.is_booked = True
-                    book_table_order.save()
-
-                    order.table = book_table_order
-                    order.save()
-                else:
-                    BookTable.objects.get(id=order.table.id).delete()
-                    response = {
-                        'data': "Table is already booked choose, Please book another table",
-                    }
-                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
             # client = razorpay.Client(auth=(razorpay_api, razorpay_secret))
             # razorpay_payment = client.order.create(
             #     {
@@ -248,7 +203,7 @@ class CheckoutAPI(views.APIView):
             payment.save()
 
             # Checking if coupon is applied.
-            if order.coupon_customer:
+            if order.coupon_used:
                 coupon_customer = CouponCustomer.objects.get(id=order.coupon_customer.id)
                 coupon_customer.used = True
                 coupon_customer.save()
@@ -256,6 +211,11 @@ class CheckoutAPI(views.APIView):
             # Updating cart
             cart = order.cart.all()
             cart.update(ordered=True)
+
+            if order.table:
+                table = order.table
+                table.is_booked = True
+                table.save()
 
             ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -286,37 +246,16 @@ class OrderCancelReasonAPI(views.APIView):
         return Response(CANCEL_REASON, status=status.HTTP_200_OK)
 
 
-class CartDetailAPI(views.APIView):
+class CartDetailAPI(generics.RetrieveAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        cart = Cart.objects.get(id=self.kwargs.get('pk'))
-        if cart.user == self.request.user:
-            return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
-        else:
-            response = {
-                'data': "FORBIDDEN"
-            }
-            return Response(response, status=status.HTTP_200_OK)
 
-
-class PaymentDetailAPI(views.APIView):
+class PaymentDetailAPI(generics.RetrieveAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        payment = Payment.objects.get(id=self.kwargs.get('pk'))
-        if payment.user == self.request.user:
-            return Response(PaymentSerializer(payment).data, status=status.HTTP_200_OK)
-        else:
-            response = {
-                'data': "FORBIDDEN"
-            }
-            return Response(response, status=status.HTTP_200_OK)
-#
-# class PaymentDetailAPI(generics.RetrieveAPIView):
-#     queryset = Payment.objects.all()
-#     serializer_class = PaymentSerializer
-#     permission_classes = [permissions.IsAuthenticated]
 
 
 class OrderTotalAPI(views.APIView):
@@ -355,4 +294,3 @@ class CartTotalAPI(views.APIView):
             'data' 'FORBIDDEN'
         }
         return Response(response, status=status.HTTP_403_FORBIDDEN)
-

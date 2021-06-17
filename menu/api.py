@@ -15,13 +15,13 @@ class ProductListAPI(generics.ListAPIView):
 
 
 class ProductAPI(generics.RetrieveAPIView):
-    queryset = Product.objects.filter(is_active=True)
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class CategoryAPI(generics.RetrieveAPIView):
-    queryset = Category.objects.filter(is_active=True)
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
 
@@ -65,11 +65,10 @@ class TableTimeAPI(generics.RetrieveAPIView):
 class TableTimeListAPI(generics.ListAPIView):
     queryset = TableTime.objects.all()
     serializer_class = TableTimeSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class BookTableAPI(views.APIView):
-    # permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
         add_food = self.request.data['add_food']
@@ -140,7 +139,7 @@ class RemoveTableOrderAPI(views.APIView):
     def get(self, request, format=None):
         order = Order.objects.filter(ordered=False, user=request.user).first()
         if not order:
-            data = {'data': 'Table Does Not Exist'}
+            data = {'data': 'Order Does Not Exist'}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
         if order.table.is_booked is not True:
             BookTable.objects.get(id=order.table.id).delete()
