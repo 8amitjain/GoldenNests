@@ -39,6 +39,21 @@
                     <div class="container">
 <!--                        <div class="lang-wrap"><a href="#" class="act-lang">En</a><span>/</span><a href="#">Fr</a></div>-->
                         <div class="header-top_contacts"><a href="#"><span>Call now:</span> +489756412322</a><a href="#"><span>Write :</span> yourmail@domain.com</a></div>
+                        <div class="col-md-6">
+                                    <h5 class="footer-title">Policies</h5>
+                                    <ul class="nav">
+                                        <li class="nav-item"><a class="nav-link" href="">Terms & Conditions</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="">Return Policy</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="">Accessibility</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="">Privacy</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'home:terms' 'terms-and-condition' %}">Terms & Conditions</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'home:terms' 'shiping-policy' %}">Shipping Policy</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'home:terms' 'return-policy' %}">Return Policy</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'home:terms' 'refund-policy' %}">Refund Policy</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'home:terms' 'cancellation-policy' %}">Cancellation Policy</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'home:terms' 'privacy-policy' %}">Privacy</a></li>
+                                    </ul>
+                                </div>
                     </div>
                 </div>
                 <!--header-top end -->
@@ -184,6 +199,7 @@
                                                     <button type="submit" id="subscribe-button" class="subscribe-button color-bg">Send </button>
                                                     <label for="subscribe-email" class="subscribe-message"></label>
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>
