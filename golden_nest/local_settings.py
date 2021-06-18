@@ -2,7 +2,7 @@ Secret_key = ''
 
 Email = 'siteguide.in@gmail.com'
 Email_Pass = 'xplcwpoproktynae'
-
+DB_PASS = "E?2ldFup-*Iv"
 
 #  To do while using this project
 # Change website name in user utils and user models

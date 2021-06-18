@@ -94,6 +94,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "hsogiawj_GN",
+#         "USER": "hsogiawj_GN_U",
+#         "PASSWORD": DB_PASS,
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [

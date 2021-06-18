@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone, dateformat
 from datetime import timedelta
+from ckeditor.fields import RichTextField
 
 
 class RestaurantsTiming(models.Model):
@@ -16,5 +17,15 @@ class RestaurantsTiming(models.Model):
         return self.opening_time.strftime('%H:%M:%S') < now < self.closing_time.strftime('%H:%M:%S')
 
 
+class TPP(models.Model):
+    tand_c = RichTextField(null=True, blank=True)
+    shipping_policy = RichTextField(null=True, blank=True)
+    refund_policy = RichTextField(null=True, blank=True)
+    return_policy = RichTextField(null=True, blank=True)
+    cancellation_policy = RichTextField(null=True, blank=True)
+    privacy_policy = RichTextField(null=True, blank=True)
+
+    def __str__(self):
+        return 'TPP'
 
 
