@@ -129,6 +129,12 @@ USE_I18N = True
 USE_L10N = True
 # USE_TZ = True
 
+USE_THOSAND_SEPERATOR = True
+FORMAT_MODULE_PATH = [
+    'golden_nest.formats',
+]
+
+
 # User Model
 AUTH_USER_MODEL = 'users.User'  # Custom User Model
 
