@@ -84,7 +84,7 @@
                                                 <p>Seasoned with an herb crust, served with au jus and handcarved to order. </p>
                                                 <div class="grid-item_price">
                                                     <span>₹{{ product.price }}</span>
-                                                     <a href="{{ product.get_add_to_cart_url }}"><div class="add_cart">Add To Cart</div></a>
+                                                     <a href="{% url 'order:add-to-cart' product.id %}"><div class="add_cart">Add To Cart</div></a>
                                                 </div>
                                             </div>
                                         </div>

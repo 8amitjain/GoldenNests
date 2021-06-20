@@ -6,6 +6,7 @@ from django.shortcuts import (
 )
 from django.utils import timezone
 from django.views.generic import View
+from django.http import JsonResponse
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
@@ -21,44 +22,86 @@ from home.models import RestaurantsTiming
 # from vowsnviews.local_settings import razorpay_api, razorpay_secret
 # import razorpay
 
+class AddToCart(LoginRequiredMixin, View):
+    def get(self, request, *args,**kwargs):
+        pk = self.kwargs.get('pk')
+        quantity = int(request.GET.get('quantity', 1))
+        product = get_object_or_404(Product, pk=pk)
 
-# TODO add sizes
-@login_required
-def add_to_cart(request, slug, size=None):
-    product = get_object_or_404(Product, slug=slug)
-    cart, created = Cart.objects.get_or_create(
-        product=product,
-        user=request.user,
-        ordered=False,
-        # size=size,
-    )
-    order_qs = Order.objects.filter(user=request.user, ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
-        if order.cart.filter(product=product).exists():
-            if cart.quantity >= 10:
-                messages.info(request, "Maximum quantity added.")
-                return redirect("order:cart")
+        user = self.request.user if self.request.user.is_authenticated else None
+
+        cart, created = Cart.objects.get_or_create(
+            product=product,
+            user=user,
+            ordered=False,
+        )
+
+        if quantity <= 0:
+            order_qs = Order.objects.filter(
+                user=user, ordered=False)
+            
+            cart.delete()
+
+            order = order_qs.filter(cart=cart).first()
+            if order and order.cart.count() == 0:
+                order.delete()
+            messages.info(request, "Item was removed from order.")
+            return redirect("order:cart-list")
+
+        # Updating cart qty
+        cart.quantity = quantity
+        cart.save()
+        order_qs = Order.objects.filter(
+            user=user, ordered=False)
+        if order_qs.exists():
+            # Updating THE CART
+            order = order_qs[0]
+            if cart in order.cart.all():
+                # CHECK QTY HANDLE
+                if cart.quantity >= 10:
+                    cart.quantity = 10
+                    messages.info(request, "Maximum quantity added.")
+                    return JsonResponse(
+                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                             'get_total_without_coupon':order.get_total_without_coupon(),
+                             'get_coupon_total':order.get_coupon_total()
+                             })
+
+                else:
+                    messages.info(request, "Item quantity was updated.")
+                    return JsonResponse(
+                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                             'get_total_without_coupon':order.get_total_without_coupon(),
+                             'get_coupon_total':order.get_coupon_total()
+                             })
             else:
-                cart.quantity += 1
-                cart.save()
-                messages.success(request, "Quantity was updated.")
-                return redirect("order:cart")
+                order.cart.add(cart)
+                order.save()
+                messages.info(request, "Food item was added to your cart.")
+                return JsonResponse(
+                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                             'get_total_without_coupon':order.get_total_without_coupon(),
+                             'get_coupon_total':order.get_coupon_total()
+                             })
         else:
+            # CREATING THE ORDER
+            ordered_date_time = timezone.now()
+            order = Order.objects.create(
+                user=user, ordered_date_time=ordered_date_time)  
+            ORN = f"ORN-{100000 + int(order.id)}"
+            order.order_ref_number = ORN
             order.cart.add(cart)
             order.save()
-            messages.success(request, "Food Item was added to your cart.")
-            return redirect('menu:menu')
-    else:
-        ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        order = Order.objects.create(
-            user=request.user, ordered_date_time=ordered_date_time)
-        ORN = f"ORN-{100000 + int(order.id)}"
-        order.order_ref_number = ORN
-        order.cart.add(cart)
-        order.save()
-        messages.success(request, "Food Item was added to your cart.")
-        return redirect('menu:menu')
+
+            order.save()
+
+            messages.info(request, "Food Item was added to your cart.")
+            return JsonResponse(
+                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                             'get_total_without_coupon':order.get_total_without_coupon(),
+                             'get_coupon_total':order.get_coupon_total()
+                             })
+
 
 
 class RemoveFromCart(LoginRequiredMixin, UserPassesTestMixin, View):
