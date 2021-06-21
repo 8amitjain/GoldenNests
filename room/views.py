@@ -48,8 +48,11 @@ class BookRoomView(View):
         
         days = check_out - check_in
         no_of_days = days.days
+        if (check_in - datetime.today()).days < 0:
+            messages.info(self.request, "Please select proper check in date")
+            return redirect('room:book', pk = pk)
         if not no_of_days > 0:
-            messages.info(self.request, "Please select proper check in and out date")
+            messages.info(self.request, "Please select proper check out date")
             return redirect('room:book', pk = pk)
         room_cart, created = RoomCart.objects.get_or_create(user = user, room_type=room_type, people_variation = people_variation, no_of_rooms =no_of_room)
         room_cart.save()
