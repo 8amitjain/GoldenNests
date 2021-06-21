@@ -48,7 +48,7 @@ class BookRoomView(View):
         
         days = check_out - check_in
         no_of_days = days.days
-        if (check_in - datetime.today()).days < 0:
+        if (check_in - datetime.today()).days+1 < 0:
             messages.info(self.request, "Please select proper check in date")
             return redirect('room:book', pk = pk)
         if not no_of_days > 0:
