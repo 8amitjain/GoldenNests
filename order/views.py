@@ -160,7 +160,7 @@ class CartListView(LoginRequiredMixin, ListView):
         form = CouponCustomerForm()
         context['form'] = form
         context['order'] = order
-        context['cart_count'] = order.cart.count()
+        context['cart_count'] = order.cart.count() if order is not None else 0
         return context
 
     def post(self, form, **kwargs):
