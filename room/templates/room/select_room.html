@@ -1,0 +1,46 @@
+{% extends 'room/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+            <div class="col-3">
+                <form action="" method="get">
+                    
+                    <input type="number" name="adult">
+                    <input type="number" name="child">
+                    <button type="submit"> Filter</button>
+                </form>
+            </div>
+            <div class="col-5">
+                <table class="table mt-3">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Members</th>
+      <th scope="col">Price</th>
+      <th scope="col">Action</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for object in object_list %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ object.name }}</td>
+      <td>
+        {% for obj in object.people_variation.all %}
+        <span>{{ obj.no_of_adult }} Adult & {{ obj.no_of_child }} Child</span><br>
+        {% endfor %}
+      </td>
+      <td>{{ object.price }}</td>
+      <td><a href="{% url 'room:book' object.id %}" class="btn btn-primary">Select</a></td>
+
+    </tr>
+    {% endfor %}
+    
+  </tbody>
+</table>
+            </div>
+        
+{% endblock %}
