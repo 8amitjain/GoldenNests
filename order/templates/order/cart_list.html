@@ -41,6 +41,7 @@
                                 <th>Total</th>
                                 <th></th>
                             </tr>
+                            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
                             {% for cart in object_list %}
                                 <tr>
                                     <td class="hidden-xs">
@@ -55,18 +56,39 @@
                                         <h5 class="order-money">₹{{ cart.product.price }}</h5>
                                     </td>
                                     <td>
-
-                                        <input type="number" name="cartin1" value="{{ cart.quantity }}" max="50" min="0" class="order-count">
+                                        <form method="get" id="qtyForm_{{ cart.product.id }}" data-url="{% url 'order:add-to-cart' cart.product.id %}">
+                                            <input type="number" id="quantity_{{ cart.product.id }}" name="cartin1" value="{{ cart.quantity }}" max="10" min="0" class="order-count">
+                                        </form>    
                                     </td>
                                     <td>
-                                        <h5 class="order-money">₹{{ cart.get_total_item_price }}</h5>
+                                        <h5 class="order-money" id="get_total_{{ cart.product.id }}">₹{{ cart.get_total_item_price }}</h5>
                                     </td>
                                     <td class="pr-remove">
 <!--                                        <a href="{{ cart.get_remove_from_cart_url }}" title="Remove"><i class="fal fa-times"></i></a>-->
                                         <a href="{{ cart.get_delete_cart_url }}" title="Remove"><i class="fal fa-times"></i></a>
                                     </td>
                                 </tr>
+                            
+                                <script>
+                                    $("#qtyForm_{{ cart.product.id }}").change(function (){
+                                        var quantity = $("#quantity_{{ cart.product.id }}").val();
+                                        var url = $(this).attr('data-url');
+                                        console.log(url);
+                                        $.ajax({
+                                            url: url,
+                                            data: {
+                                                'quantity': quantity,
+                                            },
+                                            success: function (data) {
+                                                console.log("Success");
+                                                $("#get_total_{{ cart.product.id }}").html("₹" + data["total"] + "/-"); 
+                                            }
+                                        });
+                                    });
+                                </script>
                             {% endfor %}
+
+
 <!--                            <tr>-->
 <!--                                <td class="hidden-xs">-->
 <!--                                    <a href="#"><img src="images/menu/2.jpg" alt="" class="respimg"></a>-->
