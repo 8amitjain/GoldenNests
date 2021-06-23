@@ -1,0 +1,258 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load order_extras %}
+{% block content %}
+    <div class="content">
+         <!--  section  -->
+        <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+            <div class="bg par-elem "  data-bg="{% static 'home/images/bg/19.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="section-title">
+                    <h4>Enjoy your time in our restaurant with pleasure.</h4>
+                    <h2>Discover Our Menu</h2>
+                    <div class="dots-separator fl-wrap"><span></span></div>
+                </div>
+            </div>
+            <div class="hero-section-scroll">
+                <div class="mousey">
+                    <div class="scroller"></div>
+                </div>
+            </div>
+            <div class="brush-dec"></div>
+        </section>
+        <!--  section  end-->
+
+        <!--  section  -->
+        <section class="hidden-section" data-scrollax-parent="true" id="sec2">
+            <div class="container">
+<!--                <div class="row">-->
+<!--                    <div class="col-md-3">-->
+<!--                <div class="gallery_filter-button btn">Show Filters <i class="fal fa-long-arrow-down"></i></div>-->
+<!--                &lt;!&ndash; gallery-filters &ndash;&gt;-->
+<!--                <div class="gallery-filters gth">-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter gallery-filter-active"  data-filter="*"><span>01.</span>All Dishes</a>&ndash;&gt;-->
+<!--                    {% for category in category_list %}-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                    {% endfor %}-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".desserts"><span>03.</span>Desserts</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".seafood"><span>04.</span>Sea Food</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".drinks"><span>05.</span>Drinks</a>&ndash;&gt;-->
+<!--                </div>-->
+<!--                        </div>-->
+<!--                &lt;!&ndash; gallery-filters end&ndash;&gt;-->
+<!--                &lt;!&ndash; gallery start &ndash;&gt;-->
+<!--                     <div class="col-md-9">-->
+<!--                <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">-->
+
+<!--                    &lt;!&ndash; gallery-item&ndash;&gt;-->
+
+<!--                    &lt;!&ndash; gallery-item end&ndash;&gt;-->
+
+<!--                </div>-->
+<!--                     </div>-->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script>
+                    jQuery(function($) {
+                      $(window).scroll(function fix_element() {
+                        $('#target').css(
+                          $(window).scrollTop() > 350 && $(window).scrollTop() < $("#menu").height()
+                            ? { 'position': 'fixed', 'top': '100px', 'bottom': '100px', 'overflow' : 'auto' }
+                            : { 'position': 'relative', 'top': 'auto' }
+                        );
+                        return fix_element;
+                      }());
+                    });
+                </script>
+
+                <div class="hero-menu tabs-act fl-wrap">
+                <div class="row">
+                        <!--  hero-menu_header-->
+                        <div class="col-md-3 hide-mobile mycol">
+                            <div class="hero-menu_header fl-wrap" id="target">
+                                <ul class="tabs-menu no-list-style change_bg">
+                                    {% for category in category_list %}
+                                    <li {% if forloop.counter == 1 %} class="current" {% endif %}><a href="#tab-{{category.id}}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>{% if forloop.counter < 10 %}0{% endif %}{{forloop.counter}}.</span>{{category.title}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!--  hero-menu_header  end-->
+                        <!--  hero-menu_content   -->
+                        <div class="col-md-9 mycol2" id="menu">
+
+                                <div class="menu-wrapper single-menu fl-wrap" id="menu-section-1" data-scrollax-parent="true">
+                                    {% for category in category_list %}
+                                    <div class="tabs-container">
+                                    <div class="tab">
+                                        <!--tab -->
+                                        <div id="tab-{{category.id}}" class="tab-content first-tab">
+                                            <div class="menu-wrapper-title fl-wrap">
+                                                <div class="menu-wrapper-title-item">
+                                                    <h4>{{ category.title }}</h4>
+                                                    <h5>Pellentesque eros mi, faucibus tempor scelerisque nec, efficitur nec nunc.</h5>
+                                                </div>
+                                                {% if category.image %}
+                                                 <div class="bg par-elem "  data-bg="{{ category.image.url }}" data-scrollax="properties: { translateY: '40%' }"></div>
+                                                {% endif %}
+                                                <div class="overlay"></div>
+                                                <span class="menu-wrapper-title_number">01.</span>
+                                            </div>
+                                            <!-- hero-menu-item-->
+                                            {% for object in category.product_set.all %}
+                                                    <div class="hero-menu-item" style="padding-left: 0.5em;">
+<!--                                                        <a href="{{object.image.url}}" class="hero-menu-item-img image-popup"><img src="{{object.image.url}}" alt=""></a>-->
+                                                        <div class=" fl-wrap" style="padding-left: 0em;display: flex;">
+                                                            <h6 style="padding-left: 0em;"> {{object.title}}</h6>
+                                                            <div class="hmi-dec" style="left: 100px;"></div>
+                                                            <span class="hero-menu-item-price" style="width: auto;margin-left: auto;">₹{{object.price}} </span>
+                                                            <div style="position:absolute;bottom:-50px;right:0;display: none;" id="myDIV_{{object.id}}">
+                                                                <div>
+                                                                    <div style="display: flex;background: #292929;" id="max{{object.id}}">
+                                                                        <a style="color: #C19D60;padding: 0.5em 1em;" id="less{{object.id}}"><i class="fa fa-minus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                                                        <p style="padding: 0.5em;" id="quantity_{{object.id}}">{% cart_quantity request object.pk %}</p>
+                                                                        <a style="color: #C19D60;padding: 0.5em 1em;" id="add{{object.id}}"><i class="fa fa-plus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="add_cart" id="mybtn_{{object.id}}" style="position:absolute;bottom:-50px;right:0;">
+                                                                <a id="cart_btn{{object.id}}">Add To Cart</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="hero-menu-item-details" style="width: 70%;">
+                                                            <p>Seasoned with an herb crust, served with au jus and handcarved to order.</p>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                <script>
+                                                        var object_id = "#quantity_{{object.id}}";
+                                                        console.log(object_id);
+
+                                                     $(document).ready(function(){
+                                                         $("#add{{object.id}}").click(function () {
+                                                             console.log('works');
+                                                               var url = "{% url 'order:add-to-cart' object.pk %}";
+                                                              var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) + 1;  // get the selected country ID from the HTML input
+                                                                                console.log(quantity, 'quantity');
+                                                                                console.log(url, 'url');
+
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                                                  document.getElementById("bottom_total").style.display = "block"
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                  if(data["quantity"] == 10 ){
+                                                                     document.getElementById("max{{object.id}}").style.border = "1px solid red";
+                                                                  };
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_mobile").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+
+                                                              }
+
+                                                            });
+                                                        });
+                                                        $("#less{{object.id}}").click(function () {
+                                                             console.log('works');
+                                                               var url = "{% url 'order:add-to-cart' object.pk %}";
+                                                              var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) - 1;  // get the selected country ID from the HTML input
+                                                                                console.log(quantity, 'quantity');
+                                                                                console.log(url, 'url');
+
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                  document.getElementById("max{{object.id}}").style.border = "0px solid black";
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_mobile").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"] );
+                                                              }
+
+                                                            });
+                                                        });
+
+                                                        $("#cart_btn{{object.id}}").click(function () {
+                                                          console.log("works");
+                                                          document.getElementById("mybtn_{{object.id}}").style.display = "none";
+                                                          document.getElementById("myDIV_{{object.id}}").style.display = "block";
+                                                        });
+
+                                                       });
+                                                </script>
+
+
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                  {% endfor %}
+                                </div>
+
+                        </div>
+
+                </div>
+                </div>
+
+                <!-- gallery end -->
+                <div class="clearfix"></div>
+                <div class="bold-separator bold-separator_dark"><span></span></div>
+                <div class="clearfix"></div>
+<!--                <a href="#" class="btn  ">Download menu in PDF<i class="fal fa-long-arrow-right"></i></a>-->
+            </div>
+        </section>
+    </div>
+
+        <!--  section end  -->
+
+<div id="bottom_total" style="width:100%;overflow: hidden;position: fixed;bottom: 0;z-index: 10;background:rgba(12, 12, 12, 0.5);{% if not order.get_total %}display: none;{% endif %}">
+
+	<div class="container" id="order_data">
+			<div class="hide-mobile">
+				<div class="row"  style="background:rgba(12, 12, 12, 0.5)">
+					<div class="col-md-6">
+						<p align="left" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;font-family: 'Playfair Display', cursive;">Order Items (<span id="item">{{ order.cart.count }}</span>)</p>
+					</div>
+					<div class="col-md-4">
+						<p align="right" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;color: #fff;" class="hero-menu-item-price">SubTotal : &nbsp;&nbsp;<span style="color: #C19D60;font-weight: 500;" id="get_total">₹{{order.get_total}}</span></p>
+					</div>
+					<div class="col-md-2">
+						<p class="py-3 mt-2 font-weight-bold" align="right"><a href="" class="btn fl-btn">Continue<i class="fal fa-long-arrow-right"></i></a></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="show-mobile container">
+		<div class="row"  style="background:rgba(12, 12, 12, 0.5);display: flex;">
+			<div class="col-md-8" style="width: 60%">
+				<p align="left" style="font-weight: 500;font-size: 1.4em;margin:1.5em 0em 1em 0em;font-family: 'Playfair Display', cursive;">(<span class="border-right" id="item_mobile">{{order.cart.count}}</span><span>) Items &nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;<span id="get_total_mobile" style="color: #C19D60;">₹{{order.get_total}}</span></p>
+			</div>
+			<div class="col-md-4">
+				<p align="right"><a href="" style="color: #fff;font-weight: 500;font-size: 1em;margin:1.5em auto 1em 0em;font-family: 'Playfair Display', cursive;float: right;background: #C19D60;padding: 1em 1em;">Continue &nbsp<i class="fal fa-long-arrow-right"></i></a></p>
+			</div>
+		</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+{% endblock %}

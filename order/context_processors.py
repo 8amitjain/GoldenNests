@@ -15,7 +15,7 @@ def cart_details(request):
 
     context['cart_count'] = cart_count
     context['cart_list'] = cart_list
-    context['order'] = order
+    context['orders'] = order
     return context
 
 

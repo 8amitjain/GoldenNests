@@ -4,7 +4,7 @@
     <div class="content">
         <section class=" no-padding dark-bg hidden-section">
             <div class="map-container">
-                <div id="singleMap"></div>
+                <div id="singleMap"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59600.98831922248!2d75.54040355030988!3d20.99016090770962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd90fa4a1eab90f%3A0x37f67bd21bff0a3c!2sJalgaon%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1624101239892!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
                 <div class="scrollContorl"></div>
             </div>
             <!-- map-view-wrap -->
@@ -14,9 +14,9 @@
                         <div class="contact-details">
                             <h4>Contacts Details</h4>
                             <ul>
-                                <li><span><i class="fal fa-map-marked-alt"></i> Adress :</span> <a href="#">USA 27TH Brooklyn NY</a></li>
-                                <li><span><i class="fal fa-phone-rotary"></i> Phone :</span> <a href="#">+7(123)987654</a></li>
-                                <li><span><i class="fal fa-mailbox"></i> Mail :</span> <a href="#">yourmail@domain.com</a></li>
+                                <li><span><i class="fal fa-map-marked-alt"></i> Adress :</span> <a href="#">Plot no 11, Muhadi Phata, Jalgaon.</a></li>
+                                <li><span><i class="fal fa-phone-rotary"></i> Phone :</span> <a href="#">+91 9823333373 ,</a></li>
+                                <li><span><i class="fal fa-mailbox"></i> Mail :</span> <a href="#">info@goldennest.in</a></li>
                             </ul>
                         </div>
                     </div>
@@ -35,37 +35,27 @@
                             <div class="dots-separator fl-wrap"><span></span></div>
                         </div>
                         <div class="text-block ">
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.
-                            </p>
+<!--                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.-->
+<!--                            </p>-->
                         </div>
                         <div class="contactform-wrap">
                             <div id="message"></div>
-                            <form  class="custom-form" action="http://restabook.kwst.net/dark/php/contact.php" name="contactform" id="contactform">
+                            <form  class="custom-form" method="post">
+                                {% csrf_token %}
                                 <fieldset>
                                 <div id="message2"></div>
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <input type="text" name="name" id="name2" placeholder="Your Name *" value=""/>
+                                        <div class="col-sm-12">
+                                            <input type="text" name="name" id="id_name" placeholder="Your Name *" value=""/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text"  name="email" id="email2" placeholder="Email Address *" value=""/>
+                                            <input type="text"  name="email" id="id_email" placeholder="Email Address *" value=""/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text"  name="phone" id="phone2" placeholder="Phone *" value=""/>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class=" fl-wrap">
-                                                <select name="subject" id="subject2" class="chosen-select no-search-select">
-                                                    <option data-display="Subject">Any</option>
-                                                    <option value="Upcoming Events">Upcoming Events </option>
-                                                    <option value="Book table">Book table</option>
-                                                    <option value="Banquet">Banquet</option>
-                                                    <option value="Banquet">Other</option>
-                                                </select>
-                                            </div>
+                                            <input type="tel"  name="mobile" id="id_mobile" placeholder="Phone *" pattern="[789][0-9]{9}" value="" style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
                                         </div>
                                     </div>
-                                    <textarea name="comments"  id="comments2" cols="40" rows="3" placeholder="Your Message:"></textarea>
+                                    <textarea name="description"  id="id_description" cols="40" rows="3" placeholder="Your Message:"></textarea>
                                     <div class="clearfix"></div>
                                     <button class="btn float-btn flat-btn color-bg" id="submit_cnt">Send Message <i class="fal fa-long-arrow-right"></i></button>
                                 </fieldset>
