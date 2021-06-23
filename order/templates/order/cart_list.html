@@ -31,41 +31,109 @@
                     {% if cart %}
                         <h4 class="cart-title">Your cart <span>{{ cart_count }} items</span></h4>
                     {% endif %}
-                    <table class="table table-border checkout-table">
+                    <table class="table table-border checkout-table" style="overflow: auto;">
                         <tbody>
                             <tr>
-                                <th class="hidden-xs">Item</th>
-                                <th>Description</th>
+<!--                                <th class="hidden-xs">Item</th>-->
+                                <th width="30%">Title</th>
                                 <th class="hidden-xs">Price</th>
                                 <th>Count</th>
                                 <th>Total</th>
                                 <th></th>
                             </tr>
-                            {% for cart in object_list %}
+                            {% for object in object_list %}
                                 <tr>
+<!--                                    <td class="hidden-xs">-->
+<!--                                        {% if object.product.image %}-->
+<!--                                            <a href="{% url 'menu:menu' %}"><img src="{{ object.product.image.url }}" alt="" class="respimg"></a>-->
+<!--                                        {% endif %}-->
+<!--                                    </td>-->
+                                    <td>
+                                        <h5 class="product-name">{{ object.product.title }}</h5>
+                                    </td>
                                     <td class="hidden-xs">
-                                        {% if cart.product.image %}
-                                            <a href="{% url 'menu:menu' %}"><img src="{{ cart.product.image.url }}" alt="" class="respimg"></a>
-                                        {% endif %}
+                                        <h5 class="order-money">₹{{ object.product.price }}</h5>
                                     </td>
                                     <td>
-                                        <h5 class="product-name">{{ cart.product.title }}</h5>
-                                    </td>
-                                    <td class="hidden-xs">
-                                        <h5 class="order-money">₹{{ cart.product.price }}</h5>
-                                    </td>
-                                    <td>
-
-                                        <input type="number" name="cartin1" value="{{ cart.quantity }}" max="50" min="0" class="order-count">
+                                        <center><div style="display: flex;background: #292929;width: 95px;" id="max{{object.id}}">
+                                            <a style="color: #C19D60;padding: 0.5em 1em;" id="less{{object.id}}"><i class="fa fa-minus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                            <p style="padding: 0.5em;" id="quantity_{{object.id}}">{{object.quantity}}</p>
+                                            <a style="color: #C19D60;padding: 0.5em 1em;" id="add{{object.id}}"><i class="fa fa-plus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                        </div></center>
+<!--                                        <input type="number" name="cartin1" value="{{ cart.quantity }}" max="50" min="0" class="order-count">-->
                                     </td>
                                     <td>
-                                        <h5 class="order-money">₹{{ cart.get_total_item_price }}</h5>
+                                        <h5 class="order-money" id="get_cart_total_{{object.id}}">₹{{ object.get_total_item_price }}</h5>
                                     </td>
                                     <td class="pr-remove">
 <!--                                        <a href="{{ cart.get_remove_from_cart_url }}" title="Remove"><i class="fal fa-times"></i></a>-->
-                                        <a href="{{ cart.get_delete_cart_url }}" title="Remove"><i class="fal fa-times"></i></a>
+                                        <a href="{% url 'order:remove-from-cart' object.id %}" title="Remove"><i class="fal fa-times"></i></a>
                                     </td>
                                 </tr>
+
+                               <script>
+                                                        var object_id = "#quantity_{{object.id}}";
+                                                        console.log(object_id);
+
+                                                     $(document).ready(function(){
+                                                         $("#add{{object.id}}").click(function () {
+                                                             console.log('works');
+                                                               var url = "{% url 'order:add-to-cart' object.product.id %}";
+                                                              var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) + 1;  // get the selected country ID from the HTML input
+                                                                                console.log(quantity, 'quantity');
+                                                                                console.log(url, 'url');
+
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                  if(data["quantity"] == 10 ){
+                                                                     document.getElementById("max{{object.id}}").style.border = "1px solid red";
+                                                                  };
+                                                                  $("#get_total").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_mobile").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+
+                                                              }
+
+                                                            });
+                                                        });
+                                                        $("#less{{object.id}}").click(function () {
+                                                             console.log('works');
+                                                               var url = "{% url 'order:add-to-cart' object.product.id %}";
+                                                              var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) - 1;  // get the selected country ID from the HTML input
+                                                                                console.log(quantity, 'quantity');
+                                                                                console.log(url, 'url');
+
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                  document.getElementById("max{{object.id}}").style.border = "0px solid black";
+                                                                  $("#get_total").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_mobile").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"] );
+                                                              }
+
+                                                            });
+                                                        });
+                                                       });
+                                                </script>
+
                             {% endfor %}
 <!--                            <tr>-->
 <!--                                <td class="hidden-xs">-->
@@ -128,15 +196,19 @@
                             <tbody>
                                 <tr>
                                     <th>Cart Subtotal:</th>
-                                    <td>₹{{ order.get_total_without_coupon }}</td>
+                                    <td id="get_subtotal">₹{{ order.get_total_without_coupon }}</td>
                                 </tr>
                                 <tr>
                                     <th>Coupon Discount:</th>
                                     <td>₹{{ order.get_coupon_total }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Tax:</th>
+                                    <td>₹{{ order.get_tax_total }}</td>
+                                </tr>
+                                <tr>
                                     <th>Total:</th>
-                                    <td>₹{{ order.get_total }}</td>
+                                    <td id="get_total">₹{{ order.get_total }}</td>
                                 </tr>
                             </tbody>
                         </table>

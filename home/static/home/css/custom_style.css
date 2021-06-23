@@ -1,0 +1,166 @@
+.show-mobile{
+ display: none;
+}
+
+.hide-tab{
+    display: none;
+  }
+
+.show-tab{
+    display: none;
+  }
+
+.hide-mobile{
+    display: block;
+  }
+
+@media all and (min-width: 270px ){
+
+  .show-mobile{
+    display: block;
+  }
+
+  .hide-tab{
+    display: block;
+  }
+
+  .show-tab{
+    display: none;
+  }
+
+
+   .hide-mobile{
+    display: none;
+  }
+
+}
+
+
+ @media all and (min-width: 465px ){
+
+
+  .hide-tab{
+    display: none;
+  }
+
+  .show-tab{
+    display: block;
+  }
+
+}
+
+
+ @media only screen and (min-width: 1030px ) {
+
+  .show-mobile{
+    display: none;
+  }
+
+    .hide-tab{
+    display: block;
+  }
+
+   .hide-mobile{
+    display: block;
+  }
+
+
+  .show-tab{
+    display: none;
+  }
+
+}
+
+@media only screen and (min-width: 1250px ) {
+
+  .show-mobile{
+    display: none;
+  }
+
+  .hide-tab{
+    display: none;
+  }
+
+   .hide-mobile{
+    display: block;
+  }
+}
+
+
+
+   #snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #333; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar
+{
+  width: 0px;
+  height: 0px;
+  background-color: #F5F5F5;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #C19D60;
+  overflow-x: auto;
+}
+
+.mycol:hover {
+  overflow-y: scroll;
+}
+
+.mycol2:hover .mycol{
+  overflow-y: hidden;
+}

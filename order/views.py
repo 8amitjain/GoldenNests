@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionDenied
 from django.shortcuts import (
     get_object_or_404, redirect, render
 )
+from django.http import JsonResponse
 from django.utils import timezone
 from django.views.generic import View
 from django.views.generic.detail import DetailView
@@ -22,43 +23,85 @@ from home.models import RestaurantsTiming
 # import razorpay
 
 
-# TODO add sizes
-@login_required
-def add_to_cart(request, slug, size=None):
-    product = get_object_or_404(Product, slug=slug)
-    cart, created = Cart.objects.get_or_create(
-        product=product,
-        user=request.user,
-        ordered=False,
-        # size=size,
-    )
-    order_qs = Order.objects.filter(user=request.user, ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
-        if order.cart.filter(product=product).exists():
-            if cart.quantity >= 10:
-                messages.info(request, "Maximum quantity added.")
-                return redirect("order:cart")
+class AddtoCart(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        quantity = int(request.GET.get('quantity', 1))
+        product = get_object_or_404(Product, pk=pk)
+        if not product.is_active:
+            raise PermissionDenied
+        if not request.session or not request.session.session_key:
+            request.session.save()
+
+        user = self.request.user if self.request.user.is_authenticated else None
+
+        cart, created = Cart.objects.get_or_create(
+            product=product,
+            user=request.user,
+            ordered=False,
+        )
+
+        if quantity <= 0:
+            order_qs = Order.objects.filter(user=request.user, ordered=False)
+            cart.delete()
+            order = order_qs.filter(cart=cart).first()
+            if order and order.cart.count() == 0:
+                order.delete()
+            messages.info(request, "Product was removed from order.")
+            return redirect('menu:menu')
+
+        cart.quantity = quantity
+        cart.save()
+        order_qs = Order.objects.filter(user=request.user, ordered=False)
+        if order_qs.exists():
+            order = order_qs[0]
+            if cart in order.cart.all():
+                if cart.quantity >= 10:
+                    cart.quantity = 10
+                    messages.info(request, "Only 10 items per cart")
+                    return JsonResponse(
+                        {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                         'get_total_without_coupon': order.get_total_without_coupon(),
+                         'get_coupon_total': order.get_coupon_total(),
+                         'get_cart_total': cart.get_total_item_price(),
+                         'quantity' : cart.quantity, 'item': order.cart.count()
+                         })
+                else:
+                    messages.info(request, "Product quantity was updated")
+                    return JsonResponse(
+                        {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                         'get_total_without_coupon': order.get_total_without_coupon(),
+                         'get_coupon_total': order.get_coupon_total(),
+                         'get_cart_total': cart.get_total_item_price(),
+                         'quantity': cart.quantity, 'item': order.cart.count()
+                         })
             else:
-                cart.quantity += 1
-                cart.save()
-                messages.success(request, "Quantity was updated.")
-                return redirect("order:cart")
+                order.cart.add(cart)
+                order.save()
+                messages.info(request, "Product was added to your cart.")
+                return JsonResponse(
+                    {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                     'get_total_without_coupon': order.get_total_without_coupon(),
+                     'get_coupon_total': order.get_coupon_total(),
+                     'get_cart_total': cart.get_total_item_price(),
+                     'quantity': cart.quantity, 'item': order.cart.count()
+                     })
         else:
+            ordered_date_time = timezone.now()
+            order = Order.objects.create(
+                user=user, ordered_date_time=ordered_date_time)
+            ORN = f"ORN-{100000 + int(order.id)}"
+            order.order_ref_number = ORN
             order.cart.add(cart)
             order.save()
             messages.success(request, "Food Item was added to your cart.")
-            return redirect('menu:menu')
-    else:
-        ordered_date_time = timezone.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        order = Order.objects.create(
-            user=request.user, ordered_date_time=ordered_date_time)
-        ORN = f"ORN-{100000 + int(order.id)}"
-        order.order_ref_number = ORN
-        order.cart.add(cart)
-        order.save()
-        messages.success(request, "Food Item was added to your cart.")
-        return redirect('menu:menu')
+            return JsonResponse(
+                {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                 'get_total_without_coupon': order.get_total_without_coupon(),
+                 'get_coupon_total': order.get_coupon_total(),
+                 'get_cart_total': cart.get_total_item_price(),
+                 'quantity': cart.quantity, 'item': order.cart.count()
+                 })
 
 
 class RemoveFromCart(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -80,7 +123,8 @@ class RemoveFromCart(LoginRequiredMixin, UserPassesTestMixin, View):
                 messages.info(self.request, "Dish was removed from plate.")
             return redirect("order:cart")
         else:
-            messages.info(self.request, "You don't have any product in your plate.")
+            messages.info(
+                self.request, "You don't have any product in your plate.")
             return redirect("/")
 
     def test_func(self):
@@ -230,6 +274,7 @@ class CancelOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 # TODO Test
 class CheckoutView(LoginRequiredMixin, View):
+
     # def get(self, *args, **kwargs):
     #     cart = Cart.objects.filter(user=self.request.user, ordered=False)
     #     order = Order.objects.get(user=self.request.user, ordered=False)

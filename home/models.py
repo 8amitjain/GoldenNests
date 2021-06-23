@@ -17,4 +17,16 @@ class RestaurantsTiming(models.Model):
 
 
 
+class Contact(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(null=True, blank=True)
+    mobile = models.BigIntegerField()
+    description = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+    seen = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"{self.name}_{self.mobile}"

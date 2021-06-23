@@ -1,4 +1,5 @@
 {% load static %}
+{% load l10n %}
 <!DOCTYPE HTML>
 <html lang="en">
 
@@ -11,15 +12,32 @@
         <meta name="keywords" content=""/>
         <meta name="description" content=""/>
         <!--=============== css  ===============-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/reset.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/plugins.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/style.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/custom_style.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/dark-style.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/color.css' %}">
         <!--=============== favicons ===============-->
         <link rel="shortcut icon" href="images/favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     </head>
-    <body>
+    <body onload="mySnackar()">
+
+
+        <div id="snackbar">
+            {{ message }} message test
+        </div>
+
+
+        <script>
+        function mySnackar() {
+          var x = document.getElementById("snackbar");
+          x.className = "show";
+          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+        </script>
         <!-- lodaer  -->
         <div class="loader-wrap">
             <div class="loader-item">
@@ -38,7 +56,7 @@
                 <div class="header-top">
                     <div class="container">
 <!--                        <div class="lang-wrap"><a href="#" class="act-lang">En</a><span>/</span><a href="#">Fr</a></div>-->
-                        <div class="header-top_contacts"><a href="#"><span>Call now:</span> +489756412322</a><a href="#"><span>Write :</span> yourmail@domain.com</a></div>
+                        <div class="header-top_contacts"><a href="#"><span>Call now:</span> +91 9823333373</a><a href="#"><span>Write :</span> info@goldennest.in</a></div>
                     </div>
                 </div>
                 <!--header-top end -->
@@ -60,10 +78,11 @@
                             <div class="nav-holder main-menu">
                                 <nav>
                                     <ul>
-                                        <li><a href="/" class="act-link">Home</a></li>
+                                        <li><a href="/">Home</a></li>
                                         <li><a href="{% url 'menu:menu' %}">Menu</a></li>
                                         <li><a href="{% url 'menu:menu' %}">Rooms</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><a href="{% url 'home:about' %}">About</a></li>
+                                        <li><a href="{% url 'home:contact' %}">Contact</a></li>
 <!--                                        <li>-->
 <!--                                            <a href="#">Pages<i class="fas fa-caret-down"></i></a>-->
 <!--                                            &lt;!&ndash;second level &ndash;&gt;-->
@@ -93,12 +112,12 @@
                                             <ol>
                                                 {% for cart in cart_list %}
                                                     <li class="clearfix">
-                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="{{ cart.product.image.url }}" class="respimg" alt=""></a>
+                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="{{ cart.product.image.url }}" class="respimg" alt="" style="height: 60px;object-fit: cover;"></a>
                                                         <div class="widget-posts-descr">
                                                             <a href="{% url 'menu:menu' %}" title="">{{ cart.product.title }}</a>
                                                             <div class="widget-posts-descr_calc clearfix">{{ cart.quantity }} <span>x</span>₹{{ cart.product.price }}</div>
                                                         </div>
-                                                        <a href="{{ cart.get_delete_cart_url }}"><div class="clear-cart_button" style="margin-top:2em;"><i class="fal fa-times"></i></div></a>
+                                                        <a href="{{ cart.get_delete_cart_url }}"><div class="clear-cart_button" ><i class="fal fa-times"></i></div></a>
                                                     </li>
                                                 {% endfor %}
                                             </ol>
@@ -106,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="header-cart_wrap_total fl-wrap">
-                                    <div class="header-cart_wrap_total_item">Subtotal : <span>₹{{ order.get_total }}</span></div>
+                                    <div class="header-cart_wrap_total_item">Subtotal : <span>₹{{ orders.get_total }}</span></div>
                                 </div>
                                 <div class="header-cart_wrap_footer fl-wrap">
                                     <a href="{% url 'order:cart' %}"> View Cart</a>
@@ -145,12 +164,12 @@
                         <div class="footer-widget-wrap fl-wrap">
                             <div class="row">
                                 <!-- footer-widget -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="footer-widget">
                                         <div class="footer-widget-title">About us</div>
                                         <div class="footer-widget-content">
                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
-                                            <a href="about.html" class="footer-widget-content-link">Read more</a>
+                                            <a href="{% url 'home:about' %}" class="footer-widget-content-link">Read more</a>
                                         </div>
                                     </div>
                                 </div>
@@ -162,18 +181,34 @@
                                         <div class="footer-widget-content">
                                             <div class="footer-contacts footer-box fl-wrap">
                                                 <ul>
-                                                    <li><span>Call :</span><a href="#">+489756412322</a> , <a href="#">+56897456123</a></li>
-                                                    <li><span>Write  :</span><a href="#">yourmail@domain.com</a></li>
-                                                    <li><span>Find us : </span><a href="#">USA 27TH Brooklyn NY</a></li>
+                                                    <li><span>Call :</span><a href="tel:9823333373">+91 9823333373</a> , <a href="tel:93713 33373">+91 93713 33373</a></li>
+                                                    <li><span>Write  :</span><a href="#">info@goldennest.in</a></li>
+                                                    <li><span>Find us : </span><a href="#">Plot no 11, muhadi phata, Near D-Mart Adarsh Nagar, Jalgaon, 425001</a></li>
                                                 </ul>
                                             </div>
-                                            <a href="contacts.html" class="footer-widget-content-link">Get in Touch</a>
+                                            <a href="{% url 'home:contact' %}" class="footer-widget-content-link">Get in Touch</a>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- footer-widget  end-->
                                 <!-- footer-widget -->
-                                <div class="col-md-4">
+                                <div class="col-md-2">
+                                    <div class="footer-widget">
+                                        <div class="footer-widget-title">Privacy info  </div>
+                                        <div class="footer-widget-content">
+                                            <div class="footer-contacts footer-box fl-wrap">
+                                                <ul>
+                                                    <li><a href="/policy/terms-and-condition/">Terms &amp; Conditions</a></li>
+                                                    <li><a href="/policy/refund-policy/">Refund Policy</a></li>
+                                                    <li><a href="/policy/cancellation-policy/">Cancellation Policy</a></li>
+                                                    <li><a href="/policy/privacy-policy/">Privacy</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
                                     <div class="footer-widget">
                                         <div class="footer-widget-title">Subscribe</div>
                                         <div class="footer-widget-content">
@@ -193,7 +228,7 @@
                         </div>
                         <!-- footer-widget-wrap end-->
                         <div class="footer-bottom fl-wrap">
-                            <div class="copyright">&#169; Golden Nest {{ current_year }} . All rights reserved. </div>
+                            <div class="copyright">&#169; Golden Nest {{ current_year|unlocalize }} . All rights reserved. </div>
                             <div class="to-top"><span>Back To Top </span><i class="fal fa-angle-double-up"></i></div>
                         </div>
                     </div>
@@ -228,13 +263,13 @@
                                             <input type="text" name="add_food" id="add_food" value=""/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text" name="name" id="id_name" placeholder="Your Name *" value="" required/>
+                                            <input type="text" name="name" id="id_name" placeholder="Your Name *" value="" required />
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="email"  name="email" id="id_email" placeholder="Email Address *" value="" required/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="tel"  name="phone_number" id="id_phone_number" placeholder="Phone *" value="" required/>
+                                            <input type="tel"  name="phone_number" id="id_phone_number" placeholder="Phone *" pattern="[789][0-9]{9}" value="" required style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fl-wrap">
@@ -250,7 +285,7 @@
                                         <div class="clearfix"></div>
                                         <div class="col-sm-6">
                                             <div class="date-container2 fl-wrap">
-                                                <input type="date" placeholder="Date" id="id_booked_for_date" name="booked_for_date" value="" required/>
+                                                <input type="date" placeholder="Date" id="id_booked_for_date" name="booked_for_date" value="" required style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">

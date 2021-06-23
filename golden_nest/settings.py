@@ -112,6 +112,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# For indian currency commas
+USE_THOUSAND_SEPARATOR = True
+FORMAT_MODULE_PATH = [
+    'golden_nest.formats',
+]
+
+
+
 SITE_ID = 1
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Calcutta'  # Indian time
