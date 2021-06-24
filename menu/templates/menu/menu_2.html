@@ -123,7 +123,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="hero-menu-item-details" style="width: 70%;">
-                                                            <p>Seasoned with an herb crust, served with au jus and handcarved to order.</p>
+                                                            <p>{{object.description|safe}}</p>
                                                         </div>
                                                     </div>
 
@@ -149,15 +149,23 @@
                                                                 },
                                                                 success: function (data) {   // `data` is the return of the `load_cities` view function
                                                                   document.getElementById("bottom_total").style.display = "block"
-                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);
+                                                                  }else{
+                                                                  $("#quantity_{{object.id}}").html("0");
+                                                                  }
+
+                                                                  $("#get_total").html("₹" + data["get_total_without_coupon"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_mobile").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_bag").html(data["item"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#_appendHere").html(data["item"]);
+
                                                                   if(data["quantity"] == 10 ){
                                                                      document.getElementById("max{{object.id}}").style.border = "1px solid red";
                                                                   };
-                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_total_mobile").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item_mobile").html(data["item"] );  // replace the contents of the city input with the data that came from the server
-
                                                               }
 
                                                             });
@@ -176,12 +184,23 @@
                                                                   'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
                                                                 },
                                                                 success: function (data) {   // `data` is the return of the `load_cities` view function
-                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
-                                                                  document.getElementById("max{{object.id}}").style.border = "0px solid black";
-                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                document.getElementById("max{{object.id}}").style.border = "0px solid black";
+                                                                 if(data["quantity"] != null ){
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);
+                                                                  }else{
+                                                                  $("#quantity_{{object.id}}").html("0");
+                                                                  }
+
+                                                                  $("#get_total").html("₹" + data["get_total_without_coupon"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
                                                                   $("#get_total_mobile").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item_mobile").html(data["item"] );
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );
+                                                                  if(data["item"] == 0 ){
+                                                                  document.getElementById("bottom_total").style.display = "none"
+                                                                  }
+                                                                  $("#item_bag").html(data["item"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#_appendHere").html(data["item"]);
                                                               }
 
                                                             });
@@ -231,7 +250,7 @@
 						<p align="left" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;font-family: 'Playfair Display', cursive;">Order Items (<span id="item">{{ order.cart.count }}</span>)</p>
 					</div>
 					<div class="col-md-4">
-						<p align="right" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;color: #fff;" class="hero-menu-item-price">SubTotal : &nbsp;&nbsp;<span style="color: #C19D60;font-weight: 500;" id="get_total">₹{{order.get_total}}</span></p>
+						<p align="right" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;color: #fff;" class="hero-menu-item-price">SubTotal : &nbsp;&nbsp;<span style="color: #C19D60;font-weight: 500;" id="get_total">₹{{order.get_total_without_coupon}}</span></p>
 					</div>
 					<div class="col-md-2">
 						<p class="py-3 mt-2 font-weight-bold" align="right"><a href="" class="btn fl-btn">Continue<i class="fal fa-long-arrow-right"></i></a></p>
@@ -242,7 +261,7 @@
 			<div class="show-mobile container">
 		<div class="row"  style="background:rgba(12, 12, 12, 0.5);display: flex;">
 			<div class="col-md-8" style="width: 60%">
-				<p align="left" style="font-weight: 500;font-size: 1.4em;margin:1.5em 0em 1em 0em;font-family: 'Playfair Display', cursive;">(<span class="border-right" id="item_mobile">{{order.cart.count}}</span><span>) Items &nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;<span id="get_total_mobile" style="color: #C19D60;">₹{{order.get_total}}</span></p>
+				<p align="left" style="font-weight: 500;font-size: 1.4em;margin:1.5em 0em 1em 0em;font-family: 'Playfair Display', cursive;">(<span class="border-right" id="item_mobile">{{order.cart.count}}</span><span>) Items &nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;<span id="get_total_mobile" style="color: #C19D60;">₹{{order.get_total_without_coupon}}</span></p>
 			</div>
 			<div class="col-md-4">
 				<p align="right"><a href="" style="color: #fff;font-weight: 500;font-size: 1em;margin:1.5em auto 1em 0em;font-family: 'Playfair Display', cursive;float: right;background: #C19D60;padding: 1em 1em;">Continue &nbsp<i class="fal fa-long-arrow-right"></i></a></p>

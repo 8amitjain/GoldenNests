@@ -11,6 +11,10 @@ urlpatterns = [
     path('', views.Home.as_view()),
     path('about/', TemplateView.as_view(template_name='home/about.html'), name='about'),
     path('contact/', views.ContactView.as_view(), name='contact'),
+
+    path('policy/<str:page_name>/', views.Terms.as_view(), name='terms'),
+    path('sitemap.xml/', TemplateView.as_view(template_name='home/sitemap.html'), name='sitemap'),
+    path('robots.txt/', TemplateView.as_view(template_name='home/robots.html'), name='robots'),
 ]
 
 if settings.DEBUG:

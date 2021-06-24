@@ -34,7 +34,7 @@
                                     <div class="clearfix"></div>
                                     <h4>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</h4>
                                     <div class="bold-separator"><span></span></div>
-                                    <a href="menu.html" class="hero_btn">Click to Discover<i class="fal fa-long-arrow-right"></i></a>
+                                    <a href="{% url 'menu:menu' %}" class="hero_btn">Click to Discover<i class="fal fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -45,29 +45,29 @@
                                 <div class="bg"  data-bg="{% static 'home/images/bg/1.jpg' %}" data-swiper-parallax="40%"></div>
                                 <div class="overlay"></div>
                                 <div class="grid-carousel-title">
-                                    <h3>Our Awesome Story</h3>
+                                    <h3>Visit Our Awesome Rooms</h3>
                                     <div class="clearfix"></div>
                                     <h4>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</h4>
                                     <div class="bold-separator"><span></span></div>
-                                    <a href="about.html" class="hero_btn">Click to Discover<i class="fal fa-long-arrow-right"></i></a>
+                                    <a href="" class="hero_btn">Click to Discover<i class="fal fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
                         <!-- swiper-slide-->
                         <!-- swiper-slide-->
-                        <div class="swiper-slide"  >
-                            <div class="fs-slider-item fl-wrap">
-                                <div class="bg"  data-bg="{% static 'home/images/bg/17.jpg' %}" data-swiper-parallax="40%"></div>
-                                <div class="overlay"></div>
-                                <div class="grid-carousel-title">
-                                    <h3>Visit Our Online Store</h3>
-                                    <div class="clearfix"></div>
-                                    <h4>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</h4>
-                                    <div class="bold-separator"><span></span></div>
-                                    <a href="shop.html" class="hero_btn">Buy Online<i class="fal fa-long-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="swiper-slide"  >-->
+<!--                            <div class="fs-slider-item fl-wrap">-->
+<!--                                <div class="bg"  data-bg="{% static 'home/images/bg/17.jpg' %}" data-swiper-parallax="40%"></div>-->
+<!--                                <div class="overlay"></div>-->
+<!--                                <div class="grid-carousel-title">-->
+<!--                                    <h3>Visit Our Online Store</h3>-->
+<!--                                    <div class="clearfix"></div>-->
+<!--                                    <h4>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</h4>-->
+<!--                                    <div class="bold-separator"><span></span></div>-->
+<!--                                    <a href="shop.html" class="hero_btn">Buy Online<i class="fal fa-long-arrow-right"></i></a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <!-- swiper-slide-->
                     </div>
                 </div>
@@ -97,11 +97,16 @@
                             <div class="dots-separator fl-wrap"><span></span></div>
                         </div>
                         <div class="text-block ">
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.
-                                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+                            <p>Golden Nest Jalgaon is a great choice for people looking to try new things as they can have a new experience every time they come with our vast variety of services.
+                                This hotel stands out as one of the highly recommended hotels in Jalgaon and is recommended by 90% of our guests.
+                                From all the hotels in Jalgaon, Golden Nest is very much popular among the locals, especially the youth.
+                                This place being fun for people of all age groups becomes loved by everyone.
+                                People having options to sit indoor, outdoor, and sand sitting makes your visit exciting every time you come here.
+                                The Banquet hall makes your dreams to have a Flamboyant function or a gathering come true.
                             </p>
-                            <p> Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.</p>
-                            <a href="menu.html" class="btn fl-btn">Explore Our Menu<i class="fal fa-long-arrow-right"></i></a>
+                            <p> Offer your business partners a stay in our Business/Executive suite and you will never be out of deals.
+                                Come once and watch yourself making excuses to come again.</p>
+                            <a href="{% url 'menu:menu' %}" class="btn fl-btn">Explore Our Menu<i class="fal fa-long-arrow-right"></i></a>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -126,9 +131,9 @@
                 <div class="overlay"></div>
                 <div class="quote-box">
                     <i class="fal fa-quote-right"></i>
-                    <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi accusantium."</p>
+                    <p>"One cannot think well, love well, sleep well, if one has not dined well."</p>
                     <div class="signature"><img src="{% static 'home/images/signature.png" alt=""></div>
-                    <h4>Kevin  Kowalsky - Restaurant’s cheaf</h4>
+                    <h4>Virginia Woolf, A Room of One's Own</h4>
                 </div>
             </div>
             <div class="column-section-wrap dark-bg" >
@@ -159,7 +164,7 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="bold-separator"><span></span></div>
-                        <div class="big-number"><a href="#">+7(111)123456789</a></div>
+                        <div class="show-rb"><a href="#" class="btn fl-btn">Reserve Table <i class="fal fa-long-arrow-right"></i></a></div>
                     </div>
                 </div>
                 <div class="illustration_bg">
@@ -263,7 +268,7 @@
                     <div class="section-dec sec-dec_top"></div>
                     <div class="section-dec sec-dec_bottom"></div>
                 </div>
-                <a href="about.html" class="btn fl-btn border-btn">Read More About us <i class="fal fa-long-arrow-right"></i></a>
+                <a href="{% url 'home:about' %}" class="btn fl-btn border-btn">Read More About us <i class="fal fa-long-arrow-right"></i></a>
                 <div class="images-collage-item col_par" style="width:120px" data-position-left="83" data-position-top="87" data-zindex="1" data-scrollax="properties: { translateY: '150px' }"><img src="{% static 'home/images/cube.png" alt=""></div>
             </div>
             <div class="section-bg">
@@ -272,299 +277,299 @@
         </section>
         <!--  section end  -->
         <!--  section  -->
-        <section class="parallax-section dark-bg hidden-section" data-scrollax-parent="true">
-            <div class="brush-dec2"></div>
-            <div class="brush-dec"></div>
-            <div class="bg par-elem bg_tabs"  data-bg="{% static 'home/images/bg/4.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
-            <div class="cd-tabs-layer" data-frame="10">
-                <div class="tabs-layer"></div>
-            </div>
-            <div class="overlay op7"></div>
-            <div class="container">
-                <div class="section-title">
-                    <h4>Special menu offers.</h4>
-                    <h2>Enjoy Restaurants Specialties</h2>
-                    <div class="dots-separator fl-wrap"><span></span></div>
-                </div>
-                <!--  hero-menu_header  end-->
-                <div class="hero-menu tabs-act fl-wrap">
-                    <div class="row">
-                        <!--  hero-menu_header-->
-                        <div class="col-md-3">
-                            <div class="hero-menu_header fl-wrap">
-                                <ul class="tabs-menu     no-list-style change_bg">
-                                    <li class="current"><a href="#tab-1" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>01.</span>Main dishes</a></li>
-                                    <li class="current"><a href="#tab-2" data-bgtab="{% static 'home/images/bg/6.jpg' %}"><span>02.</span>Starter</a></li>
-                                    <li><a href="#tab-3" data-bgtab="{% static 'home/images/bg/7.jpg' %}"><span>03.</span>Desserts</a></li>
-                                    <li><a href="#tab-4" data-bgtab="{% static 'home/images/bg/5.jpg' %}"><span>04.</span>Sea Food</a></li>
-                                    <li><a href="#tab-5" data-bgtab="{% static 'home/images/bg/9.jpg' %}"><span>05.</span>Drinks</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!--  hero-menu_header  end-->
-                        <!--  hero-menu_content   -->
-                        <div class="col-md-9">
-                            <div class="hero-menu_content fl-wrap">
-                                <div class="tabs-container">
-                                    <div class="tab">
-                                        <!--tab -->
-                                        <div id="tab-1" class="tab-content first-tab">
-                                            <!-- header-menu-item-->
-                                            <div class="hero-menu-item">
-                                                <div class="hero-menu-item-title fl-wrap">
-                                                    <h6><span>01.</span>Soft shell crab</h6>
-                                                    <div class="hmi-dec"></div>
-                                                    <span class="hero-menu-item-price">$29</span>
-                                                </div>
-                                                <div class="hero-menu-item-details">
-                                                    <p>Granny help you treat yourself with a different meal everyday</p>
-                                                </div>
-                                            </div>
-                                            <!-- header-menu-item end-->
-                                            <!-- header-menu-item-->
-                                            <div class="hero-menu-item">
-                                                <div class="hero-menu-item-title fl-wrap">
-                                                    <h6><span>02.</span>Miso chicken</h6>
-                                                    <div class="hmi-dec"></div>
-                                                    <span class="hero-menu-item-price">$19</span>
-                                                </div>
-                                                <div class="hero-menu-item-details">
-                                                    <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                </div>
-                                            </div>
-                                            <!-- header-menu-item end-->
-                                            <!-- header-menu-item-->
-                                            <div class="hero-menu-item">
-                                                <div class="hero-menu-item-title fl-wrap">
-                                                    <h6><span>03.</span>Fish pie</h6>
-                                                    <div class="hmi-dec"></div>
-                                                    <span class="hero-menu-item-price">$12</span>
-                                                </div>
-                                                <div class="hero-menu-item-details">
-                                                    <p>usce tempus tempus maximus volutpat</p>
-                                                </div>
-                                            </div>
-                                            <!-- header-menu-item end-->
-                                            <!-- header-menu-item-->
-                                            <div class="hero-menu-item">
-                                                <div class="hero-menu-item-title fl-wrap">
-                                                    <h6><span>04.</span>Salmon riverland</h6>
-                                                    <div class="hmi-dec"></div>
-                                                    <span class="hero-menu-item-price">$105</span>
-                                                </div>
-                                                <div class="hero-menu-item-details">
-                                                    <p>Fusce a tellus tellus. Praesent neque arcu, efficitur sit amet</p>
-                                                </div>
-                                            </div>
-                                            <!-- header-menu-item end-->
-                                        </div>
-                                        <!--tab end -->
-                                        <!--tab 2-->
-                                        <div class="tab">
-                                            <div id="tab-2" class="tab-content">
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>01.</span>Fried Potatoes</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$29</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Granny help you treat yourself with a different meal everyday</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>02.</span>Doner Burger</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$19</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>03.</span>Steak Filet</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$12</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>usce tempus tempus maximus volutpat</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>04.</span>Cayenne Shrimp</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$37</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>usce tempus tempus maximus volutpat</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                            </div>
-                                        </div>
-                                        <!--tab end -->
-                                        <!--tab 3-->
-                                        <div class="tab">
-                                            <div id="tab-3" class="tab-content">
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>01.</span>Soft shell crab</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$29</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Granny help you treat yourself with a different meal everyday</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>02.</span>Tarte Tatin</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$25</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>03.</span>Creme Brulee</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$64</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>usce tempus tempus maximus volutpat</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>04.</span>Lemon Meringue</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$12</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>usce tempus tempus maximus volutpat</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                            </div>
-                                        </div>
-                                        <!--tab end -->
-                                        <!--tab 4-->
-                                        <div class="tab">
-                                            <div id="tab-4" class="tab-content">
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>01.</span> Lobster with melted mozarella</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$156</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Granny help you treat yourself with a different meal everyday</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>02.</span> Butterfly fried shrimps platter</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$98</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                            </div>
-                                        </div>
-                                        <!--tab end -->
-                                        <!--tab 5-->
-                                        <div class="tab">
-                                            <div id="tab-5" class="tab-content">
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>01.</span>Kiwi Coctail</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$12</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Granny help you treat yourself with a different meal everyday</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>02.</span>Summer Beer</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$21</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>03.</span>Red Mojitos</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$17</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>usce tempus tempus maximus volutpat</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                                <!-- header-menu-item-->
-                                                <div class="hero-menu-item">
-                                                    <div class="hero-menu-item-title fl-wrap">
-                                                        <h6><span>04.</span>Cabernet Sauvignon</h6>
-                                                        <div class="hmi-dec"></div>
-                                                        <span class="hero-menu-item-price">$40</span>
-                                                    </div>
-                                                    <div class="hero-menu-item-details">
-                                                        <p>usce tempus tempus maximus volutpat</p>
-                                                    </div>
-                                                </div>
-                                                <!-- header-menu-item end-->
-                                            </div>
-                                        </div>
-                                        <!--tab end -->
-                                    </div>
-                                    <!--tabs end -->
-                                </div>
-                            </div>
-                        </div>
-                        <!--  hero-menu_content end  -->
-                        <div class="clearfix"></div>
-                        <a href="menu.html" class="hero_btn" style="margin-left:30px;">View Full Menu <i class="fal fa-long-arrow-right"></i></a>
-                        <a href="#" class="pdf-link">Dowload PDF</a>
-                    </div>
-                </div>
-                <!--  hero-menu  end-->
-            </div>
-        </section>
+<!--        <section class="parallax-section dark-bg hidden-section" data-scrollax-parent="true">-->
+<!--            <div class="brush-dec2"></div>-->
+<!--            <div class="brush-dec"></div>-->
+<!--            <div class="bg par-elem bg_tabs"  data-bg="{% static 'home/images/bg/4.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>-->
+<!--            <div class="cd-tabs-layer" data-frame="10">-->
+<!--                <div class="tabs-layer"></div>-->
+<!--            </div>-->
+<!--            <div class="overlay op7"></div>-->
+<!--            <div class="container">-->
+<!--                <div class="section-title">-->
+<!--                    <h4>Special menu offers.</h4>-->
+<!--                    <h2>Enjoy Restaurants Specialties</h2>-->
+<!--                    <div class="dots-separator fl-wrap"><span></span></div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;  hero-menu_header  end&ndash;&gt;-->
+<!--                <div class="hero-menu tabs-act fl-wrap">-->
+<!--                    <div class="row">-->
+<!--                        &lt;!&ndash;  hero-menu_header&ndash;&gt;-->
+<!--                        <div class="col-md-3">-->
+<!--                            <div class="hero-menu_header fl-wrap">-->
+<!--                                <ul class="tabs-menu     no-list-style change_bg">-->
+<!--                                    <li class="current"><a href="#tab-1" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>01.</span>Main dishes</a></li>-->
+<!--                                    <li class="current"><a href="#tab-2" data-bgtab="{% static 'home/images/bg/6.jpg' %}"><span>02.</span>Starter</a></li>-->
+<!--                                    <li><a href="#tab-3" data-bgtab="{% static 'home/images/bg/7.jpg' %}"><span>03.</span>Desserts</a></li>-->
+<!--                                    <li><a href="#tab-4" data-bgtab="{% static 'home/images/bg/5.jpg' %}"><span>04.</span>Sea Food</a></li>-->
+<!--                                    <li><a href="#tab-5" data-bgtab="{% static 'home/images/bg/9.jpg' %}"><span>05.</span>Drinks</a></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;  hero-menu_header  end&ndash;&gt;-->
+<!--                        &lt;!&ndash;  hero-menu_content   &ndash;&gt;-->
+<!--                        <div class="col-md-9">-->
+<!--                            <div class="hero-menu_content fl-wrap">-->
+<!--                                <div class="tabs-container">-->
+<!--                                    <div class="tab">-->
+<!--                                        &lt;!&ndash;tab &ndash;&gt;-->
+<!--                                        <div id="tab-1" class="tab-content first-tab">-->
+<!--                                            &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                            <div class="hero-menu-item">-->
+<!--                                                <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                    <h6><span>01.</span>Soft shell crab</h6>-->
+<!--                                                    <div class="hmi-dec"></div>-->
+<!--                                                    <span class="hero-menu-item-price">$29</span>-->
+<!--                                                </div>-->
+<!--                                                <div class="hero-menu-item-details">-->
+<!--                                                    <p>Granny help you treat yourself with a different meal everyday</p>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                            <div class="hero-menu-item">-->
+<!--                                                <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                    <h6><span>02.</span>Miso chicken</h6>-->
+<!--                                                    <div class="hmi-dec"></div>-->
+<!--                                                    <span class="hero-menu-item-price">$19</span>-->
+<!--                                                </div>-->
+<!--                                                <div class="hero-menu-item-details">-->
+<!--                                                    <p>Etiam tempus felis eros, id lobortis turpis</p>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                            <div class="hero-menu-item">-->
+<!--                                                <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                    <h6><span>03.</span>Fish pie</h6>-->
+<!--                                                    <div class="hmi-dec"></div>-->
+<!--                                                    <span class="hero-menu-item-price">$12</span>-->
+<!--                                                </div>-->
+<!--                                                <div class="hero-menu-item-details">-->
+<!--                                                    <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                            <div class="hero-menu-item">-->
+<!--                                                <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                    <h6><span>04.</span>Salmon riverland</h6>-->
+<!--                                                    <div class="hmi-dec"></div>-->
+<!--                                                    <span class="hero-menu-item-price">$105</span>-->
+<!--                                                </div>-->
+<!--                                                <div class="hero-menu-item-details">-->
+<!--                                                    <p>Fusce a tellus tellus. Praesent neque arcu, efficitur sit amet</p>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;tab end &ndash;&gt;-->
+<!--                                        &lt;!&ndash;tab 2&ndash;&gt;-->
+<!--                                        <div class="tab">-->
+<!--                                            <div id="tab-2" class="tab-content">-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>01.</span>Fried Potatoes</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$29</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Granny help you treat yourself with a different meal everyday</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>02.</span>Doner Burger</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$19</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>03.</span>Steak Filet</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$12</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>04.</span>Cayenne Shrimp</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$37</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;tab end &ndash;&gt;-->
+<!--                                        &lt;!&ndash;tab 3&ndash;&gt;-->
+<!--                                        <div class="tab">-->
+<!--                                            <div id="tab-3" class="tab-content">-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>01.</span>Soft shell crab</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$29</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Granny help you treat yourself with a different meal everyday</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>02.</span>Tarte Tatin</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$25</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>03.</span>Creme Brulee</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$64</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>04.</span>Lemon Meringue</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$12</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;tab end &ndash;&gt;-->
+<!--                                        &lt;!&ndash;tab 4&ndash;&gt;-->
+<!--                                        <div class="tab">-->
+<!--                                            <div id="tab-4" class="tab-content">-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>01.</span> Lobster with melted mozarella</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$156</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Granny help you treat yourself with a different meal everyday</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>02.</span> Butterfly fried shrimps platter</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$98</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;tab end &ndash;&gt;-->
+<!--                                        &lt;!&ndash;tab 5&ndash;&gt;-->
+<!--                                        <div class="tab">-->
+<!--                                            <div id="tab-5" class="tab-content">-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>01.</span>Kiwi Coctail</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$12</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Granny help you treat yourself with a different meal everyday</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>02.</span>Summer Beer</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$21</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>Etiam tempus felis eros, id lobortis turpis</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>03.</span>Red Mojitos</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$17</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                                &lt;!&ndash; header-menu-item&ndash;&gt;-->
+<!--                                                <div class="hero-menu-item">-->
+<!--                                                    <div class="hero-menu-item-title fl-wrap">-->
+<!--                                                        <h6><span>04.</span>Cabernet Sauvignon</h6>-->
+<!--                                                        <div class="hmi-dec"></div>-->
+<!--                                                        <span class="hero-menu-item-price">$40</span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="hero-menu-item-details">-->
+<!--                                                        <p>usce tempus tempus maximus volutpat</p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash; header-menu-item end&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;tab end &ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash;tabs end &ndash;&gt;-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;  hero-menu_content end  &ndash;&gt;-->
+<!--                        <div class="clearfix"></div>-->
+<!--                        <a href="menu.html" class="hero_btn" style="margin-left:30px;">View Full Menu <i class="fal fa-long-arrow-right"></i></a>-->
+<!--                        <a href="#" class="pdf-link">Dowload PDF</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;  hero-menu  end&ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
         <!--  section  end-->
         <section data-scrollax-parent="true">
             <div class="container">
@@ -646,13 +651,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- team-item end  -->
-                        <div class="col-md-8">
-                            <div class="align-text-block">
-                                <h4>Want to cook something tasty? Read our best recipes.</h4>
-                                <a href="blog.html" class="btn">Recipes Book <i class="fal fa-long-arrow-right"></i></a>
-                            </div>
-                        </div>
+<!--                        &lt;!&ndash; team-item end  &ndash;&gt;-->
+<!--                        <div class="col-md-8">-->
+<!--                            <div class="align-text-block">-->
+<!--                                <h4>Want to cook something tasty? Read our best recipes.</h4>-->
+<!--                                <a href="blog.html" class="btn">Recipes Book <i class="fal fa-long-arrow-right"></i></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                     <div class="section-dec sec-dec_top"></div>
                 </div>
@@ -668,7 +673,7 @@
                 <div class="column-wrap-bg-text">
                     <h3>Our Store</h3>
                     <h4>Want to order food home? Visit our online store.</h4>
-                    <a href="about.html" class="btn  ajax">Buy online <i class="fal fa-long-arrow-right"></i></a>
+                    <a href="{% url 'menu:menu' %}" class="btn  ajax">Buy online <i class="fal fa-long-arrow-right"></i></a>
                 </div>
             </div>
             <div class="column-section-wrap left-column-section dark-bg" >
@@ -685,32 +690,15 @@
                                 <div class="swiper-container">
                                     <div class="swiper-wrapper">
                                         <!-- swiper-slide -->
+                                        {% for object in event %}
                                         <div class="swiper-slide">
                                             <div class="event-carousel-item">
-                                                <h4>Jazz Band Live Event</h4>
-                                                <span class="event-date">25 may 2020</span>
-                                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam aperiam. </p>
+                                                <h4>{{object.title}}</h4>
+                                                <span class="event-date">{{object.date}}</span>
+                                                <p>{{object.description}}</p>
                                             </div>
                                         </div>
-                                        <!-- swiper-slide end -->
-                                        <!-- swiper-slide -->
-                                        <div class="swiper-slide">
-                                            <div class="event-carousel-item">
-                                                <h4>Wine and Steak Day</h4>
-                                                <span class="event-date">19 June 2020</span>
-                                                <p>In ut odio libero, at vulputate urna. Nulla tristique mi a massa convallis cursus. Nulla eu mi magna. Etiam suscipit   gravida. </p>
-                                            </div>
-                                        </div>
-                                        <!-- swiper-slide end -->
-                                        <!-- swiper-slide -->
-                                        <div class="swiper-slide">
-                                            <div class="event-carousel-item">
-                                                <h4>Freedom Day Celebration</h4>
-                                                <span class="event-date">14 October 2020</span>
-                                                <p>Lorem Ipsum generators on the Internet king this the first true generator laudantium totam aperiam. </p>
-                                            </div>
-                                        </div>
-                                        <!-- swiper-slide end -->
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
@@ -730,80 +718,80 @@
         </section>
         <!-- section end  -->
         <!-- section   -->
-        <section>
-            <div class="brush-dec2 brush-dec_bottom"></div>
-            <div class="container">
-                <div class="section-title">
-                    <h4>What said about us</h4>
-                    <h2>Customer Reviews</h2>
-                    <div class="dots-separator fl-wrap"><span></span></div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="testimonilas-carousel-wrap fl-wrap">
-                <div class="tc-button tc-button-next"><i class="fas fa-caret-right"></i></div>
-                <div class="tc-button tc-button-prev"><i class="fas fa-caret-left"></i></div>
-                <div class="testimonilas-carousel">
-                    <div class="swiper-container">
-                        <div class="swiper-wrapper">
-                            <!--testi-item-->
-                            <div class="swiper-slide">
-                                <div class="testi-item fl-wrap">
-                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/2.jpg' %}" alt=""></div>
-                                    <div class="testimonilas-text fl-wrap">
-                                        <h3>Andy Dimasky</h3>
-                                        <div class="star-rating" data-starrating="5"> </div>
-                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>
-                                        <span class="testi-number">01.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--testi-item end-->
-                            <!--testi-item-->
-                            <div class="swiper-slide">
-                                <div class="testi-item fl-wrap">
-                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/3.jpg' %}" alt=""></div>
-                                    <div class="testimonilas-text fl-wrap">
-                                        <h3>Frank Dellov</h3>
-                                        <div class="star-rating" data-starrating="4"> </div>
-                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>
-                                        <span class="testi-number">02.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--testi-item end-->
-                            <!--testi-item-->
-                            <div class="swiper-slide">
-                                <div class="testi-item fl-wrap">
-                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/4.jpg' %}" alt=""></div>
-                                    <div class="testimonilas-text fl-wrap">
-                                        <h3>Centa Simpson</h3>
-                                        <div class="star-rating" data-starrating="5"> </div>
-                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>
-                                        <span class="testi-number">03.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--testi-item end-->
-                            <!--testi-item-->
-                            <div class="swiper-slide">
-                                <div class="testi-item fl-wrap">
-                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/5.jpg' %}" alt=""></div>
-                                    <div class="testimonilas-text fl-wrap">
-                                        <h3>Nicolo Svensky</h3>
-                                        <div class="star-rating" data-starrating="5"> </div>
-                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>
-                                        <span class="testi-number">04.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--testi-item end-->
-                        </div>
-                    </div>
-                </div>
-                <div class="tc-pagination"></div>
-            </div>
-        </section>
+<!--        <section>-->
+<!--            <div class="brush-dec2 brush-dec_bottom"></div>-->
+<!--            <div class="container">-->
+<!--                <div class="section-title">-->
+<!--                    <h4>What said about us</h4>-->
+<!--                    <h2>Customer Reviews</h2>-->
+<!--                    <div class="dots-separator fl-wrap"><span></span></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="clearfix"></div>-->
+<!--            <div class="testimonilas-carousel-wrap fl-wrap">-->
+<!--                <div class="tc-button tc-button-next"><i class="fas fa-caret-right"></i></div>-->
+<!--                <div class="tc-button tc-button-prev"><i class="fas fa-caret-left"></i></div>-->
+<!--                <div class="testimonilas-carousel">-->
+<!--                    <div class="swiper-container">-->
+<!--                        <div class="swiper-wrapper">-->
+<!--                            &lt;!&ndash;testi-item&ndash;&gt;-->
+<!--                            <div class="swiper-slide">-->
+<!--                                <div class="testi-item fl-wrap">-->
+<!--                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/2.jpg' %}" alt=""></div>-->
+<!--                                    <div class="testimonilas-text fl-wrap">-->
+<!--                                        <h3>Andy Dimasky</h3>-->
+<!--                                        <div class="star-rating" data-starrating="5"> </div>-->
+<!--                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>-->
+<!--                                        <span class="testi-number">01.</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;testi-item end&ndash;&gt;-->
+<!--                            &lt;!&ndash;testi-item&ndash;&gt;-->
+<!--                            <div class="swiper-slide">-->
+<!--                                <div class="testi-item fl-wrap">-->
+<!--                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/3.jpg' %}" alt=""></div>-->
+<!--                                    <div class="testimonilas-text fl-wrap">-->
+<!--                                        <h3>Frank Dellov</h3>-->
+<!--                                        <div class="star-rating" data-starrating="4"> </div>-->
+<!--                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>-->
+<!--                                        <span class="testi-number">02.</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;testi-item end&ndash;&gt;-->
+<!--                            &lt;!&ndash;testi-item&ndash;&gt;-->
+<!--                            <div class="swiper-slide">-->
+<!--                                <div class="testi-item fl-wrap">-->
+<!--                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/4.jpg' %}" alt=""></div>-->
+<!--                                    <div class="testimonilas-text fl-wrap">-->
+<!--                                        <h3>Centa Simpson</h3>-->
+<!--                                        <div class="star-rating" data-starrating="5"> </div>-->
+<!--                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>-->
+<!--                                        <span class="testi-number">03.</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;testi-item end&ndash;&gt;-->
+<!--                            &lt;!&ndash;testi-item&ndash;&gt;-->
+<!--                            <div class="swiper-slide">-->
+<!--                                <div class="testi-item fl-wrap">-->
+<!--                                    <div class="testi-avatar"><img src="{% static 'home/images/avatar/5.jpg' %}" alt=""></div>-->
+<!--                                    <div class="testimonilas-text fl-wrap">-->
+<!--                                        <h3>Nicolo Svensky</h3>-->
+<!--                                        <div class="star-rating" data-starrating="5"> </div>-->
+<!--                                        <p>"Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. "</p>-->
+<!--                                        <span class="testi-number">04.</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;testi-item end&ndash;&gt;-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="tc-pagination"></div>-->
+<!--            </div>-->
+<!--        </section>-->
         <!-- section end  -->
     </div>
     <!-- content end  -->

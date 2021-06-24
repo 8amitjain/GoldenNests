@@ -394,7 +394,6 @@ blockquote p {
 	transition: all .3s ease-in-out;
 }
 .show-cart:before {
-    content: "";
     display: block;
     width: 1px;
     height: 16.8px;
@@ -575,7 +574,7 @@ blockquote p {
 	position:absolute;
 	right:6px;
 	top:50%;
-	margin-top:-10px;
+	margin-top: 0px;
 }
 .header-cart_wrap_footer {
 	padding-top:15px;

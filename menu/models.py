@@ -129,6 +129,8 @@ class Product(models.Model):
     description = RichTextField(help_text='To describe food item in short', null=True, blank=True)
     image = models.ImageField(upload_to='products')
 
+    first_class = models.BooleanField(default=False)
+
     is_active = models.BooleanField(default=True)
     trending = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now_add=True)

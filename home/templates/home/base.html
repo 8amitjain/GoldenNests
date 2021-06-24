@@ -20,7 +20,7 @@
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/dark-style.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'home/css/color.css' %}">
         <!--=============== favicons ===============-->
-        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="shortcut icon" href="{% static 'home/images/logo/favicon.png' %}">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     </head>
     <body onload="mySnackar()">
@@ -64,9 +64,9 @@
                 <div class="header-inner  fl-wrap">
                     <div class="container">
                         <div class="header-container fl-wrap">
-                            <a href="/" class="logo-holder ajax"><img src="images/logo.png" alt="GOLDENEST"></a>
+                            <a href="/" class="logo-holder ajax"><img src="{% static 'home/images/logo/logo.png' %}" alt="GOLDENEST" style="width: 200px;object-fit: contain;height: 100px;margin-top: -3em;"></a>
                             <div class="show-reserv_button show-rb"><span>Reservation</span> <i class="fal fa-bookmark"></i></div>
-                            <div class="show-cart sc_btn htact"><i class="fal fa-shopping-bag"></i><span class="show-cart_count">{{ cart_count }}</span><span class="header-tooltip">Your Cart</span></div>
+                            <a href="{% url 'order:cart' %}" style="color: #fff;"><div class="show-cart sc_btn htact"><i class="fal fa-shopping-bag"></i><span class="show-cart_count" id="item_bag">{{ cart_count }}</span><span class="header-tooltip">Your Cart</span></div></a>
                             <!-- nav-button-wrap-->
                             <div class="nav-button-wrap">
                                 <div class="nav-button">
@@ -103,36 +103,36 @@
                             <!-- navigation  end -->
                             <!-- header-cart_wrap  -->
 
-                            {% if cart_list %}
-                                <div class="header-cart_wrap novis_cart">
-                                <div class="header-cart_title">Your Cart <span>{{ cart_count }} items</span></div>
-                                <div class="header-cart_wrap_container fl-wrap">
-                                    <div class="box-widget-content">
-                                        <div class="widget-posts fl-wrap">
-                                            <ol>
-                                                {% for cart in cart_list %}
-                                                    <li class="clearfix">
-                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="{{ cart.product.image.url }}" class="respimg" alt="" style="height: 60px;object-fit: cover;"></a>
-                                                        <div class="widget-posts-descr">
-                                                            <a href="{% url 'menu:menu' %}" title="">{{ cart.product.title }}</a>
-                                                            <div class="widget-posts-descr_calc clearfix">{{ cart.quantity }} <span>x</span>₹{{ cart.product.price }}</div>
-                                                        </div>
-                                                        <a href="{{ cart.get_delete_cart_url }}"><div class="clear-cart_button" ><i class="fal fa-times"></i></div></a>
-                                                    </li>
-                                                {% endfor %}
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="header-cart_wrap_total fl-wrap">
-                                    <div class="header-cart_wrap_total_item">Subtotal : <span>₹{{ orders.get_total }}</span></div>
-                                </div>
-                                <div class="header-cart_wrap_footer fl-wrap">
-                                    <a href="{% url 'order:cart' %}"> View Cart</a>
-                                    <a href="{% url 'order:checkout' %}">  Checkout</a>
-                                </div>
-                            </div>
-                            {% endif %}
+<!--                            {% if cart_list %}-->
+<!--                                <div class="header-cart_wrap novis_cart">-->
+<!--                                <div class="header-cart_title">Your Cart <span></span></div>-->
+<!--                                <div class="header-cart_wrap_container fl-wrap">-->
+<!--                                    <div class="box-widget-content">-->
+<!--                                        <div class="widget-posts fl-wrap" id="_appendHere">-->
+<!--                                            <ol>-->
+<!--                                                {% for cart in cart_list %}-->
+<!--                                                    <li class="clearfix">-->
+<!--&lt;!&ndash;                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="{{ cart.product.image.url }}" class="respimg" alt="" style="height: 60px;object-fit: cover;"></a>&ndash;&gt;-->
+<!--                                                        <div class="widget-posts-descr">-->
+<!--                                                            <a href="{% url 'menu:menu' %}" title="">{{ cart.product.title }}</a>-->
+<!--                                                            <div class="widget-posts-descr_calc clearfix">{{ cart.quantity }} <span>x</span>₹{{ cart.product.price }}</div>-->
+<!--                                                        </div>-->
+<!--                                                        <a href="{{ cart.get_delete_cart_url }}"><div class="clear-cart_button" style="margin-top: 0em;margin-left: auto;float: right;"><i class="fal fa-times"></i></div></a>-->
+<!--                                                    </li>-->
+<!--                                                {% endfor %}-->
+<!--                                            </ol>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="header-cart_wrap_total fl-wrap">-->
+<!--                                    <div class="header-cart_wrap_total_item">Subtotal : <span id="get_total_header">₹{{ orders.get_total }}</span></div>-->
+<!--                                </div>-->
+<!--                                <div class="header-cart_wrap_footer fl-wrap">-->
+<!--                                    <a href="{% url 'order:cart' %}"> View Cart</a>-->
+<!--                                    <a href="{% url 'order:checkout' %}">  Checkout</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            {% endif %}-->
                             <!-- header-cart_wrap end  -->
                         </div>
                     </div>
@@ -148,7 +148,7 @@
                 <footer class="fl-wrap dark-bg fixed-footer">
                     <div class="container">
                         <div class="footer-top fl-wrap">
-                            <a href="/" class="footer-logo"><img src="images/logo2.png" alt="GOLDENEST"></a>
+                            <a href="/" class="footer-logo"><img src="{% static 'home/images/logo/logo.png' %}" alt="GOLDENEST" style="width: 230px;height: auto;margin-top: -3em;"></a>
 <!--                            <div class="lang-wrap"><a href="#" class="act-lang">En</a><span>/</span><a href="#">Fr</a></div>-->
                             <div class="footer-social">
                                 <span class="footer-social-title">Follow us :</span>
@@ -168,7 +168,7 @@
                                     <div class="footer-widget">
                                         <div class="footer-widget-title">About us</div>
                                         <div class="footer-widget-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
+                                            <p>Golden Nest Hotel is quiet comfortable Hotel located near muhadi phata jalgaon. Our hotel is famous for its rare and friendly community. </p>
                                             <a href="{% url 'home:about' %}" class="footer-widget-content-link">Read more</a>
                                         </div>
                                     </div>
@@ -213,7 +213,7 @@
                                         <div class="footer-widget-title">Subscribe</div>
                                         <div class="footer-widget-content">
                                             <div class="subcribe-form fl-wrap">
-                                                <p>Want to be notified when we launch a new template or an update. Just sign up and we'll send you a notification by email.</p>
+                                                <p>Want to be notified when we launch a menus or an update. Just sign up and we'll send you a notification by email.</p>
                                                 <form id="subscribe" class="fl-wrap">
                                                     <input class="enteremail" name="email" id="subscribe-email" placeholder="Your Email" spellcheck="false" type="text">
                                                     <button type="submit" id="subscribe-button" class="subscribe-button color-bg">Send </button>

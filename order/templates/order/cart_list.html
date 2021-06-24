@@ -1,10 +1,11 @@
 {% extends 'home/base.html' %}
+{% load static %}
 {% block content %}
 
 <div class="content">
       <!--  section  -->
     <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
-        <div class="bg par-elem "  data-bg="images/bg/17.jpg" data-scrollax="properties: { translateY: '30%' }"></div>
+        <div class="bg par-elem "  data-bg="{% static 'home/images/bg/17.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
         <div class="overlay"></div>
         <div class="container">
             <div class="section-title">
@@ -35,7 +36,7 @@
                         <tbody>
                             <tr>
 <!--                                <th class="hidden-xs">Item</th>-->
-                                <th width="30%">Title</th>
+                                <th width="30%" style="color: #C19D60;">Dish</th>
                                 <th class="hidden-xs">Price</th>
                                 <th>Count</th>
                                 <th>Total</th>
@@ -90,16 +91,18 @@
                                                                   'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
                                                                 },
                                                                 success: function (data) {   // `data` is the return of the `load_cities` view function
-                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);
+                                                                  }
                                                                   if(data["quantity"] == 10 ){
                                                                      document.getElementById("max{{object.id}}").style.border = "1px solid red";
                                                                   };
-                                                                  $("#get_total").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_total_mobile").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item_mobile").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+
+                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);
+                                                                  $("#item_bag").html(data["item"]);
 
                                                               }
 
@@ -118,15 +121,22 @@
                                                                   'quantity': quantity,       // add the country id to the GET parameters
                                                                   'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
                                                                 },
-                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
-                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);  // replace the contents of the city input with the data that came from the server
+                                                                success: function (data) {
                                                                   document.getElementById("max{{object.id}}").style.border = "0px solid black";
-                                                                  $("#get_total").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_total_mobile").html("₹" + data["get_total"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
-                                                                  $("#item_mobile").html(data["item"] );
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);
+                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);
+                                                                  }else{
+                                                                  $("#quantity_{{object.id}}").html("0");
+                                                                  $("#get_cart_total_{{object.id}}").html("0");
+                                                                  }
+
+
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);
+                                                                  $("#item_bag").html(data["item"]);
+
                                                               }
 
                                                             });
@@ -179,7 +189,7 @@
                     </table>
                     <!-- COUPON -->
                     <div class="coupon-holder">
-                        <form action="" method="POST">
+                        <form action="{% url 'order:coupon' %}" method="POST">
                             {% csrf_token %}
                             <input type="text" name="code" id="id_code" placeholder="Coupon code">
                             <button type="submit" class="btn-a">Apply</button>
@@ -198,17 +208,19 @@
                                     <th>Cart Subtotal:</th>
                                     <td id="get_subtotal">₹{{ order.get_total_without_coupon }}</td>
                                 </tr>
+                                {% if order.get_coupon_total %}
                                 <tr>
                                     <th>Coupon Discount:</th>
                                     <td>₹{{ order.get_coupon_total }}</td>
                                 </tr>
+                                {% endif %}
                                 <tr>
                                     <th>Tax:</th>
-                                    <td>₹{{ order.get_tax }}</td>
+                                    <td>₹{{ order.get_tax_total }}</td>
                                 </tr>
                                 <tr>
                                     <th>Total:</th>
-                                    <td id="get_total">₹{{ order.get_total }}</td>
+                                    <td id="get_total" style="font-size: 1.3em;">₹{{ order.get_total }}</td>
                                 </tr>
                             </tbody>
                         </table>

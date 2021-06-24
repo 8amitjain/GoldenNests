@@ -22,6 +22,10 @@ urlpatterns = [
     # Order Return
     path('cancel/<int:pk>/', views.CancelOrderView.as_view(), name='cancel'),
 
+# Checkout
+    path('coupon/', views.CheckoutCoupon.as_view(), name='coupon'),
+    path('coupon/remove/', views.CheckoutCouponRemove.as_view(), name='coupon-remove'),
+
     # Payment
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
     # path('payment/', views.PaymentView.as_view(), name='payment'),

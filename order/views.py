@@ -351,3 +351,43 @@ class CheckoutView(LoginRequiredMixin, View):
             return redirect('/')
 
 
+class CheckoutCoupon(LoginRequiredMixin, View):
+    def post(self, *args, **kwargs):
+        coupon_code = self.request.POST.get('coupon_code')
+        coupon = Coupon.objects.filter(code=coupon_code).first()
+        coupon_customer, created = CouponCustomer.objects.get_or_create(
+            user=self.request.user, coupon=coupon)
+        if not created:
+            messages.warning(self.request, "Coupon already used")
+            return redirect('order:cart')
+        if not coupon:
+            messages.warning(self.request, "Coupon does not exists")
+            return redirect('order:cart')
+        order = Order.objects.filter(
+            user=self.request.user, ordered=False).first()
+        if order.get_sub_total() < coupon.minimum_order_amount:
+            coupon_customer.delete()
+            messages.info(self.request, "Not applicable")
+            return redirect('order:cart')
+        if order.coupon:
+            prev_coupon = CouponCustomer.objects.get(id=order.coupon.id)
+            prev_coupon.delete()
+        order.coupon = coupon_customer
+        order.save()
+        coupon_customer.discount_amount = order.get_coupon_total()
+        coupon_customer.save()
+        messages.success(self.request, "Coupon applied!")
+        return redirect('order:cart')
+
+
+class CheckoutCouponRemove(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        order = Order.objects.filter(
+            user=self.request.user, ordered=False).first()
+        if order.coupon:
+            prev_coupon = CouponCustomer.objects.get(id=order.coupon.id)
+            prev_coupon.delete()
+            order.coupon = None
+            order.save()
+            messages.info(self.request, "Coupon removed!")
+        return redirect('order:checkout')
