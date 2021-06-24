@@ -133,6 +133,11 @@ class Order(models.Model):
         for order_item in self.cart.all():
             total += order_item.get_tax()
         return float(total)
+    
+    def get_tax(self):
+        total = self.get_total()
+        total = total * 5 //100
+        return total
 
     def get_total_without_coupon(self):
         total = 0

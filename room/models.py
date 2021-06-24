@@ -58,6 +58,17 @@ class Room(models.Model):
 
     def get_total_one_night(self):
         return self.room_type.price
+    
+
+    def get_total_without_tax(self):
+        return (self.room_type.price*self.no_of_days)
+
+    def get_tax(self):
+        total = self.get_total_without_tax()
+        total = total * 12 // 100
+        return total
 
     def get_total(self):
-        return (self.room_type.price*self.no_of_days)
+        sum = self.get_total_without_tax()
+        tax = self.get_tax()
+        return sum + tax

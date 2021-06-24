@@ -54,7 +54,7 @@ class AddtoCart(LoginRequiredMixin, View):
                          'get_total_without_coupon': order.get_total_without_coupon(),
                          'get_coupon_total': order.get_coupon_total(),
                          'get_cart_total': cart.get_total_item_price(),
-                         'quantity' : cart.quantity, 'item': order.cart.count()
+                         'quantity' : cart.quantity, 'item': order.cart.count(), 'get_tax': order.get_tax(),
                          })
             else:
                 return JsonResponse(
@@ -62,7 +62,7 @@ class AddtoCart(LoginRequiredMixin, View):
                          'get_total_without_coupon': 0,
                          'get_coupon_total': 0,
                          'get_cart_total': 0,
-                         'quantity' : 0, 'item': 0
+                         'quantity' : 0, 'item': 0, 'get_tax': 0,
                          }) 
         cart.quantity = quantity
         cart.save()
@@ -78,7 +78,7 @@ class AddtoCart(LoginRequiredMixin, View):
                          'get_total_without_coupon': order.get_total_without_coupon(),
                          'get_coupon_total': order.get_coupon_total(),
                          'get_cart_total': cart.get_total_item_price(),
-                         'quantity' : cart.quantity, 'item': order.cart.count()
+                         'quantity' : cart.quantity, 'item': order.cart.count(), 'get_tax': order.get_tax(),
                          })
                 else:
                     messages.info(request, "Product quantity was updated")
@@ -87,7 +87,7 @@ class AddtoCart(LoginRequiredMixin, View):
                          'get_total_without_coupon': order.get_total_without_coupon(),
                          'get_coupon_total': order.get_coupon_total(),
                          'get_cart_total': cart.get_total_item_price(),
-                         'quantity': cart.quantity, 'item': order.cart.count()
+                         'quantity': cart.quantity, 'item': order.cart.count(), 'get_tax': order.get_tax(),
                          })
             else:
                 order.cart.add(cart)
@@ -98,7 +98,7 @@ class AddtoCart(LoginRequiredMixin, View):
                      'get_total_without_coupon': order.get_total_without_coupon(),
                      'get_coupon_total': order.get_coupon_total(),
                      'get_cart_total': cart.get_total_item_price(),
-                     'quantity': cart.quantity, 'item': order.cart.count()
+                     'quantity': cart.quantity, 'item': order.cart.count(), 'get_tax': order.get_tax(),
                      })
         else:
             ordered_date_time = timezone.now()
@@ -114,7 +114,7 @@ class AddtoCart(LoginRequiredMixin, View):
                  'get_total_without_coupon': order.get_total_without_coupon(),
                  'get_coupon_total': order.get_coupon_total(),
                  'get_cart_total': cart.get_total_item_price(),
-                 'quantity': cart.quantity, 'item': order.cart.count()
+                 'quantity': cart.quantity, 'item': order.cart.count(), 'get_tax': order.get_tax(),
                  })
 
 

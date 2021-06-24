@@ -69,5 +69,6 @@ class BookRoomView(View):
         messages.info(self.request, "Room booked Successfully")
         return JsonResponse({
             'no_of_days': room.no_of_days,
-            'no_of_room': room.no_of_room, 'total_of_one_night': room.get_total_one_night(), 'total': room.get_total()
+            'no_of_room': room.no_of_room, 'total_of_one_night': room.get_total_one_night(),
+            'total': room.get_total(), 'get_tax': room.get_tax(), 'get_total': room.get_total(),
         })
