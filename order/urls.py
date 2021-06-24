@@ -10,7 +10,7 @@ app_name = 'order'
 urlpatterns = [
     # Cart
     path('cart/', views.CartListView.as_view(), name='cart'),
-    path('cart/add/<int:pk>/', views.AddToCart.as_view(), name='add-to-cart'),
+    path('cart/add/<int:pk>/', views.AddtoCart.as_view(), name='add-to-cart'),
     path('cart/remove/<pk>/', views.RemoveFromCart.as_view(), name='remove-from-cart'),
     path('cart/delete/<pk>/', views.DeleteCart.as_view(), name='delete-cart'),
 

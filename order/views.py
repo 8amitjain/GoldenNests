@@ -22,85 +22,100 @@ from home.models import RestaurantsTiming
 # from vowsnviews.local_settings import razorpay_api, razorpay_secret
 # import razorpay
 
-class AddToCart(LoginRequiredMixin, View):
-    def get(self, request, *args,**kwargs):
+class AddtoCart(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
         quantity = int(request.GET.get('quantity', 1))
         product = get_object_or_404(Product, pk=pk)
+        if not product.is_active:
+            raise PermissionDenied
+        if not request.session or not request.session.session_key:
+            request.session.save()
 
         user = self.request.user if self.request.user.is_authenticated else None
 
         cart, created = Cart.objects.get_or_create(
             product=product,
-            user=user,
+            user=request.user,
             ordered=False,
         )
 
         if quantity <= 0:
-            order_qs = Order.objects.filter(
-                user=user, ordered=False)
-            
+            order_qs = Order.objects.filter(user=request.user, ordered=False)
             cart.delete()
-
             order = order_qs.filter(cart=cart).first()
             if order and order.cart.count() == 0:
                 order.delete()
-            messages.info(request, "Item was removed from order.")
-            return redirect("order:cart-list")
-
-        # Updating cart qty
+            messages.info(request, "Product was removed from order.")
+            if order_qs.exists():
+                order = order_qs[0]
+                return JsonResponse(
+                        {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                         'get_total_without_coupon': order.get_total_without_coupon(),
+                         'get_coupon_total': order.get_coupon_total(),
+                         'get_cart_total': cart.get_total_item_price(),
+                         'quantity' : cart.quantity, 'item': order.cart.count()
+                         })
+            else:
+                return JsonResponse(
+                        {'get_total': 0, 'get_tax_total': 0,
+                         'get_total_without_coupon': 0,
+                         'get_coupon_total': 0,
+                         'get_cart_total': 0,
+                         'quantity' : 0, 'item': 0
+                         }) 
         cart.quantity = quantity
         cart.save()
-        order_qs = Order.objects.filter(
-            user=user, ordered=False)
+        order_qs = Order.objects.filter(user=request.user, ordered=False)
         if order_qs.exists():
-            # Updating THE CART
             order = order_qs[0]
             if cart in order.cart.all():
-                # CHECK QTY HANDLE
                 if cart.quantity >= 10:
                     cart.quantity = 10
-                    messages.info(request, "Maximum quantity added.")
+                    messages.info(request, "Only 10 items per cart")
                     return JsonResponse(
-                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
-                             'get_total_without_coupon':order.get_total_without_coupon(),
-                             'get_coupon_total':order.get_coupon_total()
-                             })
-
+                        {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                         'get_total_without_coupon': order.get_total_without_coupon(),
+                         'get_coupon_total': order.get_coupon_total(),
+                         'get_cart_total': cart.get_total_item_price(),
+                         'quantity' : cart.quantity, 'item': order.cart.count()
+                         })
                 else:
-                    messages.info(request, "Item quantity was updated.")
+                    messages.info(request, "Product quantity was updated")
                     return JsonResponse(
-                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
-                             'get_total_without_coupon':order.get_total_without_coupon(),
-                             'get_coupon_total':order.get_coupon_total()
-                             })
+                        {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                         'get_total_without_coupon': order.get_total_without_coupon(),
+                         'get_coupon_total': order.get_coupon_total(),
+                         'get_cart_total': cart.get_total_item_price(),
+                         'quantity': cart.quantity, 'item': order.cart.count()
+                         })
             else:
                 order.cart.add(cart)
                 order.save()
-                messages.info(request, "Food item was added to your cart.")
+                messages.info(request, "Product was added to your cart.")
                 return JsonResponse(
-                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
-                             'get_total_without_coupon':order.get_total_without_coupon(),
-                             'get_coupon_total':order.get_coupon_total()
-                             })
+                    {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                     'get_total_without_coupon': order.get_total_without_coupon(),
+                     'get_coupon_total': order.get_coupon_total(),
+                     'get_cart_total': cart.get_total_item_price(),
+                     'quantity': cart.quantity, 'item': order.cart.count()
+                     })
         else:
-            # CREATING THE ORDER
             ordered_date_time = timezone.now()
             order = Order.objects.create(
-                user=user, ordered_date_time=ordered_date_time)  
+                user=user, ordered_date_time=ordered_date_time)
             ORN = f"ORN-{100000 + int(order.id)}"
             order.order_ref_number = ORN
             order.cart.add(cart)
             order.save()
-
-            order.save()
-
-            messages.info(request, "Food Item was added to your cart.")
+            messages.success(request, "Food Item was added to your cart.")
             return JsonResponse(
-                            {'total': order.get_total(), 'get_tax_total': order.get_tax_total(),
-                             'get_total_without_coupon':order.get_total_without_coupon(),
-                             'get_coupon_total':order.get_coupon_total()
-                             })
+                {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                 'get_total_without_coupon': order.get_total_without_coupon(),
+                 'get_coupon_total': order.get_coupon_total(),
+                 'get_cart_total': cart.get_total_item_price(),
+                 'quantity': cart.quantity, 'item': order.cart.count()
+                 })
 
 
 
