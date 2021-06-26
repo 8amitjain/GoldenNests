@@ -127,8 +127,9 @@ class Product(models.Model):
                              help_text="Food Item is Special, Popular etc or leave it blank for no label. \
                                         (Label will be displayed over a item.)")
     description = RichTextField(help_text='To describe food item in short', null=True, blank=True)
-    image = models.ImageField(upload_to='products')
+    image = models.ImageField(upload_to='products', null=True, blank=True)
 
+    veg = models.BooleanField(default=True)
     first_class = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)

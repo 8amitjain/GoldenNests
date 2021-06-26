@@ -48,8 +48,23 @@ class AddtoCart(LoginRequiredMixin, View):
             if order and order.cart.count() == 0:
                 order.delete()
             messages.info(request, "Product was removed from order.")
-            return redirect('menu:menu')
-
+            if order_qs.exists():
+                order = order_qs[0]
+                return JsonResponse(
+                        {'get_total': order.get_total(), 'get_tax_total': order.get_tax_total(),
+                         'get_total_without_coupon': order.get_total_without_coupon(),
+                         'get_coupon_total': order.get_coupon_total(),
+                         'get_cart_total': cart.get_total_item_price(),
+                         'quantity' : 0, 'item': order.cart.count()
+                         })
+            else:
+                return JsonResponse(
+                        {'get_total': 0, 'get_tax_total': 0,
+                         'get_total_without_coupon': 0,
+                         'get_coupon_total': 0,
+                         'get_cart_total': 0,
+                         'quantity' : 0, 'item': 0
+                         })
         cart.quantity = quantity
         cart.save()
         order_qs = Order.objects.filter(user=request.user, ordered=False)

@@ -2,15 +2,17 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.generic import View, CreateView
 from .models import Contact, TPP, UpcomingEvent
-from menu.models import Product
+from menu.models import Product, Category
 
 class Home(View):
     def get(self, *args, **kwargs):
         event = UpcomingEvent.objects.all()
         first_class = Product.objects.filter(first_class = True, is_active = True)
+        category_list = Category.objects.filter(is_active=True)
         context = {
             'event' : event,
             'first_class' : first_class,
+            'category' : category_list
         }
         return render(self.request, 'home/home.html', context)
 

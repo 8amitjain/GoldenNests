@@ -61,16 +61,17 @@
                 </div>
                 <!--header-top end -->
                 <!-- header-inner -->
-                <div class="header-inner  fl-wrap">
+                <div class="header-inner  fl-wrap" style="z-index: 100;">
                     <div class="container">
                         <div class="header-container fl-wrap">
-                            <a href="/" class="logo-holder ajax"><img src="{% static 'home/images/logo/logo.png' %}" alt="GOLDENEST" style="width: 200px;object-fit: contain;height: 100px;margin-top: -3em;"></a>
-                            <div class="show-reserv_button show-rb"><span>Reservation</span> <i class="fal fa-bookmark"></i></div>
-                            <a href="{% url 'order:cart' %}" style="color: #fff;"><div class="show-cart sc_btn htact"><i class="fal fa-shopping-bag"></i><span class="show-cart_count" id="item_bag">{{ cart_count }}</span><span class="header-tooltip">Your Cart</span></div></a>
+                            <a href="/" class="logo-holder ajax"><img src="{% static 'home/images/logo/logo.png' %}" class="logo" alt="GOLDENEST" style="width: 200px;object-fit: contain;height: 100px;margin-top: -3em;"></a>
+<!--                            <div class="show-reserv_button show-rb"><span>Reservation</span> <i class="fal fa-bookmark"></i></div>-->
+<!--                            {% if user.is_authenticated %}<a href="{% url 'order:cart' %}" style="color: #fff;">{% endif %}<div class="show-cart sc_btn htact"><i class="fal fa-shopping-bag"></i><span class="show-cart_count" id="item_bag">{{ cart_count }}</span><span class="header-tooltip">Your Cart</span></div></a>-->
                             <!-- nav-button-wrap-->
-                            <div class="nav-button-wrap">
-                                <div class="nav-button">
-                                    <span></span><span></span><span></span>
+<!--                            <div class="show-cart sc_btn htact"></div>-->
+                            <div class="nav-button-wrap" style="margin-left: 2em;color: #fff;">
+                                <div class="nav-button" style="color: #fff;">
+                                    <span style="color: #fff;"></span><span style="color: #fff;"></span ><span style="color: #fff;"></span>
                                 </div>
                             </div>
                             <!-- nav-button-wrap end-->
@@ -80,9 +81,24 @@
                                     <ul>
                                         <li><a href="/">Home</a></li>
                                         <li><a href="{% url 'menu:menu' %}">Menu</a></li>
-                                        <li><a href="{% url 'menu:menu' %}">Rooms</a></li>
+<!--                                        <li><a href="{% url 'menu:menu' %}">Rooms</a></li>-->
                                         <li><a href="{% url 'home:about' %}">About</a></li>
                                         <li><a href="{% url 'home:contact' %}">Contact</a></li>
+                                        {% if not user.is_authenticated %}
+                                        <li><a><i class="fa fa-lock"></i></a>
+                                            <ul>
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                                <li><a href="{% url 'register' %}">Sign Up</a></li>
+                                            </ul>
+                                        </li>
+                                        {% else %}
+                                        <li><a><i class="fa fa-user"></i></a>
+                                          <ul>
+                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+
+                                            </ul>
+                                        </li>
+                                        {% endif %}
 <!--                                        <li>-->
 <!--                                            <a href="#">Pages<i class="fas fa-caret-down"></i></a>-->
 <!--                                            &lt;!&ndash;second level &ndash;&gt;-->
@@ -112,7 +128,7 @@
 <!--                                            <ol>-->
 <!--                                                {% for cart in cart_list %}-->
 <!--                                                    <li class="clearfix">-->
-<!--&lt;!&ndash;                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="{{ cart.product.image.url }}" class="respimg" alt="" style="height: 60px;object-fit: cover;"></a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="" class="respimg" alt="" style="height: 60px;object-fit: cover;"></a>&ndash;&gt;-->
 <!--                                                        <div class="widget-posts-descr">-->
 <!--                                                            <a href="{% url 'menu:menu' %}" title="">{{ cart.product.title }}</a>-->
 <!--                                                            <div class="widget-posts-descr_calc clearfix">{{ cart.quantity }} <span>x</span>₹{{ cart.product.price }}</div>-->
@@ -150,21 +166,21 @@
                         <div class="footer-top fl-wrap">
                             <a href="/" class="footer-logo"><img src="{% static 'home/images/logo/logo.png' %}" alt="GOLDENEST" style="width: 230px;height: auto;margin-top: -3em;"></a>
 <!--                            <div class="lang-wrap"><a href="#" class="act-lang">En</a><span>/</span><a href="#">Fr</a></div>-->
-                            <div class="footer-social">
-                                <span class="footer-social-title">Follow us :</span>
-                                <ul>
-                                    <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                                    <li><a href="#" target="_blank"><i class="fab fa-vk"></i></a></li>
-                                </ul>
-                            </div>
+<!--                            <div class="footer-social">-->
+<!--                                <span class="footer-social-title">Follow us :</span>-->
+<!--                                <ul>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-vk"></i></a></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
                         </div>
                         <!-- footer-widget-wrap -->
                         <div class="footer-widget-wrap fl-wrap">
                             <div class="row">
                                 <!-- footer-widget -->
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="footer-widget">
                                         <div class="footer-widget-title">About us</div>
                                         <div class="footer-widget-content">
@@ -175,7 +191,7 @@
                                 </div>
                                 <!-- footer-widget  end-->
                                 <!-- footer-widget -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="footer-widget">
                                         <div class="footer-widget-title">Contact info  </div>
                                         <div class="footer-widget-content">
@@ -208,21 +224,21 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="footer-widget">
-                                        <div class="footer-widget-title">Subscribe</div>
-                                        <div class="footer-widget-content">
-                                            <div class="subcribe-form fl-wrap">
-                                                <p>Want to be notified when we launch a menus or an update. Just sign up and we'll send you a notification by email.</p>
-                                                <form id="subscribe" class="fl-wrap">
-                                                    <input class="enteremail" name="email" id="subscribe-email" placeholder="Your Email" spellcheck="false" type="text">
-                                                    <button type="submit" id="subscribe-button" class="subscribe-button color-bg">Send </button>
-                                                    <label for="subscribe-email" class="subscribe-message"></label>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                <div class="col-md-3">-->
+<!--                                    <div class="footer-widget">-->
+<!--                                        <div class="footer-widget-title">Subscribe</div>-->
+<!--                                        <div class="footer-widget-content">-->
+<!--                                            <div class="subcribe-form fl-wrap">-->
+<!--                                                <p>Want to be notified when we launch a menus or an update. Just sign up and we'll send you a notification by email.</p>-->
+<!--                                                <form id="subscribe" class="fl-wrap">-->
+<!--                                                    <input class="enteremail" name="email" id="subscribe-email" placeholder="Your Email" spellcheck="false" type="text">-->
+<!--                                                    <button type="submit" id="subscribe-button" class="subscribe-button color-bg">Send </button>-->
+<!--                                                    <label for="subscribe-email" class="subscribe-message"></label>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                                 <!-- footer-widget  end-->
                             </div>
                         </div>

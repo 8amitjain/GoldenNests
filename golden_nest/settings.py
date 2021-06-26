@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'menu',
     'users',
     'order',
+    'room',
 ]
 
 AUTHENTICATION_BACKENDS = (

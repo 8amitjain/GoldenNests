@@ -45,10 +45,10 @@
                                         <h2>Register</h2>
                                         <div class="dots-separator fl-wrap"><span></span></div>
                                     </div>
-                                    <div class="text-block ">
-                                        <p>By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.
-                                        </p>
-                                    </div>
+<!--                                    <div class="text-block ">-->
+<!--                                        <p>By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.-->
+<!--                                        </p>-->
+<!--                                    </div>-->
                                     <div class="contactform-wrap">
                                         <div id="message"></div>
                                         <form  class="custom-form" method="post" name="contactform" id="contactform">
@@ -63,7 +63,7 @@
                                                         <input type="text" name="email" id="id_email" placeholder="Email Address *" value="" required/>
                                                     </div>
                                                     <div class="col-sm-12">
-                                                        <input type="text" name="phone_number" id="id_phone_number" placeholder="Phone *" value="" required/>
+                                                        <input type="tel" name="phone_number" id="id_phone_number" placeholder="Phone *" pattern="[789][0-9]{9}" style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;" value="" required/>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <input type="password" name="password1" id="id_password1" placeholder="Password *" value="" required/>
@@ -71,10 +71,17 @@
                                                     <div class="col-sm-6">
                                                         <input type="password" name="password2" id="id_password2" placeholder="Confirm Password *" value="" required/>
                                                     </div>
+
+                                                     <div class="col-sm-12">
+                                                       <button type="submit" class="btn fl-btn" style="margin-top: 1em;">Sign up<i class="fal fa-long-arrow-right"></i></button>
+                                                    </div>
+
+                                                    <div class="col-sm-12">
+                                                        <p align="left" style="margin-top: 2em;font-family: 'Playfair Display', cursive;color: #fff;font-size: 1.1em;float: left;">Already have an account ? <a style="color: #C19D60;" href="{% url 'login' %}"> Sign in </a></p>
+                                                    </div>
+
                                                 </div>
-<!--                                                <textarea name="comments"  id="comments2" cols="40" rows="3" placeholder="Your Message:"></textarea>-->
-                                                <div class="clearfix"></div>
-                                                <button type="submit" class="btn float-btn flat-btn color-bg" id="submit_cnt">Sign Up <i class="fal fa-long-arrow-right"></i></button>
+
                                             </fieldset>
                                         </form>
                                     </div>
@@ -108,7 +115,7 @@
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="bold-separator"><span></span></div>
-                                            <div class="big-number"><a href="#">+7(111)123456789</a></div>
+                                            <div class="show-rb"><a class="btn fl-btn">Reserve Table <i class="fal fa-long-arrow-right"></i></a></div>
                                         </div>
                                         <div class="illustration_bg">
                                             <div class="bg"  data-bg="images/bg/dec/6.png"></div>

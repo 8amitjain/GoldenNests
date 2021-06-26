@@ -16,13 +16,14 @@ from order.models import Order
 class MenuListView(ListView):
     model = Product
     paginate_by = 50
-    template_name = 'menu/menu_2.html'
+    template_name = 'menu/menu.html'
     # object_list variable name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category_list = Category.objects.filter(is_active=True)
-        order = Order.objects.filter(ordered=False, user=self.request.user).first()
+        user = self.request.user if self.request.user.is_authenticated else None
+        order = Order.objects.filter(ordered=False, user=user).first()
         context['category_list'] = category_list
         context['order'] = order
         return context
