@@ -41,6 +41,9 @@ urlpatterns = [
     # Remove Table
     path('api/table/remove/', api.RemoveTableOrderAPI.as_view(), name='api-table-book'),
 
+    path('check/table/available/', views.check_table_available, name='check-table-available'),
+
+
 ]
 
 if settings.DEBUG:

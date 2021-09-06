@@ -25,15 +25,11 @@ SIZE_OPTION = (
 
 
 REVIEW_RATING_CHOICES = (
-    (1, 1),
-    (1.5, 1.5),
-    (2, 2),
-    (2.5, 2.5),
-    (3, 3),
-    (3.5, 3.5),
-    (4, 4),
-    (4.5, 4.5),
-    (5, 5),
+    (1.0, 1.0),
+    (2.0, 2.0),
+    (3.0, 3.0),
+    (4.0, 4.0),
+    (5.0, 5.0),
 )
 
 
@@ -235,6 +231,10 @@ class BookTable(models.Model):
     booked_for_time = models.ForeignKey(TableTime, on_delete=models.CASCADE)
     booked_at = models.DateTimeField(auto_now_add=True)
     is_booked = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.table.title}_{self.name}'
+
+
+

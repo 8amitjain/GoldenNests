@@ -1,0 +1,42 @@
+{% extends "analytics/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block data %}
+    <form method="post" id="table_form">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Submit </button>
+    </form>
+<script>
+                                        $('#table_form').submit(function(e){
+                                            e.preventDefault();
+                                            check_available();
+                                        });
+                                        function check_available()
+                                        {
+                                            let table_id = $('#id_table').val();
+                                            let date = $('#id_booked_for_date').val();
+                                            let time = $('#id_booked_for_time').val();
+                                            let url = "{% url 'analytics:admin-check-table-available' %}";
+                                            let form = $('#table_form');
+                                            $.ajax({
+                                                url: url,
+                                                data: {
+                                                    'date': date,
+                                                    'time': time,
+                                                    'table_id': table_id,
+                                                },
+                                                method: "GET",
+                                                success: function (data)
+                                                {
+                                                    if(data['status'] === 'false') {
+                                                        alert("Table already reserved and confirmed!")
+                                                        return false
+                                                    }
+                                                    else
+                                                        form.submit();
+                                                }
+                                            });
+                                        }
+                                    </script>
+{% endblock %}

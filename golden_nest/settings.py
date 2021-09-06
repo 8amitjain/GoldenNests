@@ -6,7 +6,7 @@ import os
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = '!wzd+ws1+apy$n6bby-2s)==s@aj6-xf-(a1&f3a%vt)fhl&bb'
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', '127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'users',
     'order',
     'room',
+    'analytics',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -148,5 +149,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = Email
-EMAIL_HOST_PASSWORD = Email_Pass
+EMAIL_HOST_USER = 'Email'
+EMAIL_HOST_PASSWORD = 'Email_Pass'
+FAST_SMS_API = 'UcHqYglQVhfF37nmeZxs0uOXGSDJ2dEKoMAwT69tWBzRyvpC4iRmbtlX5zwvKJ0UYianhP3s87eExDg2'
