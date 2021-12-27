@@ -1,0 +1,85 @@
+{% extends 'users/account_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load l10n %}
+{% block achead %}Your Bookings{% endblock %}
+{% block room %}
+
+{% if not object_list %}
+<div style="height: 50vh;" class="container">
+    <div style="height: 100%;" class="section-title text-center">
+        <img  src="{% static 'home/images/logo/room-key.png' %}"  style="height: 250px;width: 250px;object-fit: cover;"  alt="logo">
+        <h2>No Rooms Booked Yet</h2>
+        <br>
+        <a href="{% url 'room:list' %}" class="btn color-bg" type="submit">Book Your Room  <i class="fal fa-long-arrow-right"></i></a>
+    </div>
+</div>
+{% endif %}
+
+{% for object in object_list %}
+
+<style>
+    @media screen and (max-width: 600px) {
+        .author-content {
+            padding-left:0;
+        }
+
+        .author-img {
+            visibility: hidden;
+        }
+    }
+    
+</style>
+
+<div class="post-author fl-wrap" style="margin-bottom: 3em;">
+    <div style="" class="author-img">
+        <img alt="" src="{{object.room_type.image_main.url}}">
+    </div>
+    
+    <div class="author-content">
+        <div style="display: flex;">
+            <h5 ><a style="color: #C19D60;" href="#">{{object.room_type.name}}</a></h5>
+            <h5 style="margin-left: auto;color: #C19D60;padding-right: 0.5em;" align="right">₹{{object.room_type.price}}</h5>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+            <p style="margin-bottom: 2em; font-family: 'Playfair Display', cursive;">For <span style="color:#C19D60 ;">{{object.no_of_days}}</span> Nights</p>
+            <h5 style="margin-left: auto;color: #e6e6e6; padding-right: 0.5em; font-size: 1em; font-family: 'Playfair Display', cursive;" align="right">
+                {% if object.is_confirmed %}
+                    Confirmed
+                {% else %}
+                    Processing
+                {% endif %}
+            </h5>
+        </div>
+        <hr style="opacity: 0.1; margin-bottom: 1em; transform: translateY(-15px);">
+        <div  class="row">
+            <div class="col-md-4 col-sm-6 col-xs-6">
+                <p style="font-size: 15px;color: #fff;font-family: 'Playfair Display', cursive;">
+                    Check In : <br><span style="color: #C19D60;">{{object.check_in}}</span>
+                </p>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-6">
+                <p style="font-size: 15px;color: #fff;font-family: 'Playfair Display', cursive;">
+                    Check Out : <br><span style="color: #C19D60;">{{object.check_out}}</span>
+                </p>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-6">
+                <p style="font-size: 15px;color: #fff;font-family: 'Playfair Display', cursive;">
+                    Booked For : <br><span style="color: #C19D60;">{{object.people_variation.no_of_person}}</span>
+                </p>
+            </div>
+        </div>
+<!--        <div class="author-social">-->
+<!--            <ul>-->
+<!--                <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>-->
+<!--                <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>-->
+<!--                <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>-->
+<!--                <li><a href="#" target="_blank"><i class="fab fa-vk"></i></a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+    </div>
+</div>
+{% endfor %}
+
+{% endblock room %}

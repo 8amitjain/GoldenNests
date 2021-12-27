@@ -1,0 +1,66 @@
+{% extends "analytics/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav-menu-add %}style="color: #FFB319;"{% endblock %}
+
+{% block data %}
+
+<style>
+    .cke_inner cke_reset{
+       width: 50%;
+    }
+    .id_description textarea {
+       display: block !important;
+       width: 100% !important;
+    }
+</style>
+
+
+<div class="row bg-white p-4" style="border-radius: 0.5em;">
+    <div class="col-12">
+        {% if request.path == "/analytics/menu/add/" %}
+        <h3 align="center" style="font-weight: bold;">Create Menu</h3><hr>
+        {% else %}
+        <h3 align="center" style="font-weight: bold;">Update Menu</h3><hr>
+        {% endif %}
+    </div>
+    <div class="col-lg-12">
+       <form class="row" method="post">
+         {% csrf_token %}
+         <div class="col-lg-12 pb-3">
+            {{ form.title|as_crispy_field }}
+         </div>
+         <div class="col-lg-6 pb-3">
+            {{ form.category|as_crispy_field }}
+         </div>
+         
+         <div class="col-lg-6 pb-3">
+            {{ form.cost_per|as_crispy_field }}
+         </div>
+         <div class="col-lg-12 pb-3">
+            {{ form.price|as_crispy_field }}
+         </div>
+         
+         <div class="col-lg-12 pb-3">
+            {{ form.description|as_crispy_field }}
+         </div>
+         <div class="col-lg-6 pb-3">
+            {{ form.veg|as_crispy_field }}
+         </div>
+         
+         <div class="col-lg-6 pb-3">
+            {{ form.is_active|as_crispy_field }}
+         </div>
+         
+         <div class="col-lg-12 pb-3">
+             {% if request.path == "/analytics/menu/add/" %}
+             <button class="btn btn-info w-100">ADD MENU</button>
+             {% else %}
+             <button class="btn btn-info w-100">UPDATE MENU</button>
+             {% endif %}
+         </div>
+       </form>
+    </div>
+</div>
+
+{% endblock data %}

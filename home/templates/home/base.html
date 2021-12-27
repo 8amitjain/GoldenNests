@@ -1,0 +1,794 @@
+{% load static %}
+{% load l10n %}
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+        <!--=============== basic  ===============-->
+        <meta charset="UTF-8">
+        <title>Golden Nest</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="robots" content="index, follow"/>
+        <meta name="keywords" content=""/>
+        <meta name="description" content=""/>
+        <!--=============== css  ===============-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/reset.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/plugins.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/style.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/custom_style.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/dark-style.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/css/color.css' %}">
+        <!--=============== favicons ===============-->
+        <link rel="shortcut icon" href="{% static 'home/images/logo/favicon.png' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    </head>
+    <body onload="mySnackbar()">
+
+
+        <style>
+            .snackbar-container {
+                position: fixed;
+                z-index: 999999999;
+                visibility: hidden;
+            }
+
+            .alert-primary {
+                color: rgb(0, 0, 0) !important;
+                border: 3px solid rgb(0, 0, 0);
+            }
+
+            .alert-success {
+                color: green !important;
+                border: 3px solid rgb(0, 192, 0);
+            }
+
+            .alert-error {
+                color: rgb(216, 14, 0) !important;
+                border: 3px solid rgb(216, 14, 0);
+            }
+            .snackbar-container.show {
+                visibility: visible;
+            }
+        </style>
+        
+
+        {% if messages %}
+        <div id="snackbar-container" class="snackbar-container">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %} alert-{{message.tags}} {% else %} alert-primary {% endif %}" id="snackbar">
+                {{message}}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+
+        <!-- <div id="snackbar-container" class="snackbar-container">
+            <div class="alert {% if message.tags %} alert-{{message.tags}} {% else %} alert-primary {% endif %}" id="snackbar">
+                test
+            </div>
+        </div> -->
+        
+
+        <script>
+            function mySnackbar() {
+                var x = document.getElementById("snackbar-container");
+                x.className = "snackbar-container show";
+                setTimeout(function(){ 
+                    x.className = "snackbar-container"; 
+                    // x.className = x.className.replace("show", ""); 
+                    console.log('works');
+                }, 3000);
+            }
+            // mySnackar();
+        </script>
+        <!-- lodaer  -->
+        <div class="loader-wrap">
+            <div class="loader-item">
+                <div class="cd-loader-layer" data-frame="25">
+                    <div class="loader-layer"></div>
+                </div>
+                <span class="loader"></span>
+            </div>
+        </div>
+        <!-- loader end  -->
+        <!-- main start  -->
+        <div id="main">
+            <!-- header  -->
+            <header class="main-header">
+                <!-- header-top  -->
+                <div class="header-top">
+                    <div class="container">
+<!--                        <div class="lang-wrap"><a href="#" class="act-lang">En</a><span>/</span><a href="#">Fr</a></div>-->
+                        <div class="header-top_contacts"><a href="#"><span>Call now:</span> +91 9823333373</a><a href="#"><span>Write :</span> info@goldennest.in</a></div>
+                    </div>
+                </div>
+                <!--header-top end -->
+                <!-- header-inner -->
+                <div class="header-inner  fl-wrap" style="z-index: 100;">
+                    <div class="container">
+                        <div class="header-container fl-wrap">
+                            <a href="/" class="logo-holder ajax"><img src="{% static 'home/images/logo/logo.png' %}" class="logo" alt="GOLDENEST" style="width: 200px;object-fit: contain;height: 100px;margin-top: -3em;"></a>
+                            {% if user.is_authenticated %}
+                            <div class="show-reserv_button show-rb" id="reservation_button"><span>Reservation</span> <i class="fal fa-bookmark"></i></div>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="show-reserv_button "><span>Reservation</span> <i class="fal fa-bookmark"></i></a>
+                            {% endif %}
+
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'order:cart' %}" style="color: #fff;">
+                            {% endif %}
+                            <div class="show-cart sc_btn htact">
+                                <i class="fal fa-shopping-bag"></i>
+                                <span class="show-cart_count" id="item_bag">{{ cart_count }}</span>
+                                <span class="header-tooltip">Your Cart</span>
+                            </div></a>
+
+                            
+                            <div class="nav-button-wrap">
+                                <div class="nav-button">
+                                    <span></span><span></span ><span></span>
+                                </div>
+                            </div>
+                            
+                            <script>
+                                jQuery(function($) {
+                                        if($(window).width() > 1000) {
+                                            $('.account-link').html('');
+                                        }
+                                        else {
+                                            $('.account-link').html('Account');
+                                        }
+                                });
+                            </script>
+
+                            <!-- nav-button-wrap end-->
+                            <!--  navigation -->
+                            <div class="nav-holder main-menu">
+                                <nav>
+                                    <ul>
+                                        <li><a href="/">Home</a></li>
+                                        <li><a href="{% url 'menu:menu' %}">Menu</a></li>
+                                        <!--<li><a href="{% url 'room:list' %}">Rooms</a></li>-->
+                                        <li><a href="{% url 'home:about' %}">About</a></li>
+                                        <li><a href="{% url 'home:contact' %}">Contact</a></li>
+                                        {% if not user.is_authenticated %}
+                                        <li><a><span class="account-link">Account</span><i class="fa fa-lock"></i></a>
+                                            <ul>
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                                <li><a href="{% url 'register' %}">Sign Up</a></li>
+                                            </ul>
+                                        </li>
+                                        {% else %}
+                                        {% if user.is_superuser %}
+                                        <style>
+                                            .badge {
+                                                display: inline-block;
+                                                font-size: 11px;
+                                                font-weight: 600;
+                                                padding: 3px 6px;
+                                                border: 1px solid transparent;
+                                                min-width: 10px;
+                                                line-height: 1;
+                                                color: #fff;
+                                                text-align: center;
+                                                white-space: nowrap;
+                                                vertical-align: middle;
+                                                
+                                            } 
+                                            .badge-warning {
+                                                background-color: #C19D60;
+                                                color: #fff;
+                                            } 
+                                            .badge-pill {
+                                                border-radius: 99999px;
+                                            }
+                                        </style>
+                                        <li><a>Admin</a>
+                                            
+                                            <ul>  
+                                                <li >
+                                                    <a class=""  href="{% url 'analytics:dashboard' %}">Dashboard</a>
+                                                </li>
+                                                
+                                                <li >
+                                                    <a class=""  {% block nav-menu %}{% endblock %} href="{% url 'analytics:menu-list' %}">Menu</a>
+                                                </li>
+                    
+                                                <li >
+                                                    <a class="" {% block nav-category %}{% endblock %}  href="{% url 'analytics:category-list' %}">Category</a>
+                                                </li>
+                    
+                                                <li >
+                                                    <a class="" {% block nav-order %}{% endblock %} href="{% url 'analytics:order-list' %}">Order {% if order_unseen != 0 %}<span class="badge badge-warning badge-pill">{{order_unseen}}</span> {% endif %}</a>
+                                                </li>
+                    
+                                                <li >
+                                                    <a class="" {% block nav-coupon %}{% endblock %} href="{% url 'analytics:coupon-list' %}">Coupon</a>
+                                                </li>
+                    
+                                                <li>
+                                                    <a class="" {% block nav-contact %}{% endblock %} href="{% url 'analytics:contact' %}">Contact {% if unseen_contact != 0 %}<span class="badge badge-warning badge-pill">{{unseen_contact}}</span> {% endif %}</a>
+                                                </li>
+                    
+                                                <li>
+                                                    <a class="" {% block nav-review %}{% endblock %} href="{% url 'analytics:review-list' %}">Review {% if room_review != 0 %}<span class="badge badge-warning badge-pill">{{room_review}}</span>{% endif %}</a>
+                                                </li>
+                                    
+                                                
+                                                <li>
+                                                    <a class=""  href="{% url 'analytics:booked-room-list' %}">Booking  {% if room_booking_to_confirmed != 0 %}<span class="badge badge-warning badge-pill">{{room_booking_to_confirmed}}</span>{% endif %}</a>
+                                                </li>
+                                                
+                                                <li>
+                                                    <a class=""  href="{% url 'analytics:table-reservation-list' %}">Reservation {% if table_booking_to_confirmed != 0 %}<span class="badge badge-warning badge-pill">{{table_booking_to_confirmed}}</span>{% endif %}</a>
+                                                </li>
+                                                
+                                            </ul>
+                                        </li>
+                                        {% endif %}
+
+                                        
+
+                                        <li><a><span class="account-link">Account</span><i class="fas fa-user"></i></a>
+                                          <ul>  
+                                           
+                                                <li><a href="{% url 'account' user.pk %}">Profile</a></li>
+                                                <li><a href="{% url 'order:list' %}">Your Order</a></li>
+                                                <li><a href="{% url 'room:booked-room-list' %}">Room Booked</a></li>
+                                                <li><a href="{% url 'menu:booked-table-list' %}">Table Reserved</a></li>
+                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+
+                                            </ul>
+                                        </li>
+                                        
+                                        
+                                        {% endif %}
+<!--                                        <li>-->
+<!--                                            <a href="#">Pages<i class="fas fa-caret-down"></i></a>-->
+<!--                                            &lt;!&ndash;second level &ndash;&gt;-->
+<!--                                            <ul>-->
+<!--                                                <li><a href="shop.html">Shop</a></li>-->
+<!--                                                <li><a href="product-single.html">Product Single</a></li>-->
+<!--                                                <li><a href="cart.html">Cart</a></li>-->
+<!--                                                <li><a href="gallery.html">Gallery</a></li>-->
+<!--                                                <li><a href="blog-single.html">Blog single</a></li>-->
+<!--                                                <li><a href="404.html">404</a></li>-->
+<!--                                                <li><a href="coming-soon.html">Coming Soon</a></li>-->
+<!--                                            </ul>-->
+<!--                                            &lt;!&ndash;second level end&ndash;&gt;-->
+<!--                                        </li>-->
+                                    </ul>
+                                </nav>
+
+                                
+                            </div>
+                            <!-- navigation  end -->
+                            <!-- header-cart_wrap  -->
+
+<!--                            {% if cart_list %}-->
+<!--                                <div class="header-cart_wrap novis_cart">-->
+<!--                                <div class="header-cart_title">Your Cart <span></span></div>-->
+<!--                                <div class="header-cart_wrap_container fl-wrap">-->
+<!--                                    <div class="box-widget-content">-->
+<!--                                        <div class="widget-posts fl-wrap" id="_appendHere">-->
+<!--                                            <ol>-->
+<!--                                                {% for cart in cart_list %}-->
+<!--                                                    <li class="clearfix">-->
+<!--&lt;!&ndash;                                                        <a href="{% url 'menu:menu' %}"  class="widget-posts-img"><img src="" class="respimg" alt="" style="height: 60px;object-fit: cover;"></a>&ndash;&gt;-->
+<!--                                                        <div class="widget-posts-descr">-->
+<!--                                                            <a href="{% url 'menu:menu' %}" title="">{{ cart.product.title }}</a>-->
+<!--                                                            <div class="widget-posts-descr_calc clearfix">{{ cart.quantity }} <span>x</span>₹{{ cart.product.price }}</div>-->
+<!--                                                        </div>-->
+<!--                                                        <a href="{{ cart.get_delete_cart_url }}"><div class="clear-cart_button" style="margin-top: 0em;margin-left: auto;float: right;"><i class="fal fa-times"></i></div></a>-->
+<!--                                                    </li>-->
+<!--                                                {% endfor %}-->
+<!--                                            </ol>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="header-cart_wrap_total fl-wrap">-->
+<!--                                    <div class="header-cart_wrap_total_item">Subtotal : <span id="get_total_header">₹{{ orders.get_total }}</span></div>-->
+<!--                                </div>-->
+<!--                                <div class="header-cart_wrap_footer fl-wrap">-->
+<!--                                    <a href="{% url 'order:cart' %}"> View Cart</a>-->
+<!--                                    <a href="{% url 'order:checkout' %}">  Checkout</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            {% endif %}-->
+                            <!-- header-cart_wrap end  -->
+                        </div>
+                    </div>
+                </div>
+                <!-- header-inner end  -->
+            </header>
+            <!--header end -->
+            <!-- wrapper  -->
+            <div id="wrapper">
+                {% block content %} {% endblock %}
+                <!-- footer -->
+                <div class="height-emulator fl-wrap"></div>
+                <footer class="fl-wrap dark-bg fixed-footer">
+                    <div class="container">
+                        <div class="footer-top fl-wrap">
+                            <a href="/" class="footer-logo"><img src="{% static 'home/images/logo/logo.png' %}" alt="GOLDENEST" style="width: 230px;height: auto;margin-top: -3em;"></a>
+<!--                            <div class="lang-wrap"><a href="#" class="act-lang">En</a><span>/</span><a href="#">Fr</a></div>-->
+<!--                            <div class="footer-social">-->
+<!--                                <span class="footer-social-title">Follow us :</span>-->
+<!--                                <ul>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>-->
+<!--                                    <li><a href="#" target="_blank"><i class="fab fa-vk"></i></a></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+                        </div>
+                        <!-- footer-widget-wrap -->
+                        <div class="footer-widget-wrap fl-wrap">
+                            <div class="row">
+                                <!-- footer-widget -->
+                                <div class="col-md-4">
+                                    <div class="footer-widget">
+                                        <div class="footer-widget-title">About us</div>
+                                        <div class="footer-widget-content">
+                                            <p>Golden Nest Hotel is quiet comfortable Hotel located near muhadi phata jalgaon. Our hotel is famous for its rare and friendly community. </p>
+                                            <a href="{% url 'home:about' %}" class="footer-widget-content-link">Read more</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- footer-widget  end-->
+                                <!-- footer-widget -->
+                                <div class="col-md-6">
+                                    <div class="footer-widget">
+                                        <div class="footer-widget-title">Contact info  </div>
+                                        <div class="footer-widget-content">
+                                            <div class="footer-contacts footer-box fl-wrap">
+                                                <ul>
+                                                    <li><span>Call :</span><a href="tel:9823333373">+91 9823333373</a> , <a href="tel:93713 33373">+91 93713 33373</a></li>
+                                                    <li><span>Write  :</span><a href="#">info@goldennest.in</a></li>
+                                                    <li><span>Find us : </span><a href="#">Plot no 11, muhadi phata, Near D-Mart Adarsh Nagar, Jalgaon, 425001</a></li>
+                                                </ul>
+                                            </div>
+                                            <a href="{% url 'home:contact' %}" class="footer-widget-content-link">Get in Touch</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- footer-widget  end-->
+                                <!-- footer-widget -->
+                                <div class="col-md-2">
+                                    <div class="footer-widget">
+                                        <div class="footer-widget-title">Privacy info  </div>
+                                        <div class="footer-widget-content">
+                                            <div class="footer-contacts footer-box fl-wrap">
+                                                <ul>
+                                                    <li><a href="{% url 'home:franchise' %}">Franchise</a></li>
+                                                    <li><a href="/policy/terms-and-condition/">Terms &amp; Conditions</a></li>
+                                                    <li><a href="/policy/refund-policy/">Refund Policy</a></li>
+                                                    <li><a href="/policy/cancellation-policy/">Cancellation Policy</a></li>
+                                                    <li><a href="/policy/privacy-policy/">Privacy</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+<!--                                <div class="col-md-3">-->
+<!--                                    <div class="footer-widget">-->
+<!--                                        <div class="footer-widget-title">Subscribe</div>-->
+<!--                                        <div class="footer-widget-content">-->
+<!--                                            <div class="subcribe-form fl-wrap">-->
+<!--                                                <p>Want to be notified when we launch a menus or an update. Just sign up and we'll send you a notification by email.</p>-->
+<!--                                                <form id="subscribe" class="fl-wrap">-->
+<!--                                                    <input class="enteremail" name="email" id="subscribe-email" placeholder="Your Email" spellcheck="false" type="text">-->
+<!--                                                    <button type="submit" id="subscribe-button" class="subscribe-button color-bg">Send </button>-->
+<!--                                                    <label for="subscribe-email" class="subscribe-message"></label>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                                <!-- footer-widget  end-->
+                            </div>
+                        </div>
+                        <!-- footer-widget-wrap end-->
+                        <div class="footer-bottom fl-wrap">
+                            <div class="copyright">&#169; Golden Nest {{ current_year|unlocalize }} . All rights reserved. </div>
+                            <div class="to-top"><span>Back To Top </span><i class="fal fa-angle-double-up"></i></div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- footer end-->
+            </div>
+            <!-- wrapper end -->
+
+            {% if user.is_authenticated %}
+            <!-- reservation-modal-wrap-->
+            <div class="reservation-modal-wrap">
+                <div class="reserv-overlay crm">
+                    <div class="cd-reserv-overlay-layer" data-frame="25">
+                        <div class="reserv-overlay-layer"></div>
+                    </div>
+                </div>
+                <div class="reservation-modal-container bot-element">
+                    <div class="reservation-modal-item fl-wrap">
+                        <div class="close-reservation-modal crm"><i class="fal fa-times"></i></div>
+                        <div class="reservation-bg"></div>
+                        <div class="section-title">
+                            <h4>Don't forget to book a table</h4>
+                            <h2>Table Reservations</h2>
+                            <div class="dots-separator fl-wrap"><span></span></div>
+                        </div>
+                        <div class="reservation-wrap">
+                            <div id="reserv-message"></div>
+                            <form  class="custom-form" action="{% url 'menu:book-table' %}" name="" method="post" id="table_form">
+                               {% csrf_token %}
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-sm-6" style="display:none;">
+                                            <input type="text" name="add_food" id="add_food" value=""/>
+                                        </div>
+                                        <div style="z-index: 99998;" class="col-sm-6">
+                                            <input type="text" name="name" id="id_name" placeholder="Your Name *" value="{% if request.user.is_authenticated %} {{request.user.name}} {% endif %}" required />
+                                        </div>
+                                        <div style="z-index: 99999;" class="col-sm-6">
+                                            <input type="email"  name="email" id="id_email" placeholder="Email Address *" value="{% if request.user.is_authenticated %} {{request.user.email}} {% endif %}" required/>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="tel"  name="phone_number" id="id_phone_number" placeholder="Phone *" pattern="[789][0-9]{9}" value="{% if request.user.is_authenticated %} {{request.user.phone_number|safe}} {% endif %}" required style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="fl-wrap">
+                                                <select name="people_count" id="id_people_count" data-placeholder="Persons" class="chosen-select no-search-select" required>
+<!--                                                    <option data-display="Persons">Select</option>-->
+                                                    {% for person in people_count_list %}
+                                                        <option value="{{ person.id }}">{{ person.title }} Person</option>
+                                                    {% endfor %}
+<!--                                                    <option value="Banquet">Banquet</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="col-sm-6">
+                                            <div class="date-container2 fl-wrap">
+                                                <input type="date" min="2020-09-09" placeholder="Date" id="id_booked_for_date" name="booked_for_date" value="" required style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
+                                                <script language="javascript">
+                                                    var today = new Date();
+                                                    var dd = String(today.getDate()).padStart(2, '0');
+                                                    var mm = String(today.getMonth() + 1).padStart(2, '0');
+                                                    var yyyy = today.getFullYear();
+                                                
+                                                    today = yyyy + '-' + mm + '-' + dd;
+                                                    $('#id_booked_for_date').attr('min',today);
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="fl-wrap">
+                                                <input type="time" placeholder="Time" id="id_booked_for_time" name="booked_for_time" value="" required style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
+                                                <!-- <select name="booked_for_time" id="id_booked_for_time" data-placeholder="Time" class="chosen-select no-search-select" required>
+                                                    {% for time in time_list %}
+                                                        <option value="{{ time.id }}">{{ time.time }}</option>
+                                                    {% endfor %}
+
+                                                </select> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="fl-wrap">
+                                                <select id="id_sitting_type" name="sitting_type" data-placeholder="Dinning Area" class="chosen-select no-search-select" required>
+<!--                                                    <option data-display="Dinning Area">Select</option>-->
+                                                    {% for person in sitting_area %}
+                                                        <option value="{{ person.id }}">{{ person.title }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    <textarea name="comments"  id="comments" cols="30" rows="3" placeholder="Your Message:"></textarea>-->
+                                    <div class="clearfix"></div>
+                                    <button class="btn color-bg"  type="submit">Reserve Table  <i class="fal fa-long-arrow-right"></i></button>
+                                    <button class="btn color-bg"  type="submit" onclick="menu_order()">Reserve Table and Add Food to table <i class="fal fa-long-arrow-right"></i></button>
+                                    <!-- <button class="btn color-bg"  type="submit" onclick="menu_order()" >Reserve Table and Add Food to table <i class="fal fa-long-arrow-right"></i></button> -->
+                                </fieldset>
+                                <script>
+
+
+
+                                    $('#table_form').submit(function(e){
+                                        e.preventDefault();
+                                        check_available();
+                                    });
+                                    function check_available()
+                                    {
+                                        let table_id = "{{ object.id }}";
+                                        let date = $('#id_booked_for_date').val();
+                                        let time = $('#id_booked_for_time').val();
+                                        {#close_time = new Date();#}
+                                        {#close_time.setMinutes(0);#}
+                                        {#close_time.setHours(21);#}
+                                        {#close_time.setSeconds(0);#}
+                                        {#now_time = new Date();#}
+                                        {#time = time.split(":");#}
+                                        {#now_time.setHours(parseInt(time[0]) + 2);#}
+                                        {#now_time.setMinutes(parseInt(time[1]));#}
+                                        {#if(now_time.getTime() > close_time.getTime())#}
+                                        {#{#}
+                                        {#    alert("Sorry, Order not accepted from 2 hours before shutting down!!!");#}
+                                        {#    return false;#}
+                                        {#}#}
+
+
+                                        let cond = new Date(Date.parse(date.replace(/-/g, " "))) > new Date();
+                                        let url = "{% url 'menu:check-table-available' %}";
+                                        let form = $('#table_form');
+
+                                        let start_time = new Date(2011,09,12,08,59,00,000).toLocaleTimeString('en-US', { hour12: false,
+                                             hour: "numeric",
+                                             minute: "numeric", second: "numeric"});
+                                        let end_time = new Date(2011,01,12,21,00,00,596).toLocaleTimeString('en-US', { hour12: false,
+                                             hour: "numeric",
+                                             minute: "numeric", second: "numeric"});
+                                        if (start_time < time && time < end_time) {
+                                            if (cond) {
+                                                $.ajax({
+                                                    url: url,
+                                                    data: {
+                                                        'date': date,
+                                                        'time': time,
+                                                        'table_id': table_id,
+                                                    },
+                                                    method: "GET",
+                                                    success: function (data) {
+                                                        if (data['status'] === 'false') {
+                                                            alert("Table not available for selected date.")
+                                                            return false
+                                                        } else
+                                                            form.submit();
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                let date_now = new Date().toISOString().split('T')[0];
+                                                let user_date = new Date(date).toISOString().split('T')[0];
+                                                if (date_now === user_date) {
+                                                    now_time = new Date().getTime();
+                                                    time = time.split(":");
+                                                    user_date = new Date();
+                                                    user_date.setHours(time[0]);
+                                                    user_date.setMinutes(time[1]);
+                                                    user_time = user_date.getTime();
+                                                    console.log("Here")
+                                                    if (now_time > user_time) {
+                                                        alert("Please select proper date & time");
+                                                        return false;
+                                                    }
+                                                    else{
+                                                        $.ajax({
+                                                    url: url,
+                                                    data: {
+                                                        'date': date,
+                                                        'time': time,
+                                                        'table_id': table_id,
+                                                    },
+                                                    method: "GET",
+                                                    success: function (data) {
+                                                        if (data['status'] === 'false') {
+                                                            alert("Table not available for selected date.")
+                                                            return false
+                                                        } else
+                                                            form.submit();
+                                                    }
+                                                });
+
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            alert("Sorry, Table Reservation is from 9 A.M. to 9 P.M.");
+                                            return false;
+                                        }
+                                    }
+                                </script>
+                            </form>
+                        </div>
+                        <!-- reservation-wrap end-->
+                    </div>
+                </div>
+            </div>
+            <!-- reservation-modal-wrap end-->
+            {% endif %}
+
+            <!-- cursor-->
+            <div class="element" id="Element">
+                <div class="element-item"></div>
+            </div>
+            <!-- cursor end-->
+        </div>
+
+
+
+
+        <!-- Custom Alert -->
+
+        <style>
+            #modalContainer {
+            background-color:rgba(0, 0, 0, 0.3);
+            position:absolute;
+            width:100%;
+            height:100%;
+            top:0px;
+            left:0px;
+            z-index:10000;
+            background-image:url(tp.png); /* required by MSIE to prevent actions on lower z-index elements */
+        }
+
+        #alertBox {
+            position:relative;
+            width:300px;
+            min-height:100px;
+            margin-top:50px;
+            border:1px solid #9F8353;
+            background-color:#303030;
+            background-repeat:no-repeat;
+            background-position:20px 30px;
+        }
+
+        #modalContainer > #alertBox {
+            position:fixed;
+        }
+
+        #alertBox h1 {
+            margin:0;
+            font:bold 1.1em verdana,arial;
+            background-color:#9F8353;
+            color:#FFF;
+            border-bottom:1px solid #9F8353;
+        }
+
+        #alertBox p {
+            font:1em verdana,arial;
+            height:60px;
+            padding: 2em;
+        }
+
+        #alertBox #closeBtn {
+            display:block;
+            position:relative;
+            margin:5px auto;
+            padding:7px;
+            border:0 none;
+            width:70px;
+            font:0.7em verdana,arial;
+            text-transform:uppercase;
+            text-align:center;
+            color:#FFF;
+            background-color:#9F8353;
+            border-radius: 3px;
+            text-decoration:none;
+        }
+
+        /* unrelated styles */
+
+        #mContainer {
+            position:relative;
+            width:600px;
+            margin:auto;
+            padding:5px;
+            border-top:2px solid #000;
+            border-bottom:2px solid #000;
+            font:0.7em verdana,arial;
+        }
+
+        #modalContainer h1, #modalContainer h2 {
+            margin:0;
+            padding:4px;
+            font:bold 1.5em verdana;
+            border-bottom:1px solid #000;
+        }
+
+        code {
+            font-size:1.2em;
+            color:#069;
+        }
+
+        #credits {
+            position:relative;
+            margin:25px auto 0px auto;
+            width:350px; 
+            font:0.7em verdana;
+            border-top:1px solid #000;
+            border-bottom:1px solid #000;
+            height:90px;
+            padding-top:4px;
+        }
+
+        #credits img {
+            float:left;
+            margin:5px 10px 5px 0px;
+            border:1px solid #000000;
+            width:80px;
+            height:79px;
+        }
+
+        .important {
+            background-color:#F5FCC8;
+            padding:2px;
+        }
+
+        code span {
+            color:green;
+        }
+        </style>
+
+        <script>
+            var ALERT_TITLE = "Oops!";
+            var ALERT_BUTTON_TEXT = "Ok";
+
+            if(document.getElementById) {
+                window.alert = function(txt) {
+                    createCustomAlert(txt);
+                }
+            }
+
+            function createCustomAlert(txt) {
+                d = document;
+
+                if(d.getElementById("modalContainer")) return;
+
+                mObj = d.getElementsByTagName("body")[0].appendChild(d.createElement("div"));
+                mObj.id = "modalContainer";
+                mObj.style.height = d.documentElement.scrollHeight + "px";
+
+                alertObj = mObj.appendChild(d.createElement("div"));
+                alertObj.id = "alertBox";
+                if(d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
+                alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth)/2 + "px";
+                alertObj.style.visiblity="visible";
+
+                h1 = alertObj.appendChild(d.createElement("h1"));
+                h1.appendChild(d.createTextNode(ALERT_TITLE));
+
+                msg = alertObj.appendChild(d.createElement("p"));
+                //msg.appendChild(d.createTextNode(txt));
+                msg.innerHTML = txt;
+
+                btn = alertObj.appendChild(d.createElement("a"));
+                btn.id = "closeBtn";
+                btn.appendChild(d.createTextNode(ALERT_BUTTON_TEXT));
+                btn.href = "#";
+                btn.focus();
+                btn.onclick = function() { removeCustomAlert();return false; }
+
+                alertObj.style.display = "block";
+
+            }
+
+            function removeCustomAlert() {
+                document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
+            }
+        </script>
+
+        <!-- End of custom alert -->
+
+        <script>
+
+            function menu_order() {
+               if (document.getElementById("table_form").checkValidity()) {
+                document.getElementById("add_food").value = "add_food";
+                document.getElementById("reservation_form").value = "add_food";
+              }
+            }
+        </script>
+        <!-- Main end -->
+        <!--=============== scripts  ===============-->
+        <script src="{% static 'home/js/jquery.min.js' %}"></script>
+        <script src="{% static 'home/js/plugins.js' %}"></script>
+        <script src="{% static 'home/js/scripts.js' %}"></script>
+
+    </body>
+
+
+</html>

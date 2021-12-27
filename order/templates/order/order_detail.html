@@ -1,0 +1,301 @@
+{% extends "users/account_base.html" %}
+{% load static %}
+{% block achead %}Order Details{% endblock %}
+{% block room %}
+
+    {% comment %}
+    <!-- { % for category in category_list %}
+    <li {% if forloop.counter == 1 %} class="current" {% endif %} onclick="closeNav()"><a href="#tab-{{category.id}}" data-bgtab="{% static 'home/images/bg/4.jpg' %}" style="font-size: 0.9em;"><span>{% if forloop.counter < 10 %}0{% endif %}{{forloop.counter}}.</span>{{category.title|title }}</a></li><br>
+    {% endfor %} -->
+    {% endcomment %}
+
+    <style>
+
+    .rounded-circle {
+        width: 26px;
+        height: 26px;
+        padding: 2px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .card {
+        display: block;
+        padding: 1em;
+        padding-top: 0;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .card-body {
+        padding: 2em;
+        padding-bottom: 0;
+        margin: 0;
+    }
+
+    .th-head {
+        border: none !important; 
+        font-weight: 600; 
+        text-transform: uppercase;
+        font-size: 0.9em;
+        vertical-align: top !important;
+    }
+
+    table td, table td * {
+        vertical-align: top !important;
+    }
+
+    .row {
+        margin-bottom: 1.2em ;        
+    }
+
+    .card-body.row {
+        margin-bottom: 0;
+    }
+
+    .row .row {
+        background-color: #292929;
+    }
+
+    p {
+        font-size: 1.2em;
+        color: rgb(176, 144, 89);
+    }
+
+    h6 {
+        text-transform: uppercase;
+    }
+
+    .checkout-table * {
+        font-family: 'Playfair Display', cursive !important;
+    }
+
+    .btn-cancel-custom {
+        transform: translate(30px, -28px);
+    }
+
+    .head-custom {
+        margin: 0 1.2em 1.2em 1.2em;
+        padding-top: 0;
+        display: flex;
+        justify-content: space-between; 
+    }
+
+    @media screen and (max-width: 1199px) {
+        .btn-cancel-custom {
+            transform: translate(0, -28px);
+        }
+
+        .card-body {
+            padding: 0;
+            padding-top: 2em;
+        }
+
+        .head-custom {
+            margin: 0 0 1.2em 0;
+            margin-top: 0;
+            padding-top: 0;
+            display: flex;
+            justify-content: space-between; 
+        }
+    }
+
+
+</style>
+                        
+
+<div style="background-color: #292929; overflow: auto; text-align: left; padding: 3em 2em 2em 2em;" class="checkout-table cart-totals dark-bg fl-wrap">
+    <div class="head-custom">
+            <h2 align="left" style="">
+                <p style="color: #C19D60;text-align: left;font-family: 'Playfair Display', cursive; " >
+                    <p style="margin-bottom: 0.5em; font-size: 1.5em; font-weight: 600;">#{{object.order_ref_number}}</p> 
+                    <p style="color:#fff; font-size: 1em;">- placed on {{object.ordered_date_time|date:"d M, Y"}}, {{object.ordered_date_time|time}}</p> 
+                </p>
+            </h2>
+            
+            <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+                <span style="transform: translateY(7px);">{{object.order_status}}</span>
+                <br>
+
+            </div>
+    </div>
+    <!-- <p style="transform:translateY(-40px);margin-left:0.8em; color:#fff; font-size: 1em;">- placed on {{object.ordered_date_time|date:"d M, Y"}}, {{object.ordered_date_time|time}}</p>  -->
+</div>
+
+
+<div style="margin-top: 2em; background-color: #292929; overflow: auto; text-align: left; padding: 3em 2em 2em 2em;" class="checkout-table cart-totals dark-bg fl-wrap">
+    <!-- <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #C19D60;text-align: left; font-size: 1.5em; margin-left: 0.5em;" >
+                Ordered Items
+            </a>
+        </h2>
+        
+    </div>
+    <hr style="opacity: 0.1; margin: 0 1.2em;"> -->
+    <div class="head-custom">
+        <table class="checkout-table" style="padding:0; margin:0; border:0; overflow: auto;">
+            <tbody>
+                <tr style="font-size: 1.4em;">
+                    <th width="50%" style="border:0; color: #C19D60;">Items</th>
+                    <th style="border:0;">Price</th>
+                    <th style="border:0;">Status</th>
+                </tr>
+
+                {% for cart in object.cart.all %}
+                <tr style="font-size: 1.2em">
+                    <td width="50%" style="color: #C19D60;">{{cart}}</td>
+                    <td>₹{{cart.product.price}}</td>
+                    <td>{{cart.order_status}}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<style>
+    .hero-menu-item:nth-child(1) {
+        height: 101px !important;
+    }
+    
+    .manage-width {
+        width:48%; 
+    }
+
+    .manage-width2 {
+        margin-left: 2.2em;
+    }
+
+    @media screen and (max-width: 900px) {
+        .manage-width {
+            width:100%; 
+        }
+
+        .manage-width2 {
+            margin-left: 0;
+        }
+    }
+
+</style>
+
+<!-- hero-menu-item -->
+
+<div class="manage-width checkout-table cart-totals dark-bg fl-wrap" style="background-color: #292929; overflow: auto; text-align: left; padding: 3em 2em 2em 2em; margin-top: 2em;" >
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #C19D60;text-align: left; font-size: 1.5em;" >
+                Payment Info
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            
+        </div>
+    </div>
+    <hr style="opacity: 0.1;"><br>
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #C19D60;text-align: left; font-size: 1.2em;" >
+                <p>
+                    <p style="color: #ffffff;text-align: left; font-size: 1.2em; margin-bottom: 0.4em;" >
+                        Paid by : &nbsp;<span style="color: #C19D60;">{{object.payment_method}}</span> 
+                    </p>
+                    <p style="color: #ffffff;text-align: left; font-size: 1.2em; margin-bottom: 0.4em;" >
+                        Payment ID :  &nbsp;<span style="color: #C19D60;">{{object.payment.payment_id}}</span>
+                    </p>
+                    <p style="color: #ffffff;text-align: left; font-size: 1.2em; margin-bottom: 0.4em;" >
+                        Amount :  &nbsp;<span style="color: #C19D60;">₹{{object.payment.amount_paid}} </span>
+                    </p>
+                    
+                                                                            
+                </p> 
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            
+        </div>
+    </div>
+    
+</div>
+
+
+<div style="background-color: #292929; overflow: auto; text-align: left; padding: 3em ; margin-top: 2em;" class="col checkout-table cart-totals dark-bg fl-wrap manage-width manage-width2">
+    
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #C19D60;text-align: left; font-size: 1.5em;" >
+                Order Total
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            
+        </div>
+    </div>
+    
+    <hr style="opacity: 0.1;"><br>
+    
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #ffffff;text-align: left; font-size: 1.2em;" >
+                Subtotal
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #ffffff; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            ₹{{object.get_total_without_coupon}}
+        </div>
+    </div>
+
+    <hr style="opacity: 0.1;"><br>
+    
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #ffffff;text-align: left; font-size: 1.2em;" >
+                Tax
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #ffffff; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            ₹{{object.get_tax_total}}
+        </div>
+    </div>
+
+    <hr style="opacity: 0.1;"><br>
+    
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #ffffff;text-align: left; font-size: 1.2em;" >
+                Coupon
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #ffffff; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            ₹{{object.get_coupon_total}}
+        </div>
+    </div>
+
+    <hr style="opacity: 0.1;"><br>
+    
+    <div class="head-custom">
+        <h2 align="left" style="">
+            <a href="#" style="color: #C19D60;text-align: left; font-size: 1.5em;" >
+                Total
+            </a>
+        </h2>
+        
+        <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            ₹{{object.get_total}}
+        </div>
+    </div>
+
+</div>
+                                
+                            
+                            
+                            
+                    
+{% endblock %}

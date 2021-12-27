@@ -1,0 +1,98 @@
+{% extends "analytics/base.html" %}
+{% load crispy_forms_tags %}
+{% block nav-room %}style="color: #FFB319;"{% endblock %}
+{% block data %}
+
+<div style="border-radius: 0.5em;" class="container mb-5 px-5 py-5 bg-white">
+
+
+    <h2 align="center" class="py-2 font-weight-bold">{{object.name}}</h2><hr>
+
+    <div class="">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row">
+                  <img src="{{object.image_main.url}}" class="d-block col-md-6" alt="...">
+                  {% if object.image_2 %}
+                    <img src="{{object.image_2.url}}" class="d-block col-md-6" alt="...">
+                  {% endif %}
+                </div>
+                
+              </div>
+              
+              
+              <div class="carousel-item">
+                <div class="row">
+                  {% if object.image_3 %}
+                  <img src="{{object.image_3.url}}" class="d-block col-md-6" alt="...">
+                {% endif %}
+                {% if object.image_4 %}
+                  <img src="{{object.image_4.url}}" class="d-block col-md-6" alt="...">
+                {% endif %}
+                </div>
+                
+              </div>
+              
+              
+              
+              <div class="carousel-item">
+                <div class="row">
+                  {% if object.image_5 %}
+                  <img src="{{object.image_5.url}}" class="d-block col-md-6" alt="...">
+                {% endif %}
+                {% if object.image_6 %}
+                  <img src="{{object.image_6.url}}" class="d-block col-md-6" alt="...">
+                {% endif %}
+                </div>
+                
+              </div>
+              
+
+              
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="row border-bottom py-3">
+        <div class="col-lg-12">
+            <span><strong>Stock Number</strong>: &nbsp;{{ object.stock_no }}</span>
+        </div>
+    </div>
+    
+    <div class="row border-bottom py-3">
+        <div class="col-lg-12">
+            <span><strong>Price</strong> &nbsp;{{ object.price }}</span>
+        </div>
+    </div>
+    <div class="row border-bottom py-3">
+        <div class="col-lg-12">
+            <span><strong>Description</strong> &nbsp;{{ object.short_description }}</span>
+        </div>
+    </div>
+    
+
+    <br>
+    <div class="row">
+      <p class="mt-5 col-6 text-center">
+          <a style="height: 40px; line-height: 25px;" class="btn btn-outline-warning w-75" href="{% url 'analytics:rooms-update' object.id %}"><i class="fas fa-edit"></i>&nbsp;&nbsp;Edit</a>
+      </p>
+      <p class="mt-5 col-6 text-center">
+        <a style="height: 40px; line-height: 25px;" class="btn btn-outline-danger w-75" href="{% url 'analytics:rooms-delete' object.id %}"><i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete</a>
+      </p>
+  </div>
+    
+
+</div>
+
+{% endblock %}

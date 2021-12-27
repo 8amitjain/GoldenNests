@@ -1,0 +1,41 @@
+{% extends "analytics/base.html" %}
+{% load crispy_forms_tags %}
+{% block table-list %}style="color: #FFB319;"{% endblock %}
+{% block data %}
+
+<div style="border-radius: 0.5em;" class="container mb-5 px-5 py-5 bg-white">
+
+
+    <h2 align="center" class="py-2 font-weight-bold">Table no. {{object.title}}</h2><hr>
+
+    <br><br>
+
+    <div class="row border-bottom py-3">
+        <div class="col-lg-6">
+            <span><strong>People Count</strong>: &nbsp;{{ object.people_count }}</span>
+        </div>
+        
+        <div class="col-lg-6">
+            <span><strong>Sitting Type</strong>: &nbsp;{{ object.sitting_type }}</span>
+        </div>
+    </div>
+
+    <div class="row border-bottom py-3">
+        <div class="col-lg-6">
+            <span><strong>Is Active</strong>: &nbsp;{{ object.is_active }}</span>
+        </div>
+        
+        <div class="col-lg-6">
+            <span><strong>Trending</strong>: &nbsp;{{ object.trending }}</span>
+        </div>
+    </div>
+
+    
+    
+
+    <br>
+    <a class="btn btn-dark w-100 mt-5" href="{% url 'analytics:rooms-update' object.id %}">Edit</a>
+
+</div>
+
+{% endblock %}

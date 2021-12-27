@@ -1,0 +1,82 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load order_extras %}
+{% block content %}
+    <div class="content">
+         <!--  section  -->
+        <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+            <div class="bg par-elem "  data-bg="{% static 'home/images/bg/19.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="section-title">
+                    <!-- <h4>Enjoy your time in our restaurant with pleasure.</h4> -->
+                    <h2>{% block achead %}{% endblock %}</h2>
+                    <!-- <h2>Your Profile</h2> -->
+                    <div class="dots-separator fl-wrap"><span></span></div>
+                </div>
+            </div>
+            <div class="hero-section-scroll">
+                <div class="mousey">
+                    <div class="scroller"></div>
+                </div>
+            </div>
+            <div class="brush-dec"></div>
+        </section>
+        <!--  section  end-->
+
+        <!--  section  -->
+        <section class="hidden-section" data-scrollax-parent="true" id="sec2">
+            <div class="container">
+
+
+                <div class="row">
+                        <!--  hero-menu_header-->
+                        <div class="col-md-3">
+                            <div class="cart-totals dark-bg fl-wrap hide-mobile" style="padding: 2em 2em 2em 3em;">
+                            <div class="hero-menu_header total-table fl-wrap hide-mobile">
+                                <ul class=" no-list-style change_bg">
+
+                                    <li><a href="" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span></span>Hello, {{user.name}}</a></li>
+                                    {% if '/account/' in request.get_full_path %}
+                                        <li class="current"><a href="{% url 'account' user.pk %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>01.</span>Your Profile</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'account' user.pk %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>01.</span>Your Profile</a></li>
+                                    {% endif %}
+                                    
+                                    {% if '/order/' in request.get_full_path %}
+                                        <li class="current"><a href="{% url 'order:list' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>02.</span>Your Order</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'order:list' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>02.</span>Your Order</a></li>
+                                    {% endif %}
+
+                                    {% if '/room/' in request.get_full_path %}
+                                        <li class="current"><a href="{% url 'room:booked-room-list' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>03.</span>Your Booking</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'room:booked-room-list' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>03.</span>Your Booking</a></li>
+                                    {% endif %}
+
+                                    {% if '/table/' in request.get_full_path %}
+                                        <li class="current"><a href="{% url 'menu:booked-table-list' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>04.</span>Your Tables</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'menu:booked-table-list' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>04.</span>Your Tables</a></li>
+                                    {% endif %}
+
+                                    <li><a href="{% url 'logout' %}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>05.</span>Logout</a></li>
+
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                        <!--  hero-menu_header  end-->
+                        <!--  hero-menu_content   -->
+                        <div class="col-md-9">
+                            {% block room %}
+                            {% endblock room %}
+                        </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+{% endblock %}

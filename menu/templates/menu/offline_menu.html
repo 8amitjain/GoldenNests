@@ -1,0 +1,563 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load order_extras %}
+{% block content %}
+
+<!-- <style>
+    @media screen and (min-width: 1000px) {
+    #menu {
+            margin-left:'24.5em';
+            
+        }
+        .sticky {
+            width: 49%;
+        }
+}
+    
+</style> -->
+
+
+    <div class="content">
+         <!--  section  -->
+        <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+            <div class="bg par-elem "  data-bg="{% static 'home/images/bg/19.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="section-title">
+                    <h4>Enjoy your time in our restaurant with pleasure.</h4>
+                    <h2>Discover Our Menu</h2>
+                    <div class="dots-separator fl-wrap"><span></span></div>
+                </div>
+            </div>
+            <div class="hero-section-scroll">
+                <div class="mousey">
+                    <div class="scroller"></div>
+                </div>
+            </div>
+            <div class="brush-dec"></div>
+        </section>
+        <!--  section  end-->
+
+        <!--  section  -->
+        <section class="hidden-section" data-scrollax-parent="true" id="sec2">
+            <div class="container">
+<!--                <div class="row">-->
+<!--                    <div class="col-md-3">-->
+<!--                <div class="gallery_filter-button btn">Show Filters <i class="fal fa-long-arrow-down"></i></div>-->
+<!--                &lt;!&ndash; gallery-filters &ndash;&gt;-->
+<!--                <div class="gallery-filters gth">-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter gallery-filter-active"  data-filter="*"><span>01.</span>All Dishes</a>&ndash;&gt;-->
+<!--                    {% for category in category_list %}-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                    {% endfor %}-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".desserts"><span>03.</span>Desserts</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".seafood"><span>04.</span>Sea Food</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".drinks"><span>05.</span>Drinks</a>&ndash;&gt;-->
+<!--                </div>-->
+<!--                        </div>-->
+<!--                &lt;!&ndash; gallery-filters end&ndash;&gt;-->
+<!--                &lt;!&ndash; gallery start &ndash;&gt;-->
+<!--                     <div class="col-md-9">-->
+<!--                <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">-->
+
+<!--                    &lt;!&ndash; gallery-item&ndash;&gt;-->
+
+<!--                    &lt;!&ndash; gallery-item end&ndash;&gt;-->
+
+<!--                </div>-->
+<!--                     </div>-->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <!-- <script>
+                    jQuery(function($) {
+                      $(window).scroll(function fix_element() {
+                          if($(window).width() > 1000) {
+                            $('.sticky').css(
+                            $(window).scrollTop() > 0 && $(window).scrollTop() < $("#menu").height()
+                                ? { 'position': 'fixed', 'top': '100px', 'bottom': '10px', 'width':'20%', 'overflow' : 'auto' }
+                                : { 'position': 'relative', 'width':'49%', 'top': '0' }
+                            );
+                            $('#menu').css(
+                            $(window).scrollTop() > 0 && $(window).scrollTop() < $("#menu").height()
+                                ? { 'margin-left':'24.5em' }
+                                : { 'margin-left': '24.5em' }
+                            );
+                          }
+                        return fix_element;
+                      }());
+                    });
+                </script> -->
+
+                <script>
+                    function openNav() {
+                      document.getElementById("mySidenav").style.width = "250px";
+                      document.getElementById("main").style.marginLeft = "250px";
+                      document.getElementById("btn_f").style.display = "none";
+                    }
+
+                    function closeNav() {
+                      document.getElementById("mySidenav").style.width = "0";
+                      document.getElementById("main").style.marginLeft= "0";
+                      document.getElementById("btn_f").style.display = "block";
+                    }
+                    </script>
+
+<div class="hero-menu tabs-act fl-wrap">
+    <div class="row">
+            <!--  hero-menu_header-->
+            <div class="col-md-3 mycol sticky">
+                <div id="mySidenav" class="sidenav side-pad" style="z-index: 1000;">
+                  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="color: #fff;padding-top: 1em;">&times;</a>
+                  <div class="hero-menu_header fl-wrap">
+                    <ul class="tabs-menu no-list-style change_bg" style="text-align: left;display: block;padding: 0em 1em 3em 1em;">
+                        {% for category in category_list %}
+                        <li {% if forloop.counter == 1 %} class="current" {% endif %} onclick="closeNav()"><a href="#tab-{{category.id}}" data-bgtab="{% static 'home/images/bg/4.jpg' %}" style="font-size: 0.9em;"><span>{% if forloop.counter < 10 %}0{% endif %}{{forloop.counter}}.</span>{{category.title|title }}</a></li><br>
+                        {% endfor %}
+                    </ul>
+                </div>
+                </div>
+                <style>
+                    #btn_f {
+                        z-index: 100;
+                        position: fixed;
+                        bottom: 30px;
+                        left: 32%;
+                    }
+                </style>
+                <div class="show-mobile" id="btn_f" style="">
+                    <center><a style="" onclick="openNav()"class="btn fl-btn show-mobile">Menu  <i class="fas fa-utensils"></i></a></center>
+                </div>
+
+
+                <div class="sticky main-sidebar fixed-bar fl-wrap fixbar-action" style="z-index: 999; position: sticky !important; position: -webkit-sticky; top: 0;">
+                <div class="main-sidebar-widget cart-totals dark-bg fl-wrap  hide-mobile" style="padding: 2em 2em 2em 3em;z-index: 999; position: sticky !important; position: -webkit-sticky; top: 0;">
+                <div class="hero-menu_header total-table fl-wrap hide-mobile" style="z-index: 999; position: sticky !important; position: -webkit-sticky; top: 0;">
+                    <ul class="tabs-menu no-list-style change_bg">
+                        {% for category in category_list %}
+                        <li {% if forloop.counter == 1 %} class="current" {% endif %}><a href="#tab-{{category.id}}" data-bgtab="{% static 'home/images/bg/4.jpg' %}"><span>{% if forloop.counter < 10 %}0{% endif %}{{forloop.counter}}.</span>{{category.title|title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                </div>
+                </div>
+
+            </div>
+            <!--  hero-menu_header  end-->
+            <!--  hero-menu_content   -->
+            <div class="col-md-9 mycol2" id="menu">
+                <!-- FILTER -->
+                <style>
+                    .filterDiv {
+                        display: none;
+                    }
+
+                    .show {
+                        display: block;
+                    }
+
+                    /* checkbox */
+
+                    .switch {
+                        position: relative;
+                        display: inline-block;
+                        width: 60px;
+                        height: 28px;
+                        }
+
+                        /* Hide default HTML checkbox */
+                        .switch input {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                        }
+
+                        /* The slider */
+                        .switch {
+                        position: relative;
+                        display: inline-block;
+                        width: 90px;
+                        height: 38px;
+                        }
+
+                        .switch input {display:none;}
+
+                        .slider {
+                        position: absolute;
+                        cursor: pointer;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: #4da723;
+                        -webkit-transition: .4s;
+                        transition: .4s;
+                        border-radius: 34px;
+                        }
+
+                        .slider:before {
+                        position: absolute;
+                        content: "";
+                        height: 30px;
+                        width: 30px;
+                        left: 4px;
+                        bottom: 4px;
+                        background-color: white;
+                        -webkit-transition: .4s;
+                        transition: .4s;
+                        border-radius: 50%;
+                        }
+
+                        input:checked + .slider {
+                        background-color: #a7211c;
+                        }
+
+                        input:focus + .slider {
+                        box-shadow: 0 0 1px #2196F3;
+                        }
+
+                        input:checked + .slider:before {
+                        /* -webkit-transform: translateX(80px);
+                        -ms-transform: translateX(80px); */
+                        transform: translateX(50px);
+                        }
+
+                        /*------ ADDED CSS ---------*/
+                        .slider:after
+                        {
+                        content:'VEG';
+                        color: white;
+                        display: block;
+                        position: absolute;
+                        transform: translate(-6%,-50%);
+                        top: 50%;
+                        left: 50%;
+                        font-size: 10px;
+                        font-family: Verdana, sans-serif;
+                        }
+
+                        input:checked + .slider:after
+                        {
+                        content:'NON VEG';
+                        transform: translate(-98%,-50%);
+                        }
+                </style>
+                <div align="left" class="myBtnContainer" style="display: flex; justify-content:flex-start; align-items: center; color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1em; margin-bottom: 2em;">
+                        <label class="switch">
+                            <input type="checkbox" id="togBtn">
+                            <div class="slider round"></div>
+                        </label>
+                        <i id="allselect" onclick="filterSelection('all')" style="cursor:pointer; margin-left: 0.3em; font-size: 2.5em;" class="far fa-times-circle"></i>
+
+                    <!-- <button  style="padding: 1em 2em; border: 0; margin: 3px;" class="btn active" onclick="filterSelection('all')"> Show all</button>
+                    <button style="padding: 1em 2em; border: 0; margin: 3px;" class="btn" onclick="filterSelection('yveg')"> Veg</button>
+                    <button style="padding: 1em 2em; border: 0; margin: 3px;" class="btn" onclick="filterSelection('nonveg')"> Non-Veg</button> -->
+                </div>
+                <script>
+                                
+                    var count1 = 1;
+                   
+                   $(document).ready(function(){
+                        $("#allselect").trigger('click');
+                        $("#togBtn").click(function(event) {
+                            if(count1 == 1){
+                                event.preventDefault();
+                                event.stopPropagation();
+                                var c = 'yveg';
+                                var x, i;
+                                x = document.getElementsByClassName("filterDiv");
+                                console.log(c);
+                                // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+                                for (i = 0; i < x.length; i++) {
+                                    w3RemoveClass(x[i], "show");
+                                    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+                                }
+                                $('.slider').css("background-color", "#4da723");
+
+                            } 
+                            else {
+                                filterSelection("selected");
+                            }
+                            count1 += 1;
+                        });
+                        
+                    });
+                    function filterSelection(c) {
+                    var x, i;
+                    x = document.getElementsByClassName("filterDiv");
+                    if (c == "all") {
+                        c = "";
+                        $('.slider').css("background-color", "#ccc");
+                    }
+                    else {
+                        
+                        if(document.getElementById('togBtn').checked == true) {
+                            c = "nonveg";
+                            $('.slider').css("background-color", "#a7211c");
+                        }
+                        else {
+                            c = "yveg";
+                            $('.slider').css("background-color", "#4da723");
+                        }
+                        
+                    }
+                    console.log(c);
+                    // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+                    for (i = 0; i < x.length; i++) {
+                        w3RemoveClass(x[i], "show");
+                        if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+                    }
+                    }
+
+                    // Show filtered elements
+                    function w3AddClass(element, name) {
+                    var i, arr1, arr2;
+                    arr1 = element.className.split(" ");
+                    arr2 = name.split(" ");
+                    for (i = 0; i < arr2.length; i++) {
+                        if (arr1.indexOf(arr2[i]) == -1) {
+                        element.className += " " + arr2[i];
+                        }
+                    }
+                    }
+
+                    // Hide elements that are not selected
+                    function w3RemoveClass(element, name) {
+                    var i, arr1, arr2;
+                    arr1 = element.className.split(" ");
+                    arr2 = name.split(" ");
+                    for (i = 0; i < arr2.length; i++) {
+                        while (arr1.indexOf(arr2[i]) > -1) {
+                        arr1.splice(arr1.indexOf(arr2[i]), 1);
+                        }
+                    }
+                    element.className = arr1.join(" ");
+                    }
+
+                    // Add active class to the current control button (highlight it)
+                    // var btnContainer = document.getElementById("myBtnContainer");
+                    // var btns = btnContainer.getElementsByClassName("btn");
+                    // for (var i = 0; i < btns.length; i++) {
+                    // btns[i].addEventListener("click", function() {
+                    //     var current = document.getElementsByClassName("active");
+                    //     current[0].className = current[0].className.replace(" active", "");
+                    //     this.className += " active";
+                    // });
+                    // }
+                </script>
+                <!-- END OF FILTER -->
+                    <div class="menu-wrapper single-menu fl-wrap" id="menu-section-1" data-scrollax-parent="true">
+                        {% for category in category_list %}
+                        <div class="tabs-container">
+                        <div class="tab">
+                            <!--tab -->
+                            <div id="tab-{{category.id}}" class="tab-content first-tab">
+                                <div class="menu-wrapper-title fl-wrap">
+                                    <div class="menu-wrapper-title-item">
+                                        <h4>{{ category.title|title }}</h4>
+                                        <h5 style="padding: 0.5em;">{{category.description}}</h5>
+                                    </div>
+                                    {% if category.image %}
+                                     <div class="bg par-elem "  data-bg="{{ category.image.url }}" data-scrollax="properties: { translateY: '40%' }"></div>
+                                    {% endif %}
+                                    <div class="overlay"></div>
+                                    <span class="menu-wrapper-title_number"></span>
+                                </div>
+                                            <!-- hero-menu-item-->
+                                            {% for object in category.product_set.all %}
+                                                    <div class="hero-menu-item filterDiv {% if object.veg %} yveg {% else %} nonveg {% endif %}" style="padding-left: 0.5em;">
+<!--                                                        <a href="" class="hero-menu-item-img image-popup"><img src="" alt=""></a>-->
+                                                        <div class=" fl-wrap" style="padding-left: 0em;display: flex;">
+                                                            <h6 style="padding-left: 0em; margin-bottom: 0.3em !important; padding-bottom: 0.7em !important;" align="left">{{object.title|title}} </h6>
+                                                            <style>
+                                                                .hmi-dec {
+                                                                    left: 0 !important;
+                                                                    right: 0 !important;
+                                                                    margin-top: 5px;
+                                                                }
+                                                            </style>
+                                                            
+                                                            <div class="hmi-dec" style="left: 0 !important; padding: 1em;"></div>
+                                                            <span class="hero-menu-item-price" style="width: auto;margin-left: auto;padding-bottom: 0.4em;margin-top: -0.2em;">{% if object.veg %}<img src="{% static 'home/images/logo/veg.jpg' %}" style="width: 15px;height: 15px;">{% else %}<img src="{% static 'home/images/logo/non-veg.jpg' %}" style="width: 15px;height: 15px;">{% endif %} &nbsp;&nbsp;₹{{object.price}} </span>
+                                                            <div style="position:absolute;bottom:-40px;right:0;display: none;" id="myDIV_{{object.id}}">
+                                                                <div>
+                                                                    <div style="display: flex;background: #292929;" id="max{{object.id}}">
+                                                                        <a style="color: #C19D60;padding: 0.5em 1em;" id="less{{object.id}}"><i class="fa fa-minus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                                                        <p style="padding: 0.5em;" id="quantity_{{object.id}}">{% cart_quantity request object.pk %}</p>
+                                                                        <a style="color: #C19D60;padding: 0.5em 1em;" id="add{{object.id}}"><i class="fa fa-plus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="add_cart" id="mybtn_{{object.id}}" style="position:absolute;bottom:-30px;right:0;">
+
+                                                                <a id="cart_btn{{object.id}}">Add To Cart</a>
+
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <style>
+                                                            .hero-menu-item-details p {
+                                                                max-width: 73% !important;
+                                                            }
+                                                        </style>
+                                                        <div class="hero-menu-item-details" style="margin-top: -1em;">
+                                                            <p>{{object.description|safe|capfirst}}</p>
+                                                        </div>
+                                                    </div>
+
+                                                <script>
+                                                        var object_id = "#quantity_{{object.id}}";
+                                                        function addtocart_using_qr(object_id, variation, quantity) {
+                                                            var queryDict = {}
+                                                            location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+                                                            let table_id = parseInt(queryDict['table_id']);
+                                                               var url = "{% url 'order:add-to-cart-qr-code' %}";
+
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': variation,       // add the country id to the GET parameters
+                                                                    'table_id': table_id,
+                                                                    'product_id': object_id,
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                                                    document.getElementById("bottom_total").style.display = "block";
+                                                                document.getElementById("btn_f").style.bottom = "110px";
+
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_"+object_id).html(data["quantity"]);
+                                                                  }else{
+                                                                  $("#quantity_"+object_id).html("0");
+                                                                  }
+
+                                                                  $("#get_total").html("₹" + data["get_total_without_coupon"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_mobile").html("₹" + data["get_total_without_coupon"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item").html(data["item"] );  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_bag").html(data["item"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#item_mobile").html(data["item"]);  // replace the contents of the city input with the data that came from the server
+                                                                  $("#_appendHere").html(data["item"]);
+
+                                                                  if(data["item"] == 0 ){
+                                                                  document.getElementById("bottom_total").style.display = "none"
+                                                                  document.getElementById("btn_f").style.bottom = "30px";
+                                                                  }
+                                                                  else {
+
+                                                                    document.getElementById("btn_f").style.bottom = "110px";
+                                                                  }
+
+                                                                  if(data["quantity"] == 10 ){
+                                                                     document.getElementById("max"+object_id).style.border = "1px solid red";
+                                                                  };
+                                                              }
+                                                        });
+                                                        }
+
+                                                     $(document).ready(function(){
+                                                        if($("#item").html() == 0 ){
+                                                            document.getElementById("bottom_total").style.display = "none"
+                                                            document.getElementById("btn_f").style.bottom = "30px";
+                                                            }
+                                                            else {
+                                                            document.getElementById("btn_f").style.bottom = "110px";
+                                                        }
+
+                                                        
+                                                         $("#add{{object.id}}").click(function () {
+                                                             let variation = {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %}
+                                                             let object_id = "{{ object.id }}";
+                                                             var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) + 1;  // get the selected country ID from the HTML input
+                                                             if(window.location.search.substr(1))
+                                                             {
+                                                                 addtocart_using_qr(object_id, variation, quantity);
+                                                             }
+
+                                                             });
+
+                                                        $("#less{{object.id}}").click(function () {
+                                                             let variation = {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %}
+                                                             let object_id = "{{ object.id }}";
+
+                                                               var url = "{% url 'order:add-to-cart' object.pk %}";
+                                                              var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) - 1;  // get the selected country ID from the HTML input
+
+                                                              if(window.location.search.substr(1))
+                                                             {
+                                                                 addtocart_using_qr(object_id, variation, quantity);
+                                                             }
+
+                                                        });
+
+                                                        $("#cart_btn{{object.id}}").click(function () {
+                                                          console.log("works");
+                                                          document.getElementById("mybtn_{{object.id}}").style.display = "none";
+                                                          document.getElementById("myDIV_{{object.id}}").style.display = "block";
+                                                          document.getElementById("btn_f").style.bottom = "110px";
+                                                        });
+
+                                                       });
+                                                </script>
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                  {% endfor %}
+                                </div>
+
+                        </div>
+
+                </div>
+                </div>
+
+                <!-- gallery end -->
+                <div class="clearfix"></div>
+                <div class="bold-separator bold-separator_dark"><span></span></div>
+                <div class="clearfix"></div>
+<!--                <a href="#" class="btn  ">Download menu in PDF<i class="fal fa-long-arrow-right"></i></a>-->
+            </div>
+        </section>
+    </div>
+
+        <!--  section end  -->
+
+        <div id="bottom_total" style="width:100%;overflow: hidden;position: fixed;bottom: 0;z-index: 10;background:rgba(12, 12, 12, 0.5);{% if not order.get_total %}display: none;{% endif %}">
+
+            <div class="container" id="order_data">
+                    <div class="hide-mobile">
+                        <div class="row"  style="background:rgba(12, 12, 12, 0.5)">
+                            <div class="col-md-6">
+                                <p align="left" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;font-family: 'Playfair Display', cursive;">Order Items (<span id="item">{{ order.cart.count }}</span>)</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p align="right" style="font-weight: 500;font-size: 1.5em;margin:1.5em 0em 0em 0em;color: #fff;" class="hero-menu-item-price">SubTotal : &nbsp;&nbsp;<span style="color: #C19D60;font-weight: 500;" id="get_total">₹{{order.get_total_without_coupon}}</span></p>
+                            </div>
+                            <div class="col-md-2">
+
+                                <p class="py-3 mt-2 font-weight-bold" align="right"><a href="{% url 'order:cart-qr-code' %}?{{ request.GET.urlencode }}" class="btn fl-btn">Continue<i class="fal fa-long-arrow-right"></i></a></p>
+
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="show-mobile container">
+                <div class="row"  style="background:rgba(12, 12, 12, 0.5);display: flex;">
+                    <div class="col-md-8" style="width: 60%">
+                        <p align="left" style="font-weight: 500;font-size: 1.2em;margin:1.5em 0em 1em 0em;font-family: 'Playfair Display', cursive;">(<span class="border-right" id="item_mobile">{{order.cart.count}}</span><span>) Items &nbsp;&nbsp;&nbsp;</span><br><span id="get_total_mobile" style="color: #C19D60; font-size: 1.3em;">₹{{order.get_total_without_coupon}}</span></p>
+                    </div>
+                    <div class="col-md-4">
+
+                                <p align="right"><a href="{% url 'order:cart-qr-code' %}?{{ request.GET.urlencode }}" style="color: #fff;font-weight: 500;font-size: 1em;margin:1.5em auto 1em 0em;font-family: 'Playfair Display', cursive;float: right;background: #C19D60;padding: 1em 1em;">Continue &nbsp;<i class="fal fa-long-arrow-right"></i></a></p>
+
+                    </div>
+                </div>
+                </div>
+            </div>
+        
+        </div>
+
+{% endblock %}

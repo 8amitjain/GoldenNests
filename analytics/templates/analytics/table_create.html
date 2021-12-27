@@ -1,0 +1,52 @@
+{% extends "analytics/base.html" %}
+{% load crispy_forms_tags %}
+{% block nav-table %}style="color: #FFB319;"{% endblock %}
+{% block data %}
+
+<style>
+    .cke_inner cke_reset{
+       width: 50%;
+    }
+</style>
+
+
+<div class="row bg-white p-4" style="border-radius: 0.5em;">
+    <div class="col-12">
+        {% if "/create/" in request.path %}
+        <h3 align="center" style="font-weight: bold;">Create Table</h3><hr>
+        {% else %}
+        <h3 align="center" style="font-weight: bold;">Update Table</h3><hr>
+        {% endif %}
+    </div>
+    <div class="col-lg-12">
+       <form class="row" method="post">
+         {% csrf_token %}
+         <div class="col-lg-12 pb-3">
+            {{ form.title|as_crispy_field }}
+         </div>
+         <div class="col-lg-6 pb-3">
+            {{ form.people_count|as_crispy_field }}
+         </div>
+         <div class="col-lg-6 pb-3">
+            {{ form.sitting_type|as_crispy_field }}
+         </div>
+         <div class="col-lg-6 pb-3">
+            {{ form.is_active|as_crispy_field }}
+         </div>
+         <div class="col-lg-6 pb-3">
+            {{ form.trending|as_crispy_field }}
+         </div>
+         
+         
+         <div class="col-lg-12 pb-3">
+             {% if "/create/" in request.path %}
+             <button class="btn btn-info w-100">ADD TABLE</button>
+             {% else %}
+             <button class="btn btn-info w-100">UPDATE TABLE</button>
+             {% endif %}
+         </div>
+       </form>
+    </div>
+</div>
+
+{% endblock data %}

@@ -1,0 +1,172 @@
+{% extends "analytics/base.html" %}
+
+{% block nav-order %}style="color: #FFB319;"{% endblock %}
+
+{% block data %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<style>
+    select {
+        border-color: blue;
+        padding: 0.4em 0em 0.4em 0.4em;
+        border-radius: 0.2em;
+    }
+</style>
+
+<div style="border-radius: 0.5em; border-color: #fff;" class="mb-0 pb-0">
+    <div style="border-radius: 0.5em; border-color: #fff;" class="card bg-white p-3 mb-3">
+        <div class="m-2 pt-0">
+            <a href="#" style="font-weight: 700; color: rgb(0, 0, 0); "
+                class="float-left">#{{object.order_ref_number}}
+                <br>
+                <span class="text-muted" style="font-size: 0.7em; font-weight: 600;">- placed on {{object.ordered_date_time|date:"d M, Y"}}, {{object.ordered_date_time|time}}</span>
+            </a>
+            {% if object.order_status == "Delivered" %}
+            <div align="right" style="font-weight: 600; color: rgb(5, 233, 36);">
+                {{object.order_status}}
+            </div>
+            {% else %}
+            <div align="right" style="font-weight: 600; color: rgb(235, 195, 19);">
+                {{object.order_status}}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- <div class="bg-white  p-4 pt-5"  style="border-radius: 0.5em; margin: 1.7em 0;">
+    <h3 style="font-weight: 700; color: rgb(0, 0, 0);"> Ordered Items</h3>  -->
+    <div class="row mt-4">  
+           
+            {% for cart in object.cart.all %}
+            <div class="col-lg-6 mb-4">
+                <div class="bg-white p-3" style="border-radius: 0.5em;">
+                    <div class="row pt-3 px-3">
+                        <div class="col-12 mb-2">
+                            <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">{{cart}}</h6>
+                        </div>
+                        <div class="col-6 pt-3">
+                            <p style="font-weight: 600;">₹{{cart.product.price}}</p>
+                        </div>
+                        <div class="col-12 "> 
+                            
+                            <form action="" id="indication-form" method="get" >
+                                {% csrf_token %}
+                                <hr>
+                                <div class="d-flex my-3 justify-content-between">
+                                
+                                    <select id="order_status{{cart.id}}" style="font-weight: 600; color: rgb(0, 118, 228);" name ="order_status">
+                                        <option {% if cart.order_status == "Processing" %} selected {% endif %} value="Processing">Processing</option>
+                                        <option {% if cart.order_status == "Preparing" %} selected {% endif %} value="Preparing">Preparing</option>
+                                        <option {% if cart.order_status == "Ready" %} selected {% endif %} value="Ready">Order Ready</option>
+                                        <option {% if cart.order_status == "Delivered" %} selected {% endif %} value="Delivered">Delivered</option>
+                                        <option {% if cart.order_status == "CANCELLED" %} selected {% endif %} value="CANCELLED">Cancelled</option>
+                                    </select>
+                                
+                                <button id="go_button{{cart.id}}" class="btn btn-outline-success"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Submit</button>
+                                </div>
+                                
+                            </form>
+
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+                            <script>
+                                $('#go_button{{cart.id}}').click(function(e) {
+                                    
+                                    e.preventDefault()
+                                    {% if not 'offline/order/' in request.path %}
+                                        var s_url = '/analytics/order/update/{{cart.id}}/' + $('select#order_status{{cart.id}}').val() + '/';
+                                    {% else %}
+                                        var s_url = '/analytics/offline/order/update/{{cart.id}}/' + $('select#order_status{{cart.id}}').val() + '/';
+                                    {% endif %}
+                                    console.log(s_url);
+                                    $('form').attr("action", s_url);  
+                                    $('form').submit();  
+                                });
+                            </script>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+            {% endfor %}
+        </div>
+        <!-- </div> -->
+
+    
+    <div style="border-radius: 0.5em; " class="rowcard">
+        <div style="border-radius: 0.5em; border-color: #fff;" class="row">
+            
+                <div class="col-lg-6  mb-4">
+                    {% if not 'offline/order/' in request.path %}
+                    <div style="border-radius: 0.5em; border-color: #fff; line-height: 2em;" class="bg-white p-4">
+                        <h3 class="mb-3" style="font-weight: 700; color: rgb(0, 0, 0);">User Info</h3>
+                        {{object.user}}, <br>
+                        {{object.user.name}}, <br>
+                        {{object.user.phone_number|safe}}
+                    </div>
+                        <div style="border-radius: 0.5em; border-color: #fff; line-height: 2em;  margin: 1.7em 0;" class="bg-white p-4">
+                        <h3 class="mb-3" style="font-weight: 700; color: rgb(0, 0, 0);">Payment Info</h3>
+                        <b>Paid by : &nbsp;</b>{{object.payment_method}} <br>
+                        <b>Payment ID : &nbsp;</b>{{object.payment.payment_id}} <br>
+                        <b>Amount : &nbsp;</b>₹{{object.payment.amount_paid}} <br>
+                    </div>
+                    {% else %}
+                        
+                    <div style="border-radius: 0.5em; border-color: #fff; line-height: 2em;  margin: 1.7em 0;" class="bg-white p-4 mt-0">
+                        <h3 class="mb-3" style="font-weight: 700; color: rgb(0, 0, 0);">Table Detail</h3>
+                        <b>Table No. : &nbsp;</b>{{ object.table.title }} <br>
+                        <b>People Count : &nbsp;</b>{{object.table.people_count.title}} <br>
+                        <b>Sitting Type : &nbsp;</b>{{object.table.sitting_type}} <br>
+                    </div>
+                    {% endif %}
+
+
+                </div>
+                <div class="col-lg-6  mb-4">
+                    <div style="border-radius: 0.5em; border-color: #fff;" class="bg-white p-3">
+                        <table class="table table-borderless table-md-responsive">
+                            <thead>
+                              <tr class="mb-3">
+                                <th scope="col">Order Total</th>
+                                <th scope="col"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr style="border-bottom: 1px solid rgba(128, 128, 128, 0.2)">
+                                <td>Subtotal</td>
+                                <td align="right">₹{{object.get_total_without_coupon}}</td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid rgba(128, 128, 128, 0.2)">
+                                <td>Tax</td>
+                                <td align="right">₹{{object.get_tax_total}}</td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid rgba(128, 128, 128, 0.2)">
+                                <td>Coupon</td>
+                                <td align="right">₹{{object.get_coupon_total}}</td>
+                              </tr>
+                              <tr>
+                                <td><b>Total</b></td>
+                                <td align="right">₹{{object.get_total}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+              
+                
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+{% endblock data %}

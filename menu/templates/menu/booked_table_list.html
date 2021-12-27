@@ -1,0 +1,257 @@
+{% extends "users/account_base.html" %}
+{% load static %}
+{% block achead %}Table Reservations{% endblock %}
+{% block room %}
+
+
+<style>
+
+    .rounded-circle {
+		width: 26px;
+		height: 26px;
+		padding: 2px;
+		text-align: center;
+		font-size: 12px;
+	}
+
+	.card {
+		display: block;
+		padding: 1em;
+        padding-top: 0;
+        font-family: 'Open Sans', sans-serif;
+	}
+
+    .card-body {
+        padding: 2em;
+        padding-bottom: 0;
+        margin: 0;
+    }
+
+    .th-head {
+        border: none !important; 
+        font-weight: 600; 
+        text-transform: uppercase;
+        font-size: 0.9em;
+        vertical-align: top !important;
+    }
+
+    table td, table td * {
+        vertical-align: top !important;
+    }
+
+    .row {
+        margin-bottom: 1.2em ;        
+    }
+
+    .card-body.row {
+        margin-bottom: 0;
+    }
+
+    .row .row {
+        background-color: #292929;
+    }
+
+    p {
+        font-size: 1.2em;
+        color: rgb(176, 144, 89);
+    }
+
+    h6 {
+        text-transform: uppercase;
+    }
+
+    .checkout-table * {
+        font-family: 'Playfair Display', cursive !important;
+    }
+
+    .btn-cancel-custom {
+        transform: translate(30px, -58px);
+    }
+
+    .head-custom {
+        margin: 0 1.2em 1.2em 1.2em;
+        padding-top: 0;
+        display: flex;
+        justify-content: space-between; 
+    }
+
+    @media screen and (max-width: 1199px) {
+        .btn-cancel-custom {
+            transform: translate(0, -28px);
+        }
+
+        .card-body {
+            padding: 0;
+            padding-top: 2em;
+        }
+
+        .head-custom {
+            margin: 0 0 1.2em 0;
+            margin-top: 0;
+            padding-top: 0;
+            display: flex;
+            justify-content: space-between; 
+        }
+    }
+
+
+</style>
+
+
+{% if not object_list %}
+<div style="height: 50vh;" class="container">
+    <div style="height: 100%;" class="section-title text-center">
+        <img  src="{% static 'home/images/logo/dining-table.png' %}"  style="height: 250px;width: 250px;object-fit: cover;"  alt="logo">
+        <h2>No Tables Reserved Yet</h2>
+        <br>
+        <a style="cursor: pointer;" class="btn color-bg show-rb">Reserve Your Table  <i class="fal fa-long-arrow-right"></i></a>
+    </div>
+</div>
+{% endif %}
+
+
+{% for object in object_list %}
+<div style="margin-bottom:2em; background-color: #292929; overflow: auto; text-align: left; padding-top: 3em; padding-bottom: 1.2em;" class="checkout-table cart-totals dark-bg fl-wrap">
+    <div class="head-custom">
+            <h2 align="left" style="">
+                <a href="#" style="color: #C19D60;text-align: left;font-family: 'Playfair Display', cursive; font-size: 1.5em;" >#{{object.order_ref_number}}</a>
+            </h2>
+            
+            <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em;">
+            {% if object.is_rejected %}
+                Rejected
+            {% else %}
+                {% if object.is_confirmed %}
+                    Confirmed
+                {% else %}
+                    Processing
+                {% endif %}
+            {% endif %}
+
+            </div>
+
+    </div>
+    <hr style="opacity: 0.1;">
+
+    <div style="margin-bottom: 0; padding-bottom: 0;" class="card-body row">  
+
+        <div class="{% if not object.is_available_for_cancellation %}col-lg-4 {% else %} col-lg-3 {% endif %} col-md-4 col-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">Sitting Type:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 600; ">{{object.sitting_type}}</p>                   
+                </div>
+                
+            </div>
+        </div>
+
+
+        <div class="{% if not object.is_available_for_cancellation %}col-lg-3 {% else %} col-lg-2 {% endif %} col-md-4 col-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">People:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 600;">{{object.people_count.title}}</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">Date:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 600; ">{{object.booked_for_date|date:"d M, Y"}}</p>                   
+                </div>
+                
+            </div>
+        </div> 
+        
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">Time:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 600; ">{{object.booked_for_time}}</p>                   
+                </div>
+                
+            </div>
+        </div>     
+
+        {% if object.is_available_for_cancellation and not object.is_rejected %}
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+
+                </div>
+                <div class="row">
+                    
+                    <form id="cancel-form" action="{% url 'menu:cancel-table-booking' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="table_id" value="{{ object.id }}">
+                        <button class="btn color-bg btn-cancel-custom" type="submit" form="cancel-form">Cancel&nbsp;&nbsp;&nbsp;</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div> 
+        {% endif %}
+
+        </div>
+    </div>
+{% endfor %}
+
+
+
+
+<div class="d-flex justify-content-center m-4">
+{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page=1">&lt;&lt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.previous_page_number}}">&lt;</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.next_page_number}}">&gt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.paginator.num_pages}}">&gt;&gt;</a>
+      {% endif %}
+
+{% endif %}
+</div>
+
+<!-- <table class="table table-border checkout-table" style="overflow: auto;margin-bottom: 2em;">
+    <tbody>
+    <tr>
+        <th width="50%" style="color: #C19D60;text-align: left;font-family: 'Playfair Display', cursive;font-size: 17px;">Table No.</th>
+        <th>People</th>
+        <th style="color: #C19D60;text-align: center;font-family: 'Playfair Display', cursive;font-size: 17px;">Sitting Type</th>
+        <th>Date</th>
+    </tr>
+
+    <tr>
+        <td style="text-align: left;">2</td>
+        <td>5</td>
+        <td>Indoor</td>
+        <td>5 Sep, 2021</td>
+    </tr>
+
+    </tbody>
+</table> -->
+
+
+{% endblock %}

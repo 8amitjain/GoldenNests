@@ -1,0 +1,145 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="content">
+         <!--  section  -->
+        <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+            <div class="bg par-elem "  data-bg="images/bg/12.jpg" data-scrollax="properties: { translateY: '30%' }"></div>
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="section-title">
+                    <h4>Enjoy your time in our restaurant with pleasure.</h4>
+                    <h2>Discover Our Rooms</h2>
+                    <div class="dots-separator fl-wrap"><span></span></div>
+                </div>
+            </div>
+            <div class="hero-section-scroll">
+                <div class="mousey">
+                    <div class="scroller"></div>
+                </div>
+            </div>
+            <div class="brush-dec"></div>
+        </section>
+        <!--  section  end-->
+
+        <!--  section  -->
+        <section class="hidden-section" data-scrollax-parent="true" id="sec2">
+            <div class="container">
+<!--                <div class="row">-->
+<!--                    <div class="col-md-3">-->
+<!--                <div class="gallery_filter-button btn">Show Filters <i class="fal fa-long-arrow-down"></i></div>-->
+<!--                &lt;!&ndash; gallery-filters &ndash;&gt;-->
+<!--                <div class="gallery-filters gth">-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter gallery-filter-active"  data-filter="*"><span>01.</span>All Dishes</a>&ndash;&gt;-->
+<!--                    {% for category in category_list %}-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                        <a href="#" class="gallery-filter " data-filter=".{{ category.title }}">{{ category.title }}</a><br>-->
+<!--                    {% endfor %}-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".desserts"><span>03.</span>Desserts</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".seafood"><span>04.</span>Sea Food</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#" class="gallery-filter" data-filter=".drinks"><span>05.</span>Drinks</a>&ndash;&gt;-->
+<!--                </div>-->
+<!--                        </div>-->
+<!--                &lt;!&ndash; gallery-filters end&ndash;&gt;-->
+<!--                &lt;!&ndash; gallery start &ndash;&gt;-->
+<!--                     <div class="col-md-9">-->
+<!--                <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">-->
+
+<!--                    &lt;!&ndash; gallery-item&ndash;&gt;-->
+
+<!--                    &lt;!&ndash; gallery-item end&ndash;&gt;-->
+
+<!--                </div>-->
+<!--                     </div>-->
+
+                    <div class="menu-wrapper single-menu fl-wrap" id="menu-section-1" data-scrollax-parent="true">
+
+                                <!-- hero-menu-item-->
+
+                            <!-- gallery-filters end-->
+                            <!-- gallery start -->
+                            <div class="gallery-items grid-big-pad  lightgallery three-column fl-wrap" style="margin-bottom:50px;">
+                                <!-- gallery-item-->
+                                {% for room in object_list %}
+
+                                        <div class="gallery-item desserts" onclick="window.location.href='{% if user.is_authenticated %} {% url 'room:book' room.id %} {% else %} {% url 'login' %} {% endif %}'">
+                                            <div class="grid-item-holder hov_zoom">
+                                                <a href="{{room.image_main.url}}" class="box-media-zoom   popup-image"><i class="fal fa-search"></i></a>
+                                                <img  src="{{room.image_main.url}}"  style="height: 250px;width: 100%;object-fit: cover;"  alt="">
+                                            </div>
+                                            <div class="grid-item-details" >
+                                                <h3>{{ room.name }} </h3>
+                                                <p style="text-overflow: ellipsis;">{{room.short_description|safe|linebreaks|truncatewords_html:"5"}}</p>
+                                                <div class="grid-item_price">
+                                                    <span>₹{{ room.price }}</span>
+                                                     <div class="add_cart">View Details</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                {% endfor %}
+                            </div>
+
+                    </div>
+
+                <!-- gallery end -->
+                <div class="clearfix"></div>
+                <div class="bold-separator bold-separator_dark"><span></span></div>
+                <div class="clearfix"></div>
+
+            </div>
+
+            <div class="section-bg">
+                <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+            </div>
+        </section>
+        <!--  section end  -->
+
+
+    </div>
+
+
+<!--            <div class="col-3">-->
+<!--                <form action="" method="get">-->
+<!--                    -->
+<!--                    <input type="number" name="adult">-->
+<!--                    <input type="number" name="child">-->
+<!--                    <button type="submit"> Filter</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="col-5">-->
+<!--                <table class="table mt-3">-->
+<!--  <thead>-->
+<!--    <tr>-->
+<!--      <th scope="col">#</th>-->
+<!--      <th scope="col">Name</th>-->
+<!--      <th scope="col">Members</th>-->
+<!--      <th scope="col">Price</th>-->
+<!--      <th scope="col">Action</th>-->
+
+<!--    </tr>-->
+<!--  </thead>-->
+<!--  <tbody>-->
+<!--  {% for object in object_list %}-->
+<!--    <tr>-->
+<!--      <th scope="row">{{ forloop.counter }}</th>-->
+<!--      <td>{{ object.name }}</td>-->
+<!--      <td>-->
+<!--        {% for obj in object.people_variation.all %}-->
+<!--        <span>{{ obj.no_of_adult }} Adult & {{ obj.no_of_child }} Child</span><br>-->
+<!--        {% endfor %}-->
+<!--      </td>-->
+<!--      <td>{{ object.price }}</td>-->
+<!--      <td><a href="{% url 'room:book' object.id %}" class="btn btn-primary">Select</a></td>-->
+
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--    -->
+<!--  </tbody>-->
+<!--</table>-->
+<!--            </div>-->
+        
+{% endblock %}

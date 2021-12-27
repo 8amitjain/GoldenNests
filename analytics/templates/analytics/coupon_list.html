@@ -1,0 +1,123 @@
+{% extends "analytics/base.html" %} 
+
+{% block nav-coupon %}style="color: #FFB319;"{% endblock %}
+
+{% block data %}
+
+<style>
+
+	#contact-table {
+		background: #fff;
+	}
+
+	.rounded-circle {
+		width: 35px;
+		height: 35px;
+		padding: 2px;
+		text-align: center;
+		font-size: 12px;
+	}
+	
+	.card {
+		display: block;
+		padding: 2em;
+	}
+	th, td {
+       font-size: 0.9em;
+ 	}
+	th, td {
+	  padding: 15px;
+	}
+	.table thead th {
+		border-bottom: 0.5px solid #ddd;
+	}
+	.table td {
+		border-bottom: 0.5px solid #ddd;
+		border-top: 0;
+	}
+</style>
+
+<div class="card rounded-lg border-0 py-4">
+	<h3 class="float-left text-dark" style="font-weight:600">All Coupons</h3>
+	<a class="btn btn-primary float-right m-2 mb-4" href="{% url 'analytics:coupon-add' %}">+ Add Coupon</a>
+
+
+<table id="contact-table" class="table table-responsive-md">
+	<thead>
+		<tr>
+			<th scope="col">Code</th>
+			<th scope="col">Discount</th>
+			<th scope="col">Min</th>
+			<th scope="col">Max</th>
+			<th scope="col">Edit</th>
+			<th scope="col">Delete</th>
+		</tr>
+	</thead>
+	<tbody>
+        {% for object in object_list %}
+		<tr>
+			<td>{{object.code}}</td>
+			<td>{{object.discount_percent}} %</td>
+			<td>₹{{object.minimum_order_amount}}</td>
+			<td>₹{{object.max_discount_amount}}</td>
+			<td>
+				<a href="{% url 'analytics:coupon-update' object.pk %}" >
+					<i class="fas fa-edit"></i>
+				</a>
+			</td>
+			<td>
+				<a data-toggle="modal" data-target="#modalElement{{object.id}}" >
+					<i class="fas fa-trash-alt text-danger"></i>
+				</a>
+
+				<div class="modal fade" id="modalElement{{object.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document" >
+						<div class="modal-content" style="background:rgba(12, 12, 12, 0.2)">
+							<div class="modal-body p-5">
+								<p align="right"><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button></p>
+								<form method="POST" class="row" enctype="multipart/form-data" action="{% url 'analytics:coupon-delete' object.id %}">
+									{% csrf_token %}
+									<h3 class="mb-4 pb-3 p-3" style=" color: #fff; font-weight: bold;">Are you sure, you want to delete the Coupon ?</h3>
+									<div class="col-12">
+										<button class="btn btn-danger" type="submit" style="width: 100%;">Delete</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+        {% endfor %} 
+	</tbody>
+</table>
+</div>
+
+<div class="d-flex justify-content-center m-4">
+{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page=1">&lt;&lt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.previous_page_number}}">&lt;</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.next_page_number}}">&gt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.paginator.num_pages}}">&gt;&gt;</a>
+      {% endif %}
+
+{% endif %}
+</div>
+
+
+{% endblock data %}

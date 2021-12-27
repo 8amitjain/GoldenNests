@@ -1,0 +1,150 @@
+{% extends "analytics/base.html" %} 
+
+{% block nav-contact %}style="color: #FFB319;"{% endblock %}
+
+{% block data %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+	.rounded-circle {
+		width: 26px;
+		height: 26px;
+		padding: 2px;
+		text-align: center;
+		font-size: 12px;
+	}
+
+	.card {
+		display: block;
+		padding: 1em;
+	}
+	th {
+       font-size: 0.9em;
+ 	}
+	th, td {
+	  padding: 15px;
+	  border-bottom: 1px solid #ddd;
+	}
+</style>
+
+<div class="card border-0 rounded-lg py-4">
+	<h3 class="text-dark ml-2 mb-0 pb-1" style="font-weight:600;font-size: 1.3em;color: #FFB319;" align="Center">Contacts</h3><hr>
+<div style="overflow-x:auto;margin-top: -1em;">
+  <table width="100%;">
+	<thead>
+		<tr>
+			<th scope="col">Name</th>
+			<th scope="col">Email</th>
+			<th scope="col">Mobile</th>
+			<th scope="col">Date</th>
+			<th align="center" style="text-align: center;" scope="col">Description</th>
+			<th align="center" style="text-align: center;" scope="col">Seen</th>
+			<th align="center" style="text-align: center;" scope="col">Delete</th>
+
+		</tr>
+	</thead>
+	<tbody>
+        {% for object in object_list %}
+		<tr>
+			<td style="padding: 1em;"><p style="color: #000;font-size: 0.9em;">{{object.name|capfirst}}</p></td>
+			<td><p style="color: #000;font-size: 0.9em;">{{object.email}}</td>
+			<td><p style="color: #000;font-size: 0.9em;">{{object.mobile|safe}}</td>
+			<td><p style="color: #000;font-size: 0.9em;">{{object.date.date}}</td>
+			<td align="center"  class="text-center">
+				<!-- Button trigger modal -->
+				<a type="button"  data-toggle="modal" data-target="#descModal{{object.pk}}" style="color: #007bff;">
+					<i class="fas fa-info-circle"></i>
+				</a>
+
+				<!-- Modal -->
+				<div class="modal fade" id="descModal{{object.pk}}" tabindex="-1" aria-labelledby="descModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+						<h5 class="modal-title" id="descModalLabel">Description</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+							{{object.description}}
+						</div>
+						<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+					</div>
+				</div>
+			</td>
+			<td align="center" >
+				{% if object.seen %}
+				<a style="color: #14e20c;">
+					<i class="fas fa-check"></i>
+				</a>
+				{% else %}
+				<a style="color: #007bff;" href="{% url 'analytics:contact-seen' object.id %}">
+					<i class="fas fa-eye"></i>
+				</a>
+				{% endif %}
+			</td>
+
+			<td align="center"  class="text-center">
+				<a type="button" data-toggle="modal" data-target="#delModal{{object.pk}}" style="color: rgb(255,0,8);"><i class="fas fa-trash" ></i></a>
+
+				<div class="modal fade" id="delModal{{object.pk}}" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document" >
+						<div class="modal-content" style="background:rgba(12, 12, 12, 0.2)">
+							<div class="modal-body p-5">
+								<p align="right"><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button></p>
+								<form method="POST" class="row" enctype="multipart/form-data" action="{% url 'analytics:contact-delete' object.pk %}">
+									{% csrf_token %}
+									<h3 class="mb-4 pb-3 p-3" style=" color: #fff; font-weight: bold;">Are you sure, you want to delete ?</h3>
+									<div class="col-12">
+										<button class="btn btn-danger" type="submit" style="width: 100%;">Delete</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+        </td>
+
+		</tr>
+        {% endfor %} 
+	</tbody>
+</table>
+</div>
+</div>
+
+
+<div class="d-flex justify-content-center m-4">
+	{% if is_paginated %}
+	
+		  {% if page_obj.has_previous %}
+			<a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page=1">&lt;&lt;</a>
+			<a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.previous_page_number}}">&lt;</a>
+		  {% endif %}
+	
+		  {% for num in page_obj.paginator.page_range %}
+			{% if page_obj.number == num %}
+			  <a class="btn btn-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+			{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+			<a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+			{% endif %}
+		  {% endfor %}
+	
+		  {% if page_obj.has_next %}
+			<a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.next_page_number}}">&gt;</a>
+			<a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.paginator.num_pages}}">&gt;&gt;</a>
+		  {% endif %}
+	
+	{% endif %}
+</div>
+
+
+{% endblock data %}

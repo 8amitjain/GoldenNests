@@ -1,0 +1,94 @@
+{% extends "analytics/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block data %}
+
+<style>
+    .cke_inner cke_reset{
+       width: 50%;
+    }
+</style>
+
+
+<div class="row bg-white p-4" style="border-radius: 0.5em;">
+    <div class="col-12">
+        {% if request.path == "/analytics/book/room/" %}
+        <h3 align="center" style="font-weight: bold;">Book Room</h3><hr>
+        {% else %}
+        
+        {% endif %}
+    </div>
+    <div class="col-lg-12">
+        <form class="row" method="post" id="room-booked-form">
+            {% csrf_token %}
+            <div class="col-lg-6 pb-3">
+                {{ form.name|as_crispy_field }}
+            </div>
+            <div class="col-lg-6 pb-3">
+                {{ form.phone_number|as_crispy_field }}
+            </div>
+            <div id="div_id_phone_number" class="col-lg-6 pb-3">
+                <label for="id_phone_number" class="">
+                    User Email
+                </label>
+                <div class="">
+                    <input type="email" required name="email" class="form-control" id="id_email"> <small id="hint_id_phone_number" class="form-text text-muted">For sending mail to user</small>
+                </div>
+            </div>
+            <div class="col-lg-6 pb-3">
+                {{ form.room_type|as_crispy_field }}
+            </div>
+            <div class="col-lg-6 pb-3">
+                {{ form.check_in|as_crispy_field }}
+            </div>
+            <div class="col-lg-6 pb-3">
+                {{ form.check_out|as_crispy_field }}
+            </div>
+            
+            <div class="col-lg-12 pb-3">
+                <button type="submit" class="btn btn-info w-100">Submit </button>
+            </div>
+            
+        </form>
+
+         
+    </div>
+</div>
+
+
+                    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    $('#room-booked-form').submit(function(e){
+        e.preventDefault();
+        check_available();
+    });
+    function check_available()
+    {
+        let room_id = $('#id_room_type').val();
+        let check_in_date = $('#id_check_in').val();
+        let check_out_date = $('#id_check_out').val();
+        let url = "{% url 'analytics:admin-check-room-available' %}";
+        let form = $('#room-booked-form');
+        $.ajax({
+            url: url,
+            data: {
+                'check_in': check_in_date,
+                'check_out': check_out_date,
+                'room_id': room_id,
+            },
+            method: "GET",
+            success: function (data)
+            {
+                if(data['status'] === 'false') {
+                    alert("Room already booked and confirmed for selected date.")
+                    return false;
+                }
+                else
+                    form.submit();
+
+            }
+        });
+    }
+</script>
+{% endblock %}

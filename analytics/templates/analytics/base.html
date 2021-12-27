@@ -1,0 +1,530 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<meta charset="UTF-8">
+<head>
+    <!-- [if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif] -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <link href="{% static 'home/analytics/jito_images/logo/favicon.png' %}" rel="shortcut icon">
+    <title>Dashboard</title>
+
+    <!--====== Google Font ======-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet">
+
+     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
+
+    <link rel="stylesheet" href="{% static 'home/analytics/css/vendor.css' %}">
+    <link rel="stylesheet" href="{% static 'home/analytics/css/utility.css' %}">
+    <link rel="stylesheet" href="{% static 'home/analytics/css/app.color2.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'home/css/custom_style.css' %}">
+
+<!--    <link rel="stylesheet" href="{% static 'home/analytics/css/all.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'home/analytics/css/all.min.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'home/analytics/css/style.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'home/analytics/css/mine-style.css' %}">-->
+
+	{% block head %}
+	{% endblock head %}
+
+</head>
+
+<style>
+    .badge-pill {
+    border-radius: 50%;
+    width: 21px;
+    height: 21px;
+    padding: 5px;
+    font-size: 0.85em;
+    text-align: center;
+    vertical-align: middle;
+    }
+</style>
+
+<body onload="on_load_fs()" class="config" style="background: #F4F5F7;">
+
+
+    <style>
+        .snackbar-container {
+            position: fixed;
+            z-index: 999999999;
+            visibility: hidden;
+        }
+
+        .alert-primary, .alert-info {
+            color: rgb(0, 102, 255) !important;
+            border: 3px solid rgb(0, 102, 255);
+        }
+
+        .alert-success {
+            color: green !important;
+            border: 3px solid rgb(0, 192, 0);
+        }
+
+        .alert-error {
+            color: rgb(216, 14, 0) !important;
+            border: 3px solid rgb(216, 14, 0);
+        }
+        .snackbar-container.show {
+            visibility: visible;
+        }
+    </style>
+    
+
+    {% if messages %}
+    <div id="snackbar-container" class="snackbar-container">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %} alert-{{message.tags}} {% else %} alert-primary {% endif %}" id="snackbar">
+            {{message}}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <!-- <div id="snackbar-container" class="snackbar-container">
+        <div class="alert {% if message.tags %} alert-{{message.tags}} {% else %} alert-primary {% endif %}" id="snackbar">
+            test
+        </div>
+    </div> -->
+    
+
+    <script>
+        function mySnackbar() {
+            var x = document.getElementById("snackbar-container");
+            x.className = "snackbar-container show";
+            setTimeout(function(){ 
+                x.className = "snackbar-container"; 
+                // x.className = x.className.replace("show", ""); 
+                // console.log('works');
+            }, 3000);
+        }
+        // mySnackar();
+    </script>
+
+    <div class="preloader is-active">
+        <div class="preloader__wrap">
+
+            <img class="preloader__img" src="{% static 'home/analytics/images/preloader.png' %}" alt=""></div>
+    </div>
+
+    <!--====== Main App ======-->
+    <div id="app">
+
+        <!--====== Main Header ======-->
+        <header class="header--style-1"  style="margin-bottom:-2em;">
+
+            <!--====== Nav 1 ======-->
+            <nav class="primary-nav primary-nav-wrapper--border">
+                <div class="container">
+
+                    <!--====== Primary Nav ======-->
+                    <div class="primary-nav">
+
+                        <!--====== Main Logo ======-->
+
+                        <a class="main-logo" href="/">
+                           <img class="hide-mobile" src="{% static 'home/images/logo/logo.png' %}" alt="" style="width:180px;height:80px;margin-top:0em;">
+                        <!-- <h3 style="font-weight: 700;">GOLDENNEST</h3> -->
+<!--                            <img src="{% static 'home/analytics/images/logo/logo-1.png' %}" alt="">-->
+                        </a>
+
+                        {% comment %}
+                        <!-- <div style="position: absolute; right: 0; vertical-align: top; font-weight: 700;" class="dropdown ">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Analytics
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <li class="dropdown-item">
+                                <a class="dash-active"  {% block nav-menu %}{% endblock %} href="{% url 'analytics:menu-list' %}">Menu</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" {% block nav-category %}{% endblock %}  href="{% url 'analytics:category-list' %}">Category</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" {% block nav-order %}{% endblock %} href="{% url 'analytics:order-list' %}">Order</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" {% block nav-coupon %}{% endblock %} href="{% url 'analytics:coupon-list' %}">Coupon</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" {% block nav-contact %}{% endblock %} href="{% url 'analytics:contact' %}">Contact</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" {% block nav-review %}{% endblock %} href="{% url 'analytics:review-list' %}">Review</a>
+                            </li>
+                            <hr>
+                            {% if '/room/' in request.get_full_path %}
+                            {% if '/not/' in request.get_full_path %}
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:booked-room-list' %}">Confirmed Rooms</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:not-confirmed-rooms-list' %}">Unconfirmed Rooms</a>
+                            </li>
+                            {% else %}
+                            <li class="dropdown-item">
+                                <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:booked-room-list' %}">Confirmed Rooms</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:not-confirmed-rooms-list' %}">Unconfirmed Rooms</a>
+                            </li>
+                            {% endif %}
+                            {% else %}
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:booked-room-list' %}">Confirmed Rooms</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" href="{% url 'analytics:not-confirmed-rooms-list' %}">Unconfirmed Rooms</a>
+                            </li>
+                            {% endif %}
+                            <hr>
+                            {% if '/table/' in request.get_full_path %}
+                            {% if '/not/' in request.get_full_path %}
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:table-reservation-list' %}">Confirmed Reservation</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:not-confirmed-table-list' %}">Unconfirmed Reservations</a>
+                            </li>
+                            {% else %}
+                            <li class="dropdown-item">
+                                <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:table-reservation-list' %}">Confirmed Reservation</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:not-confirmed-table-list' %}">Unconfirmed Reservations</a>
+                            </li>
+                            {% endif %}
+                            {% else %}
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:table-reservation-list' %}">Confirmed Reservation</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="dash-active"  href="{% url 'analytics:not-confirmed-table-list' %}">Unconfirmed Reservations</a>
+                            </li>
+                            {% endif %}
+                            </div>
+                          </div> -->
+                          {% endcomment %}
+
+
+
+
+                        <div class="menu-init" id="navigation2"  style="margin-right:15em;">
+
+                            <div class="ah-lg-mode">
+                                <span class="ah-close">✕ Close</span>
+                                <ul style="position: absolute; right: 0; top: 0;" class="ah-list ah-list--design2 ah-list--link-color-secondary">
+
+
+<!--                                        <li class="has-dropdown">-->
+<!--                                            <a>MENU<i class="fas fa-angle-down u-s-m-l-6"></i></a>-->
+<!--                                            <span class="js-menu-toggle"></span>-->
+<!--                                            <ul style="width:200px">-->
+<!--&lt;!&ndash;                                               <li><a href="">Main Chapter</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <li><a href="">Ladies Wing</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <li><a href="">Youth Wing</a></li>&ndash;&gt;-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+
+
+
+                                   <li><a href="/">HOME</a></li>
+                                   <li><a href="/menu">MENU</a></li>
+                                   <li><a href="{% url 'room:list' %}">ROOMS</a></li>
+                                        <li><a href="/about">ABOUT</a></li>
+                                        <li><a href="/contact">CONTACT</a></li>
+<!--                                        <li><a href="">FORUM</a></li>-->
+<!--                                        <li><a href="">CONTACT</a></li>-->
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--====== End - Primary Nav ======-->
+                </div>
+            </nav>
+            <!--====== End - Nav 1 ======-->
+
+
+            <!--====== Nav 2 ======-->
+            <nav class="secondary-nav-wrapper">
+            </nav>
+        </header>
+
+
+		       <!--====== App Content ======-->
+</div>
+
+<br>
+<br>
+<br>
+        <div class="u-s-p-b-60">
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="dash">
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-lg-3 col-md-12">
+
+                                    <!--====== Dashboard Features ======-->
+                                    <!-- SIDEBAR -->
+
+                                    <div class="bg-white u-s-m-b-30" style="border-radius: 0.5em;">
+                                        <div class="" style="text-align: left; padding: 1em; padding-bottom: 0.1em;">
+                                    
+                                            <a data-toggle="collapse" data-target=".collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="dash__text u-s-m-b-16 font-weight-bolder text-dark">Hello, {{ user.name }} <span class="float-right"><i class="fas fa-chevron-down"></i></span></a>
+                                    
+                                            <ul class="dash__f-list ah-list--link-color-secondary collapse show" id="collapseExample" >
+                                                <hr>
+                                                <li >
+                                                    <a class="dash-active"  {% block dashboard %}{% endblock %} href="{% url 'analytics:dashboard' %}">Dashboard</a>
+                                                </li>
+                                    
+                                    
+                                                <hr>
+                                                <li >
+                                                    <a class="dash-active"  {% block nav-menu %}{% endblock %} href="{% url 'analytics:menu-list' %}">Menu</a>
+                                                </li>
+                                    
+                                                <li >
+                                                    <a class="dash-active"  {% block nav-menu-add %}{% endblock %} href="{% url 'analytics:menu-add' %}">Add Menu</a>
+                                                </li>
+                                    
+                                                <hr>
+                                    
+                                                <li >
+                                                    <a class="dash-active" {% block nav-category %}{% endblock %}  href="{% url 'analytics:category-list' %}">Category</a>
+                                                </li>
+                                                <li >
+                                                    <a class="dash-active"   href="{% url 'analytics:category-add' %}">Add Category</a>
+                                                </li>
+                                    
+                                                <hr>
+                                    
+                                                <li >
+                                                    <a class="dash-active" {% if "/analytics/order/" in request.get_full_path %}style="color: #FFB319;"{% endif %} href="{% url 'analytics:order-list' %}">Order <span id="order_unseen" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                    
+                                                <li >
+                                                    <a class="dash-active" {% if "/analytics/offline/order/" in request.get_full_path %}style="color: #FFB319;"{% endif %} href="{% url 'analytics:offline-order-list' %}">Offline Order <span id="offline_order" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                    
+                                    
+                                                <li >
+                                                    <a class="dash-active" {% block nav-coupon %}{% endblock %} href="{% url 'analytics:coupon-list' %}">Coupon</a>
+                                                </li>
+                                    
+                                                <hr>
+                                    
+                                                <li >
+                                                    <a class="dash-active" {% block nav-review %}{% endblock %} href="{% url 'analytics:review-list' %}">Review <span id="room_review" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                                <li>
+                                                    <a class="dash-active" {% block nav-contact %}{% endblock %} href="{% url 'analytics:contact' %}">Contact <span id="unseen_contact" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                    
+                                    
+                                                <hr>
+
+
+                                                <li >
+                                                    <a class="dash-active" {% block nav-room %}{% endblock %} href="{% url 'analytics:rooms-list' %}">All Rooms</a>
+                                                </li>
+                                    
+                                                {% if '/analytics/book/room/' in request.get_full_path %}
+                                                <li >
+                                                    <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:admin-book-table' %}">Book Rooms</a>
+                                                </li>
+                                                {% else %}
+                                                <li >
+                                                    <a class="dash-active"  href="{% url 'analytics:admin-book-room' %}">Book Rooms</a>
+                                                </li>
+                                                {% endif %}
+                                    
+                                                {% if '/analytics/room/list/' in request.get_full_path %}
+                                                <li >
+                                                    <a class="dash-active" style="color: #FFB319;"  href="{% url 'analytics:booked-room-list' %}">Confirmed Rooms</a>
+                                                </li>
+                                                {% else %}
+                                                <li >
+                                                    <a class="dash-active" href="{% url 'analytics:booked-room-list' %}">Confirmed Rooms</a>
+                                                </li>
+                                                {% endif %}
+                                    
+                                                {% if '/analytics/room/not/confirmed/list/' in request.get_full_path %}
+                                                <li >
+                                                    <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:not-confirmed-rooms-list' %}">Unconfirmed Rooms <span id="room_booking_to_confirmed" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                                {% else %}
+                                                <li >
+                                                    <a class="dash-active"  href="{% url 'analytics:not-confirmed-rooms-list' %}">Unconfirmed Rooms <span id="room_booking_to_confirmed" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                                {% endif %}
+                                    
+                                    
+                                                <hr>
+
+                                                <li >
+                                                    <a class="dash-active" {% block nav-table %}{% endblock %} href="{% url 'analytics:table-create' %}">Add Table</a>
+                                                </li>
+                                    
+                                                <li >
+                                                    <a class="dash-active" {% block table-list %}{% endblock %} href="{% url 'analytics:table-list' %}">Table List</a>
+                                                </li>
+                                    
+                                                {% if '/analytics/book/table/' in request.get_full_path %}
+                                                <li >
+                                                    <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:admin-book-table' %}">Make Reservations</a>
+                                                </li>
+                                                {% else %}
+                                                <li >
+                                                    <a class="dash-active" href="{% url 'analytics:admin-book-table' %}">Make Reservations</a>
+                                                </li>
+                                                {% endif %}
+                                    
+                                                {% if '/analytics/reservations/' in request.get_full_path %}
+                                                <li >
+                                                    <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:table-reservation-list' %}">Confirmed Reservation</a>
+                                                </li>
+                                                {% else %}
+                                                <li >
+                                                    <a class="dash-active" href="{% url 'analytics:table-reservation-list' %}">Confirmed Reservation</a>
+                                                </li>
+                                                {% endif %}
+                                    
+                                                {% if '/analytics/table/not/confirmed/list/' in request.get_full_path %}
+                                                <li>
+                                                    <a class="dash-active" style="color: #FFB319;" href="{% url 'analytics:not-confirmed-table-list' %}">Unconfirmed Reservations <span id="table_booking_to_confirmed" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                                {% else %}
+                                                <li >
+                                                    <a class="dash-active"  href="{% url 'analytics:not-confirmed-table-list' %}">Unconfirmed Reservations <span id="table_booking_to_confirmed" class="badge badge-primary badge-pill"></span></a>
+                                                </li>
+                                                {% endif %}
+                                    
+                                                <br>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+                                        <script type="text/javascript">
+                                            function get_notifications_ajax() {
+                                                $.get("{% url 'analytics:ajax-notification' %}",function(data) {
+                                                if (data.order_unseen == 0) data.order_unseen = '';
+                                                if (data.cancel_order_unseen == 0) data.cancel_order_unseen = '';
+                                                if (data.table_booking_to_confirmed == 0) data.table_booking_to_confirmed = '';
+                                                if (data.room_booking_to_confirmed == 0) data.room_booking_to_confirmed = '';
+                                                if (data.room_review == 0) data.room_review = '';
+                                                if (data.unseen_contact == 0) data.unseen_contact = '';
+                                                if (data.offline_order == 0) data.offline_order = '';
+                                                console.log(data);
+                                                $("#order_unseen").html(data.order_unseen);
+                                                $("#cancel_order_unseen").html(data.cancel_order_unseen);
+                                                $("#table_booking_to_confirmed").html(data.table_booking_to_confirmed);
+                                                $("#room_booking_to_confirmed").html(data.room_booking_to_confirmed);
+                                                $("#room_review").html(data.room_review);
+                                                $("#unseen_contact").html(data.unseen_contact);
+                                                $("#offline_order").html(data.offline_order);
+                                            });
+                                            }
+                                    
+                                        setInterval(function() {
+                                            get_notifications_ajax();
+                                        }, 1000 * 120); // check notification every 120 seconds 
+                                    </script>
+
+                                    <!-- END OF SIDEBAR -->
+                                </div>
+
+
+                                <div class="col-lg-9 col-md-12">
+                                            {% block data %} {% endblock data %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <!--====== End - Section 2 ======-->
+
+            <script>
+                function on_load_fs() {
+                    get_notifications_ajax();
+                    mySnackbar();
+                }
+                
+            </script>
+
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+        window.ga = function() {
+            ga.q.push(arguments)
+        };
+        ga.q = [];
+        ga.l = +new Date;
+        ga('create', 'UA-XXXXX-Y', 'auto');
+        ga('send', 'pageview');
+
+
+    </script>
+
+
+    <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+    <!--====== Vendor Js ======-->
+    <script src="{% static 'home/analytics/js/vendor.js' %}"></script>
+
+    <!--====== jQuery Shopnav plugin ======-->
+    <script src="{% static 'home/analytics/js/jquery.shopnav.js' %}"></script>
+
+    <!--====== App ======-->
+    <script src="{% static 'home/analytics/js/app.js' %}"></script>
+
+    <!--====== Noscript ======-->
+    <noscript>
+        <div class="app-setting">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="app-setting__wrap">
+                            <h1 class="app-setting__h1">JavaScript is disabled in your browser.</h1>
+
+                            <span class="app-setting__text">Please enable JavaScript in your browser or upgrade to a JavaScript-capable browser.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </noscript>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>  -->
+
+</body>
+</html>

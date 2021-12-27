@@ -1,0 +1,117 @@
+{% extends 'users/account_base.html' %}
+{% block achead %}Your Profile{% endblock %}
+{% block room %}
+
+
+    <div class="content">
+        <!-- <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+            <div class="bg par-elem "  data-bg="images/bg/10.jpg" data-scrollax="properties: { translateY: '30%' }"></div>
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="section-title">
+                    <h2>Profile</h2>
+                    <div class="dots-separator fl-wrap"><span></span></div>
+                </div>
+            </div>
+            <div class="brush-dec"></div>
+        </section> -->
+        <!-- {% comment %}
+          {% if form.errors %}
+            <div  style="padding: 1.8em; background-color:#C19D60; font-size: 1.5em; display: flex; justify-content: center; align-items: center; " class="alert alert-error">
+                {% for field in form %}
+                  {% if field.errors %}
+                    {% for error in field.errors %}
+                       <h3 style="color: rgb(255, 51, 51);">{{ error }}</h3>
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% if form.non_field_errors %}
+                <p style="color: rgb(255, 51, 51);">{{ form.non_field_errors }}</p>
+              {% endif %}
+            </div>
+        {% endif %}
+        {% endcomment %} -->
+
+
+
+        <section style="padding-top: 0; margin-top:0; transform: translateY(-40px)" class="hidden-section big-padding con-sec" data-scrollax-parent="true" id="sec3">
+            <div style="padding: 2em; padding-top: 0; margin-top: 0;" class="container">
+                <div class="row">
+                    <div >
+                        <div class="section-title text-align_left">
+                            <h2>Profile Details</h2>
+                            <div class="dots-separator fl-wrap"><span></span></div>
+                        </div>
+                        <div class="text-block ">
+                        </div>
+                        <div class="contactform-wrap">
+                            <div id="message"></div>
+                            <!-- <form  class="custom-form" name="contactform" method="post">
+                                {% csrf_token %}
+                                <fieldset>
+                                <div id="message2"></div>
+                                    <div class="row">
+                                        {% for field in form %}
+                                            {% if 'Name:' in field.label_tag %}
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="name" id="id_name" placeholder="Your Name*" value="{{ field.value }}" required/>
+                                                </div>
+                                            {% endif %}
+                                         {% endfor %}
+
+                                        {% for field in form %}
+                                            {% if 'Phone number:' in field.label_tag %}
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="phone_number" id="id_phone_number" placeholder="Your Phone Number*" value="{{ field.value }}" required/>
+                                                </div>
+                                            {% endif %}
+                                         {% endfor %}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <button class="btn float-btn flat-btn color-bg" id="submit_cnt">Update <i class="fal fa-long-arrow-right"></i></button>
+                                </fieldset>
+                            </form> -->
+                            <form  class="custom-form" name="contactform" method="post" >
+                                {% csrf_token %}
+                                <fieldset>
+                                <div id="message2"></div>
+                                    <div class="row">
+                                                
+                                            
+                                                <div style="z-index: 9999;" class="col-sm-6">
+                                                    <h3 align="left" style="font-size: 1.4em; margin: 1em 1em 0.7em 0; color: #fff;">Name</h3>
+                                                    <input type="text" name="name" value="{{ user.name }}"/>
+                                                </div>
+
+
+                                                <div style="z-index: 9998;" class="col-sm-6">
+                                                    <h3 align="left" style="font-size: 1.4em; margin: 1em 1em 0.7em 0; color: #fff;">Email</h3>
+                                                    <input type="email" name="email" value="{{ user.email }}"/>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <h3 align="left" style="font-size: 1.4em; margin: 1em 1em 0.7em 0; color: #fff;">Phone Number</h3>
+                                                    <input type="text" name="phone_number" value="{{ user.phone_number|safe }}"/>
+                                                </div>
+                                            
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <button class="btn float-btn flat-btn color-bg" id="submit_cnt">Update <i class="fal fa-long-arrow-right"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="section-dec sec-dec_top"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-bg">
+                <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+            </div>
+        </section>
+
+        <div class="brush-dec2 brush-dec_bottom"></div>
+</div>
+
+
+
+{% endblock %}

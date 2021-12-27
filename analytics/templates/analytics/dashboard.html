@@ -1,0 +1,154 @@
+{% extends "analytics/base.html" %} 
+
+{% block dashboard %}style="color: #FFB319;"{% endblock %}
+
+{% block data %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    .info-cards {
+        
+    }
+
+    .card-counter{
+    box-shadow: 2px 2px 10px #DADADA;
+    margin: 0 0em 2em 0em;
+    padding: 1em;
+    background-color: #fff;
+    height: 120px;
+    border-radius: 5px;
+    transition: .3s linear all;
+  }
+
+  .card-counter:hover{
+    box-shadow: 4px 4px 20px #DADADA;
+    transition: .3s linear all;
+  }
+
+  .card-counter.primary{
+    background-color: #007bff;
+    color: #FFF;
+  }
+
+  .card-counter.danger{
+    background-color: #ef5350;
+    color: #FFF;
+  }  
+
+  .card-counter.success{
+    background-color: #3cb442;
+    color: #FFF;
+  }  
+
+  .card-counter.info{
+    background-color: #26c6da;
+    color: #FFF;
+  }  
+
+  .card-counter.warning{
+    background-color: #ffb222;
+    color: #FFF;
+  } 
+  
+  .card-counter.violet{
+    background-color: #9422ff;
+    color: #FFF;
+  } 
+
+  .card-counter i{
+    font-size: 2.7em;
+    opacity: 0.3;
+    float: right;
+  }
+
+  .card-counter .count-numbers{
+    position: absolute;
+    left: 35px;
+    top: 20px;
+    font-size: 32px;
+    display: block;
+  }
+
+  .card-counter .count-name{
+    position: absolute;
+    left: 35px;
+    top: 75px;
+    font-style: bold;
+    text-transform: capitalize;
+    opacity: 0.6;
+    display: block;
+    font-size: 18px;
+  }
+</style>
+
+<div style="border-color: #fff; border-radius: 0.5em;" class="card p-5">
+
+<div class="row">
+
+    <div class="col-12 mb-4">
+      <p style="font-size: 1.4em; font-weight: 600;" align="left">Today's</p>
+    </div>
+
+    <div class="col-md-4 info-cards">
+      <div class="card-counter success">
+        <i class="fas fa-hamburger"></i>
+        <span class="count-numbers">{{todays_orders}}</span>
+        <span class="count-name">Orders</span>
+      </div>
+    </div>
+
+    <div class="col-md-4 info-cards">
+      <div class="card-counter primary">
+        <i class="fas fa-table"></i>
+        <span class="count-numbers">{{todays_bookings}}</span>
+        <span class="count-name">Bookings</span>
+      </div>
+    </div>
+
+    <div class="col-md-4 info-cards">
+      <div class="card-counter danger">
+        <i class="fas fa-house-user"></i>
+        <span class="count-numbers">{{todays_reservations}}</span>
+        <span class="count-name">Reservations</span>
+      </div>
+    </div>
+</div>
+
+<hr><br>
+
+<div class="row">
+
+  <div class="col-12 mb-4">
+    <p style="font-size: 1.4em; font-weight: 600;" align="left">Total</p>
+  </div>
+
+    <div class="col-md-4 info-cards">
+      <div class="card-counter success">
+        <i class="fas fa-hamburger"></i>
+        <span class="count-numbers">{{total_orders}}</span>
+        <span class="count-name">Orders</span>
+      </div>
+    </div>
+
+    <div class="col-md-4 info-cards">
+      <div class="card-counter warning">
+        <i class="fas fa-table"></i>
+        <span class="count-numbers">{{total_bookings}}</span>
+        <span class="count-name">Tables Booked</span>
+      </div>
+    </div>
+
+    <div class="col-md-4 info-cards">
+      <div class="card-counter info">
+        <i class="fas fa-house-user"></i>
+        <span class="count-numbers">{{total_reservations}}</span>
+        <span class="count-name">Rooms Booked</span>
+      </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}

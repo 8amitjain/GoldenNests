@@ -1,0 +1,128 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+    <div class="content">
+        <section class=" no-padding dark-bg hidden-section">
+            <div class="map-container">
+                <div id="singleMap"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.085538860338!2d75.56227521432776!3d20.989207994504717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd90f61752cb785%3A0x2a18a8095f0d3033!2sGolden%20Nest!5e0!3m2!1sen!2sin!4v1632315233479!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
+                <div class="scrollContorl"></div>
+            </div>
+            <!-- map-view-wrap -->
+            <div class="map-view-wrap hide-mobile">
+                <div class="container">
+                    <div class="map-view-wrap_item">
+                        <div class="contact-details">
+                            <h4>Contacts Details</h4>
+                            <ul>
+                                <li><span><i class="fal fa-map-marked-alt"></i> Address :</span> <a href="#">Plot no 11, Muhadi Phata, Jalgaon.</a></li>
+                                <li><span><i class="fal fa-phone-rotary"></i> Phone :</span> <a href="#">+91 9823333373 ,</a></li>
+                                <li><span><i class="fal fa-mailbox"></i> Mail :</span> <a href="#">info@goldennest.in</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--map-view-wrap end -->
+            <div class="brush-dec"></div>
+        </section>
+        <!--  section  -->
+        <section class="hidden-section big-padding con-sec" data-scrollax-parent="true" id="sec3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+
+
+                <div class="container show-mobile-only" style="margin-bottom: 6em;">
+                    <div class="map-view-wrap_item">
+                        <div class="contact-details" style="color: #fff;">
+                            <h4 style="color: #fff !important;">Contacts Details</h4>
+                            <ul>
+                                <li><span><i class="fal fa-map-marked-alt"></i> Adress :</span> <a href="#">Plot no 11, Muhadi Phata, Jalgaon.</a></li>
+                                <li><span><i class="fal fa-phone-rotary"></i> Phone :</span> <a href="#">+91 9823333373 ,</a></li>
+                                <li><span><i class="fal fa-mailbox"></i> Mail :</span> <a href="#">info@goldennest.in</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                        <div class="section-title text-align_left">
+                            <h2>Get in touch</h2>
+                            <div class="dots-separator fl-wrap"><span></span></div>
+                        </div>
+                        <div class="text-block ">
+<!--                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.-->
+<!--                            </p>-->
+                        </div>
+                        <div class="contactform-wrap">
+                            <div id="message"></div>
+                            <form  class="custom-form" method="post">
+                                {% csrf_token %}
+                                <fieldset>
+                                <div id="message2"></div>
+                                    <div class="row">
+                                        <div style="z-index: 9999;" class="col-sm-12">
+                                            <input type="text" name="name" id="id_name" placeholder="Your Name *" value=""/>
+                                        </div>
+                                        <div style="z-index: 9998;" class="col-sm-6">
+                                            <input type="text"  name="email" id="id_email" placeholder="Email Address *" value=""/>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="tel"  name="mobile" id="id_mobile" placeholder="Phone *" pattern="[789][0-9]{9}" value="" style="padding: 1.2em 1.5em;background: rgba(255,255,255,0.1);;width: 100%;border: 0px;color: white;"/>
+                                        </div>
+                                    </div>
+                                    <textarea name="description"  id="id_description" cols="40" rows="3" placeholder="Your Message:"></textarea>
+                                    <div class="clearfix"></div>
+                                    <button class="btn float-btn flat-btn color-bg" id="submit_cnt">Send Message <i class="fal fa-long-arrow-right"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="section-dec sec-dec_top"></div>
+                    </div>
+                    <br><br>
+                    <div class="col-md-5">
+                        <div class="column-text_inside fl-wrap dark-bg" >
+                            <div class="column-text">
+                                <div class="section-title">
+                                    <h4>Call For Reservations</h4>
+                                    <h2>Opening Hours</h2>
+                                    <div class="dots-separator fl-wrap"><span></span></div>
+                                </div>
+                                <div class="work-time fl-wrap">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h3>Sunday to Tuesday</h3>
+                                            <div class="hours">
+                                                09:00<br>
+                                                22:00
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h3>Friday to Saturday</h3>
+                                            <div class="hours">
+                                                11:00<br>
+                                                19:00
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="bold-separator"><span></span></div>
+                                <div class="big-number"><a href="#">+7(111)123456789</a></div>
+                            </div>
+                            <div class="illustration_bg">
+                                <div class="bg"  data-bg="images/bg/dec/6.png"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-bg">
+                <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+            </div>
+        </section>
+        <!--  section end  -->
+        <div class="brush-dec2 brush-dec_bottom"></div>
+</div>
+{% endblock %}

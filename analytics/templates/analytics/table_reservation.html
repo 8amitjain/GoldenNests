@@ -1,0 +1,451 @@
+{% extends "analytics/base.html" %} 
+
+
+{% block data %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+	#contact-table {
+		background: #fff;
+	}
+
+    .rounded-circle {
+		width: 26px;
+		height: 26px;
+		padding: 2px;
+		text-align: center;
+		font-size: 12px;
+	}
+
+	.card {
+		display: block;
+		padding: 1em;
+        padding-top: 0;
+        font-family: 'Open Sans', sans-serif;
+	}
+
+    .card-body {
+        padding: 1em 0 0 0;
+        margin: 0;
+    }
+
+    .th-head {
+        border: none !important; 
+        font-weight: 600; 
+        text-transform: uppercase;
+        font-size: 0.9em;
+        vertical-align: top !important;
+    }
+
+    table td, table td * {
+        vertical-align: top !important;
+    }
+
+</style>
+
+
+{% for object in object_list %}
+
+{% if not object.table.is_booked_offline %}
+<div style="border-radius: 0.5em; border-color: #ffffff;" class="card mb-4  pb-1 container bg-white">
+    <div class="bg-white card-header d-block ">
+        <div class="pt-0 py-2 row">
+            <a href="#" style="font-weight: 700; color: rgb(0, 0, 0); " class="float-left py-3 py-lg-0 col-lg-6 col-12">{{object.table.order_ref_number}}</a>
+            <div class="font-weight-bold col-lg-6 col-12">
+                {% if '/not/' in request.get_full_path %}
+                <p style="color:rgb(248, 228, 45)" class="font-weight-bold d-flex py-3 py-lg-2 justify-content-lg-end align-items-center">
+                    <a style="margin: -1em 0; padding: 0.5em 1.8em; font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:confirm-table-booking' object.table.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Confirm</a>
+                    <a style="margin: -1em 0; margin-left:0.5em; padding: 0.5em 1.8em;  font-weight:600;" class="btn btn-outline-danger" href="{% url 'analytics:reject-table-reservation' object.table.pk %}"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+                </p>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white card-body row pt-4">  
+
+        <div class="bg-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Sitting Type</h6>                        
+                </div>
+                <div class="row">
+                    <p style="" class="font-weight-bold">
+                        {{object.table.sitting_type}}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Phone No.:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">{{object.table.phone_number|safe}}</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">People:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 168, 53);">{{object.table.people_count.title}}</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Date & Time:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 81, 0);"><span style="color: rgb(99, 206, 0);">{{object.table.booked_for_time}}</span> - {{object.table.booked_for_date|date:"d M, Y"}}</p>
+                </div>
+                
+            </div>
+        </div> 
+        {% if object.cart.all %}
+        <div class="bg-white col-lg-2 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <!-- <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Time:</h6>                         -->
+                </div>
+                <div class="row">
+                    
+                        <a style="border-radius: 0;" class="btn btn-warning" href="{% url 'analytics:order-detail' object.id %}">View Items</a>
+                    
+                </div>
+                
+            </div>
+        </div>  
+        {% endif %}
+        </div>
+</div>
+
+{% else %}
+
+<div style="border-radius: 0.5em; border-color: #343A40;" class="card mb-4  pb-1 container bg-dark">
+    <div class="bg-dark card-header border-white d-block ">
+        <div class="pt-0 py-2 row">
+            <a href="#" style="font-weight: 700; color: rgb(255, 255, 255);" class="float-left col-12 col-lg-6 py-3 py-lg-0">{{object.table.order_ref_number}}</a>
+            <div class="text-white font-weight-bold col-12 col-lg-6" align="right" >
+                {% if '/not/' in request.get_full_path %}
+                <p style="color:rgb(248, 228, 45)" class="font-weight-bold d-flex py-3 py-lg-2 justify-content-lg-end align-items-center">
+                    <a style="margin: -1em 0; padding: 0.5em 1.8em; font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:confirm-table-booking' object.table.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Confirm</a>
+                    <a style="margin: -1em 0; margin-left:0.5em; padding: 0.5em 1.8em;  font-weight:600;" class="btn btn-outline-danger" href="{% url 'analytics:reject-table-reservation' object.table.pk %}"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+                </p>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-dark card-body row pt-4">
+
+        <div class="bg-dark col-lg-3 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Sitting Type</h6>
+                </div>
+                <div class="row">
+                    <p style="" class="font-weight-bold">
+                        {{object.table.sitting_type}}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-dark text-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Phone No.:</h6>
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">{{object.table.phone_number|safe}}</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-dark text-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">People:</h6>
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 168, 53);">{{object.table.people_count.title}}</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-dark text-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Date & Time:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 81, 0);"><span style="color: rgb(99, 206, 0);">{{object.table.booked_for_time}}</span> - {{object.table.booked_for_date|date:"d M, Y"}}</p>
+                </div>
+                
+            </div>
+        </div> 
+        {% if object.cart.all %}
+        <div class="bg-dark text-white col-lg-2 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <!-- <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Time:</h6>                         -->
+                </div>
+                <div class="row">
+                    
+                        <a style="border-radius: 0;" class="btn btn-warning" href="{% url 'analytics:order-detail' object.id %}">View Items</a>
+                    
+                </div>
+                
+            </div>
+        </div>  
+        {% endif %}
+        </div>
+
+</div>
+
+{% endif %}
+
+
+{% endfor %}
+
+
+{% if 'reservations/' in request.path %}
+
+{% for object in admin_tables %}
+
+{% if not object.is_booked_offline %}
+<div style="border-radius: 0.5em; border-color: #ffffff;" class="card mb-4  pb-1 container bg-white">
+    <div class="bg-white card-header d-block row">
+        <div class="pt-0 py-2">
+            <a href="#" style="font-weight: 700; color: rgb(0, 0, 0); " class="float-right">Table No.{{ object.table.id }}</a>
+            <a href="#" style="font-weight: 700; color: rgb(0, 0, 0); " class="float-left">{{ object.order_ref_number }}</a>
+
+            <div class="font-weight-bold" align="right">
+                {% if '/not/' in request.get_full_path %}
+                <p style="color:rgb(248, 228, 45)" class="font-weight-bold">
+                    <a style="margin: -1em 0; padding: 0.5em 1.8em; font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:confirm-table-booking' object.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Confirm</a>
+                    <!-- <a style="margin: -1em 0; margin-left:0.5em; padding: 0.5em 1.8em;  font-weight:600;" class="btn btn-outline-danger" href="{% url 'analytics:reject-table-reservation' object.pk %}"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a> -->
+                </p>
+
+                {% else %}
+                <a style="color:rgb(255, 52, 25)" class="m-2 font-weight-bold">
+                    &nbsp;
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white card-body row pt-4">  
+
+        <div class="bg-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Sitting Type</h6>                        
+                </div>
+                <div class="row">
+                    <p style="" class="font-weight-bold">
+                        {{object.sitting_type}}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Phone No.:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">{{object.phone_number|safe}}</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">People:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 168, 53);">{{object.people_count.title}}</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Date & Time:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 81, 0);"><span style="color: rgb(99, 206, 0);">{{object.booked_for_time}}</span> - {{object.booked_for_date|date:"d M, Y"}}</p>
+                </div>
+                
+            </div>
+        </div> 
+        {% if object.cart.all %}
+        <div class="bg-white col-lg-2 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <!-- <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Time:</h6>                         -->
+                </div>
+                <div class="row">
+                    
+                        <a style="border-radius: 0;" class="btn btn-warning" href="{% url 'analytics:order-detail' object.id %}">View Items</a>
+                    
+                </div>
+                
+            </div>
+        </div> 
+         {% endif %}
+        </div>
+</div>
+
+{% else %}
+
+<div style="border-radius: 0.5em; border-color: #343A40;" class="card mb-4  pb-1 container bg-dark">
+    <div class="bg-dark card-header border-white d-block row">
+        <div class="pt-0 py-2">
+            <a href="#" style="font-weight: 700; color: rgb(255, 255, 255); " class="float-right">Table No. {{object.table.title}}</a>
+            <a href="#" style="font-weight: 700; color: rgb(0, 0, 0); " class="float-left">{{ object.order_ref_number }}</a>
+
+            <div class="text-white font-weight-bold" align="right" >
+                {% if '/not/' in request.get_full_path %}
+                <p style="color:rgb(248, 228, 45)" class="font-weight-bold">
+                    <a style="margin: -1em 0; padding: 0.5em 1.8em; font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:confirm-table-booking' object.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Confirm</a>
+                    <!-- <a style="margin: -1em 0; margin-left:0.5em; padding: 0.5em 1.8em;  font-weight:600;" class="btn btn-outline-danger" href="{% url 'analytics:reject-table-reservation' object.pk %}"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a> -->
+                </p>
+                {% else %}
+                <a style="color:rgb(255, 52, 25)" class="m-2 font-weight-bold">
+                    &nbsp;
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-dark card-body row pt-4">
+
+        <div class="bg-dark col-lg-3 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Sitting Type</h6>
+                </div>
+                <div class="row">
+                    <p style="" class="font-weight-bold">
+                        {{object.table.sitting_type}}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-dark text-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Phone No.:</h6>
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">{{object.table.phone_number|safe}}</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-dark text-white {% if object.cart.all %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">People:</h6>
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 168, 53);">{{object.table.people_count.title}}</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-dark text-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Date & Time:</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700; color: rgb(255, 81, 0);"><span style="color: rgb(99, 206, 0);">{{object.table.booked_for_time}}</span> - {{object.table.booked_for_date|date:"d M, Y"}}</p>
+                </div>
+                
+            </div>
+        </div> 
+        {% if object.cart.all %}
+        <div class="bg-dark text-white col-lg-2 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <!-- <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Time:</h6>                         -->
+                </div>
+                <div class="row">
+                    
+                        <a style="border-radius: 0;" class="btn btn-warning" href="{% url 'analytics:order-detail' object.id %}">View Items</a>
+                    
+                </div>
+                
+            </div>
+        </div>  
+        {% endif %}
+        </div>
+
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+{% endif %}
+
+
+<div class="d-flex justify-content-center m-4">
+{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page=1">&lt;&lt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.previous_page_number}}">&lt;</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{num}}">{{num}}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.next_page_number}}">&gt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center" href="?page={{page_obj.paginator.num_pages}}">&gt;&gt;</a>
+      {% endif %}
+
+{% endif %}
+</div>
+
+
+{% endblock data %}

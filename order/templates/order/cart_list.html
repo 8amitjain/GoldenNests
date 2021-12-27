@@ -1,0 +1,572 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+<div class="content">
+      <!--  section  -->
+    <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+        <div class="bg par-elem "  data-bg="{% static 'home/images/bg/17.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="section-title">
+                <h4>Order food with home delivery</h4>
+                <h2>Your Cart</h2>
+                <div class="dots-separator fl-wrap"><span></span></div>
+            </div>
+        </div>
+        <div class="hero-section-scroll">
+            <div class="mousey">
+                <div class="scroller"></div>
+            </div>
+        </div>
+        <div class="brush-dec"></div>
+    </section>
+    <!--  section  end-->
+
+    <!--  section  -->
+    <section class="hidden-section">
+        <div class="container">
+        
+        {% if not object_list %}
+
+            <div style="height: 50vh;" class="container">
+                <div style="height: 100%;" class="section-title text-center">
+                    <img  src="{% static 'home/images/logo/shopping-cart.png' %}"  style="height: 250px;width: 250px;object-fit: cover;"  alt="logo">
+                    <h2>Your Cart is Empty</h2>
+                    <br>
+                    <a href="/menu" class="btn color-bg" type="submit">Order Now  <i class="fal fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+        
+        {% else %}
+
+            <!-- RESERVATION -->
+
+            <style>
+
+                .total-table tr {
+                    border-bottom:1px solid rgba(255,255,255,0.1);
+                }
+
+                .resvt .rounded-circle {
+                    width: 26px;
+                    height: 26px;
+                    padding: 2px;
+                    text-align: center;
+                    font-size: 12px;
+                }
+            
+                .resvt .card {
+                    display: block;
+                    padding: 1em;
+                    padding-top: 0;
+                    font-family: 'Open Sans', sans-serif;
+                }
+            
+                .resvt .card-body {
+                    padding: 2em;
+                    padding-bottom: 0;
+                    margin: 0;
+                }
+            
+                .resvt .th-head {
+                    border: none !important; 
+                    font-weight: 600; 
+                    text-transform: uppercase;
+                    font-size: 0.9em;
+                    vertical-align: top !important;
+                }
+            
+                .resvt table td, table td * {
+                    vertical-align: top !important;
+                }
+            
+                .resvt .row {
+                    margin-bottom: 1.2em ;        
+                }
+            
+                .resvt .card-body.row {
+                    margin-bottom: 0;
+                }
+            
+                .resvt .row .row {
+                    background-color: #292929;
+                }
+            
+                .resvt p {
+                    font-size: 1.2em;
+                    color: rgb(176, 144, 89);
+                }
+            
+                .resvt h6 {
+                    text-transform: uppercase;
+                }
+            
+                .resvt .checkout-table * {
+                    font-family: 'Playfair Display', cursive !important;
+                }
+            
+                .resvt .btn-cancel-custom {
+                    transform: translate(15px, -25px);
+                }
+            
+                .resvt .head-custom {
+                    margin: 0 1.2em 1.2em 1.2em;
+                    padding-top: 0;
+                    display: flex;
+                    justify-content: space-between; 
+                }
+
+                .total-table th, .total-table td {
+                    font-size: 1.25em !important;
+                }
+            
+                @media screen and (max-width: 1199px) {
+                    .resvt .btn-cancel-custom {
+                        transform: translate(0, -28px);
+                    }
+            
+                    .resvt .card-body {
+                        padding: 1em;
+                        padding-top: 2em;
+                    }
+            
+                    .resvt .head-custom {
+                        margin: 0 0 1.2em 0;
+                        margin-top: 0;
+                        padding-top: 0;
+                        display: flex;
+                        justify-content: space-between; 
+                    }
+
+                    td h5 {
+                        font-size: 1em; 
+                        line-height: 1.8em;
+                    }
+                }
+            
+            
+            </style>
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- CHECKOUT TABLE -->
+            <div class="row">
+
+                <div class="col-md-8">
+                {% if request.user.is_authenticated and not request.GET.urlencode %}
+                {% if order.table %}
+                    <div style="background-color: #292929; overflow: auto; text-align: left; padding-top: 1.4em; padding-bottom: 0; margin-bottom: 2.5em; padding-left: 1em;" class="resvt checkout-table  dark-bg fl-wrap author-content"> <!--cart-totals-->
+                        <div class="head-custom">
+                                <h2 align="left" style="">
+                                    <a href="#" style="color: #C19D60;text-align: left;font-family: 'Playfair Display', cursive; font-size: 1.5em;" >#{{order.table.order_ref_number}}</a>
+                                </h2>
+                                
+                                <div align="right" style=" color: #C19D60; text-align: right;font-family: 'Playfair Display', cursive; font-size: 1.5em; padding-right: 1em;">
+                                    {{order.table.status}}
+                                </div>
+                    
+                        </div>
+                        <hr style="opacity: 0.1;">
+                    
+                        <div style="margin-bottom: 0; padding-bottom: 0;" class="card-body row">
+
+                            <div class="{% if order.table.is_available_for_cancellation %} col-lg-3 {% else %} col-lg-4 {% endif %} col-md-4 col-6 mb-3">
+                                <div class="bg-white p-3" style="border-radius: 0.5em;">
+                                    <div class="row mb-2">
+                                        <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">Sitting Type</h6>
+                                    </div>
+                                    <div class="row">
+                                        <p style="font-weight: 600; ">{{order.table.sitting_type}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="{% if order.table.is_available_for_cancellation %} col-lg-2 {% else %} col-lg-3 {% endif %} col-md-4 col-6 mb-3">
+                                <div class="bg-white p-3" style="border-radius: 0.5em;">
+                                    <div class="row mb-2">
+                                        <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">People</h6>
+                                    </div>
+                                    <div class="row">
+                                        <p style="font-weight: 600;">{{order.table.people_count.title}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-4 col-6 mb-3">
+                                <div class="bg-white p-3" style="border-radius: 0.5em;">
+                                    <div class="row mb-2">
+                                        <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">Date</h6>
+                                    </div>
+                                    <div class="row">
+                                        <p style="font-weight: 600; ">{{order.table.booked_for_date|date:"d M, Y"}} </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                                <div class="bg-white p-3" style="border-radius: 0.5em;">
+                                    <div class="row mb-2">
+                                        <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 1.2em;">Time</h6>
+                                    </div>
+                                    <div class="row">
+                                        <p style="font-weight: 600; ">{{order.table.booked_for_time}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            {% if order.table.is_available_for_cancellation %}
+                            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                                <div class="bg-white p-3" style="border-radius: 0.5em;">
+                                    <div class="row mb-2">
+                                    </div>
+                                    <div class="row">
+
+                                        <form id="cancel-form" action="{% url 'menu:cancel-table-booking' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="table_id" value="{{ order.table.id }}">
+                                            <button style="border:0; cursor:pointer; padding: 1em 2em;" class="btn color-bg btn-cancel-custom" type="submit" form="cancel-form">Cancel</button>
+                                        </form>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            {% endif %}
+                            </div>
+                        </div>
+                {% endif %}
+                {% endif %}
+                    {% if cart %}
+                        <h4 class="cart-title">Your cart <span>{{ cart_count }} items</span></h4>
+                    {% endif %}
+                    <table class="table table-border checkout-table" style="overflow: auto;">
+                        <tbody>
+                            <tr>
+<!--                                <th class="hidden-xs">Item</th>-->
+                                <th width="50%" style="color: #C19D60; text-align: left; font-weight: 600;">Dish</th>
+                                <th class="hidden-xs">Price</th>
+                                <th>Count</th>
+                                <th>Total</th>
+                                <th>
+                                {% if request.user.is_authenticated %}
+                                    <a style="color: #C19D60;" href="{% url 'order:delete-all-cart' %}" title="Remove"><i class="fal fa-times"></i></a></th>
+                                {% else %}
+                                    <a style="color: #C19D60;" href="{% url 'order:delete-all-cart-qr-code' %}" title="Remove"><i class="fal fa-times"></i></a></th>
+                                {% endif %}
+                                </tr>
+                            {% for object in object_list %}
+                                <tr>
+<!--                                    <td class="hidden-xs">-->
+<!--                                        {% if object.product.image %}-->
+<!--                                            <a href="{% url 'menu:menu' %}"><img src="{{ object.product.image.url }}" alt="" class="respimg"></a>-->
+<!--                                        {% endif %}-->
+<!--                                    </td>-->
+                                    <td>
+                                        <h5 style="text-align: left; " class="product-name">{{ object.product.title }}</h5>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <h5 class="order-money">₹{{ object.product.price }}</h5>
+                                    </td>
+                                    <td>
+                                        <center><div style="display: flex;background: #292929;width: 95px;" id="max{{object.id}}">
+                                            <a style="color: #C19D60;padding: 0.5em 1em;" id="less{{object.id}}"><i class="fa fa-minus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                            <p style="padding: 0.5em;" id="quantity_{{object.id}}">{{object.quantity}}</p>
+                                            <a style="color: #C19D60;padding: 0.5em 1em;" id="add{{object.id}}"><i class="fa fa-plus" aria-hidden="true" style="margin-top: 0.7em;font-size: 0.7em;"></i></a>
+                                        </div></center>
+<!--                                        <input type="number" name="cartin1" value="{{ cart.quantity }}" max="50" min="0" class="order-count">-->
+                                    </td>
+                                    <td>
+                                        <h5 class="order-money" id="get_cart_total_{{object.id}}">₹{{ object.get_total_item_price }}</h5>
+                                    </td>
+                                    <td class="pr-remove">
+                                        {% if request.user.is_authenticated %}
+                                        <a href="{% url 'order:delete-cart' object.id %}" title="Remove"><i class="fal fa-times"></i></a>
+                                        {% else %}
+                                        <a href="{% url 'order:delete-cart-qr-code' object.id %}" title="Remove"><i class="fal fa-times"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                               <script>
+                               function addtocart_using_qr(object_id, product_id,variation, quantity) {
+                                                            var queryDict = {}
+                                                            location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+                                                            let table_id = parseInt(queryDict['table_id']);
+                                                               var url = "{% url 'order:add-to-cart-qr-code' %}";
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': variation,       // add the country id to the GET parameters
+                                                                    'table_id': table_id,
+                                                                    'product_id': product_id,
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                                                    document.getElementById("max"+object_id).style.border = "0px solid black";
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_"+object_id).html(data["quantity"]);
+                                                                  $("#get_cart_total_"+object_id).html("₹" + data["get_cart_total"]);
+                                                                  }else{
+                                                                  $("#quantity_"+object_id).html("0");
+                                                                  $("#get_cart_total_"+object_id).html("0");
+                                                                  }
+
+
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);
+                                                                  $("#item_bag").html(data["item"]);
+                                                                  $('#get_tax_total').html("₹" + data["get_tax_total"].toLocaleString('en-IN'));
+
+                                                              }
+                                                        });
+                                                        }
+
+                                                        var object_id = "#quantity_{{object.id}}";
+
+                                                     $(document).ready(function(){
+                                                         $("#add{{object.id}}").click(function () {
+                                                               var url = "{% url 'order:add-to-cart' object.product.id %}";
+                                                         let variation = {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %}
+                                                             let object_id = "{{ object.id }}";
+                                                             let product_id = "{{ object.product.id }}";
+                                                             var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) + 1;
+                                                             if(window.location.search.substr(1))
+                                                             {
+                                                                 addtocart_using_qr(object_id, product_id,variation, quantity);
+                                                             }
+                                                         else{
+                                                            if (quantity <= 10 && quantity >= 1) {
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
+                                                                },
+                                                                success: function (data) {   // `data` is the return of the `load_cities` view function
+
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);
+                                                                  }
+                                                                  if(data["quantity"] == 10 ){
+                                                                     document.getElementById("max{{object.id}}").style.border = "1px solid red";
+                                                                  };
+
+                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);
+                                                                  $('#get_tax_total').html("₹" + data["get_tax_total"].toLocaleString('en-IN'));
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);
+                                                                  $("#item_bag").html(data["item"]);
+
+                                                                }
+                                                                });
+                                                             }
+                                                         }
+                                                        });
+                                                        
+                                                        $("#less{{object.id}}").click(function () {
+                                                             console.log('works');
+                                                             let variation = {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %}
+                                                             let object_id = "{{ object.id }}";
+                                                             let product_id = "{{ object.product.id }}";
+                                                              var quantity = parseInt(document.getElementById("quantity_{{object.id}}").innerHTML) - 1;  // get the selected country ID from the HTML input
+
+                                                              if(window.location.search.substr(1))
+                                                             {
+                                                                 addtocart_using_qr(object_id, product_id,variation, quantity);
+                                                             }
+                                                              else{
+                                                               var url = "{% url 'order:add-to-cart' object.product.id %}";
+
+                                                            if (quantity <= 10 && quantity >= 0) {
+                                                              $.ajax({                       // initialize an AJAX request
+                                                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                                                data: {
+                                                                  'quantity': quantity,       // add the country id to the GET parameters
+                                                                  'variation': {% if object.variation %}{{object.variation.id}}{% else %} 0 {% endif %},       // add the country id to the GET parameters
+                                                                },
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                  document.getElementById("max{{object.id}}").style.border = "0px solid black";
+                                                                  if(data["quantity"] != null ){
+                                                                  $("#quantity_{{object.id}}").html(data["quantity"]);
+                                                                  $("#get_cart_total_{{object.id}}").html("₹" + data["get_cart_total"]);
+                                                                  }else{
+                                                                  $("#quantity_{{object.id}}").html("0");
+                                                                  $("#get_cart_total_{{object.id}}").html("0");
+                                                                  }
+
+
+                                                                  $("#get_total").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_total_header").html("₹" + data["get_total"].toLocaleString('en-IN'));
+                                                                  $("#get_subtotal").html("₹" + data["get_total_without_coupon"]);
+                                                                  $("#item_bag").html(data["item"]);
+                                                                  $("#get_tax_total").html("₹" + data["get_tax_total"].toLocaleString('en-IN'));
+
+                                                              }
+
+                                                            });
+                                                        }
+                                                              }
+                                                        });
+                                                       });
+                                                </script>
+
+                            {% endfor %}
+<!--                            <tr>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <a href="#"><img src="images/menu/2.jpg" alt="" class="respimg"></a>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="product-name">Cripsy Lobster & Shrimp Bites</h5>-->
+<!--                                </td>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <h5 class="product-title order-money">$22.00</h5>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <input type="number" name="cartin2" value="2" max="50" min="1" class="order-count">-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="order-money">$22.00</h5>-->
+<!--                                </td>-->
+<!--                                <td class="pr-remove">-->
+<!--                                    <a href="#" title="Remove"><i class="fal fa-times"></i></a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <a href="#"><img src="images/menu/3.jpg" alt="" class="respimg"></a>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="product-name">Chicken tortilla soup</h5>-->
+<!--                                </td>-->
+<!--                                <td class="hidden-xs">-->
+<!--                                    <h5 class="product-title order-money">$37.00</h5>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <input type="number" name="cartin3" value="1" max="50" min="1" class="order-count">-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <h5 class="order-money">$37.00</h5>-->
+<!--                                </td>-->
+<!--                                <td class="pr-remove">-->
+<!--                                    <a href="#" title="Remove"><i class="fal fa-times"></i></a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                        </tbody>
+                    </table>
+                    <!-- COUPON -->
+                    <div class="coupon-holder">
+                        <form action="{% url 'order:coupon' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="coupon_code" id="id_code" placeholder="Coupon code">
+                            <button type="submit" class="btn-a">Apply</button>
+                        </form>
+<!--                        <button type="submit" class="pull-right btn-uc">Update Cart</button>-->
+                    </div>
+                    <!-- /COUPON -->
+                </div>
+
+                <div class="col-md-4">
+                    <!-- CART TOTALS  -->
+                    <div class="cart-totals dark-bg fl-wrap">
+                        <h3>Cart totals</h3>
+                        <table class="total-table">
+                            <tbody>
+                                <tr>
+                                    <th>Cart Subtotal:</th>
+                                    <td id="get_subtotal">₹{{ order.get_total_without_coupon }}</td>
+                                </tr>
+                                {% if order.get_coupon_total %}
+                                <tr>
+                                    <th>Coupon Discount:</th>
+                                    <td>₹{{ order.get_coupon_total }}</td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <th>Tax:</th>
+                                    <td id="get_tax_total">₹{{ order.get_tax_total }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td id="get_total" style="font-size: 1.3em;">₹{{ order.get_total }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% if request.user.is_authenticated and not request.GET.urlencode %}
+                        <a href="{% url 'order:checkout' %}"><button type="submit" class="cart-totals_btn color-bg">Proceed to Checkout</button></a>
+                    {% else %}
+                        <a href="{% url 'order:checkout-qr-code' %}"><button type="submit" class="cart-totals_btn color-bg">Place Order</button></a>
+                    {% endif %}
+                    </div>
+                    <!-- /CART TOTALS  -->
+                </div>
+            </div>
+            <!-- /CHECKOUT TABLE -->
+
+        
+        {% endif %}
+        
+        </div>
+        <div class="section-bg">
+            <div class="bg"  data-bg="images/bg/dec/section-bg.png"></div>
+        </div>
+    </section>
+    <!--  section end  -->
+
+    <div class="brush-dec2 brush-dec_bottom"></div>
+</div>
+
+
+           {% if payment %}
+    <form method="post" id="requestForm" name="requestForm" action="{% url 'order:payment-response' %}">
+    <input type="hidden" name="order" value="{{ order.id }}">
+    <button type="submit" id="requestButton" form="requestForm"></button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"
+    data-key="{{ key }}"
+    data-amount="{{ order.get_total }}"
+    data-currency="INR"
+    data-order_id="{{payment.id}}"
+    data-name="Golden Nest"
+    data-image="{% static 'home/images/logo/logo.png' %}"
+    data-prefill.name="{{ order.user.name }}"
+    data-prefill.email="{{ order.user.email }}"
+    data-prefill.contact = "{{ order.user.phone_number }}"
+    data-theme.color="#F37254">
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+    </form>
+    <script>
+    $(document).ready(function() {
+     let form = $('#requestForm');
+     form.submit();
+    });
+
+    </script>
+    {% endif %}
+
+{% endblock content %}

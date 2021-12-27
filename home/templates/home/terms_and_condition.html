@@ -1,0 +1,48 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+
+ <div class="content">
+     <section class="parallax-section hero-section hidden-section" data-scrollax-parent="true">
+                    <div class="bg par-elem " data-bg="{% static 'home/images/bg/10.jpg' %}" data-scrollax="properties: { translateY: '30%' }"></div>
+                    <div class="overlay"></div>
+                    <div class="container">
+                        <div class="section-title">
+<!--                            <h4>Enjoy your time in our restaurant with pleasure.</h4>-->
+                            {% if page == "terms-and-condition" %}
+                            <h2 class="section-title">Terms And Condition</h2>
+                            {% elif page == "privacy-policy" %}
+                            <h2 class="section-title">Privacy Policy</h2>
+                            {% elif page == "shiping-policy" %}
+                            <h2 class="section-title">Shipping Policy</h2>
+                            {% elif page == "refund-policy" %}
+                            <h2 class="section-title">Refund Policy</h2>
+                            {% elif page == "return-policy" %}
+                            <h2 class="section-title">Return Policy</h2>
+                            {% elif page == "cancellation-policy" %}
+                            <h2 class="section-title">Cancellation Policy</h2>
+                            {% endif %}
+                            <div class="dots-separator fl-wrap"><span></span></div>
+                        </div>
+                    </div>
+                    <div class="hero-section-scroll">
+                        <div class="mousey">
+                            <div class="scroller"></div>
+                        </div>
+                    </div>
+                    <div class="brush-dec"></div>
+                </section>
+                <!--  section  end-->
+                <!--  section  -->
+                <section class="hidden-section big-padding" data-scrollax-parent="true">
+                    <div class="container">
+                        <div class="section-title text-align_left">
+                        {{tpp|safe}}
+                        </div>
+                    </div>
+                </section>
+
+ </div>
+
+
+{% endblock %}

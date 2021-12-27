@@ -1,0 +1,81 @@
+{% extends "analytics/base.html" %}
+
+{% block nav-menu %}style="color: #FFB319;"{% endblock %}
+
+{% block data %}
+
+
+<div class="row">
+
+<!--    <div class="col-12 mb-4">-->
+<!--        <p align="right"><a class="btn btn-primary ml-auto text-white">+ Add Menu Item</a></p>-->
+<!--    </div>-->
+
+
+    {% for object in object_list %}
+    <div class="col-lg-6 mb-4">
+        <div class="bg-white p-3" style="border-radius: 0.5em;">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">{{object.title}}</h6>
+                </div>
+                <div class="col-10">
+                    <p style="font-weight: 600;">₹{{object.price}}</p>
+                </div>
+                <div class="col-2">
+                    <div style="display: flex">
+                        <a href="{% url 'analytics:menu-update' object.id %}" class="text-primary" style="font-size: 0.8em;"><i class="fa fa-edit"></i></a>
+                        <a data-toggle="modal" data-target="#modalElement{{object.id}}" class="text-danger pl-2" style="font-size: 0.8em;"><i class="fa fa-trash-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalElement{{object.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" >
+            <div class="modal-content" style="background:rgba(12, 12, 12, 0.2)">
+                <div class="modal-body p-5">
+                    <p align="right"><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button></p>
+                    <form method="POST" class="row" enctype="multipart/form-data" action="{% url 'analytics:menu-delete' object.id  %}">
+                        {% csrf_token %}
+                        <h3 class="mb-4 pb-3 p-3" style=" color: #fff; font-weight: bold;">Are you sure, you want to delete the menu item ?</h3>
+                        <div class="col-12">
+                            <button class="btn btn-danger" type="submit" style="width: 100%;">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a class="btn btn-outline-info mb-4" href="?page={{num}}">{{num}}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
+    {% endif %}
+
+{% endif %}
+
+
+
+{% endblock data %}

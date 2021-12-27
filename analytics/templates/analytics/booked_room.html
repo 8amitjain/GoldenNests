@@ -1,0 +1,324 @@
+{% extends "analytics/base.html" %}
+
+
+{% block data %}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+	#contact-table {
+		background: #fff;
+	}
+
+    .rounded-circle {
+		width: 26px;
+		height: 26px;
+		padding: 2px;
+		text-align: center;
+		font-size: 12px;
+	}
+
+	.card {
+		display: block;
+		padding: 1em;
+        padding-top: 0;
+        font-family: 'Open Sans', sans-serif;
+	}
+
+    .card-body {
+        padding: 1em 0 0 0;
+        margin: 0;
+    }
+
+    .th-head {
+        border: none !important; 
+        font-weight: 600; 
+        text-transform: uppercase;
+        font-size: 0.9em;
+        vertical-align: top !important;
+    }
+
+    table td, table td * {
+        vertical-align: top !important;
+    }
+
+</style>
+{% if messages %}
+    {% for msg in messages %}
+
+        <div class="alert alert-{{ msg.tags }}" role="alert">
+            {{ msg }}
+        </div>
+    {% endfor %}
+    {% endif %}
+<!--<h3 style="border-radius: 0.5em; border-color: #fff;" class="card mb-4  px-4 py-3 container font-weight-bold text-primary">-->
+<!--    {% if '/not/' in request.get_full_path %}-->
+<!--    All Unconfirmed Room Bookings :-->
+<!--    {% else %}-->
+<!--    All Booked Rooms :-->
+<!--    {% endif %}-->
+<!--</h3>-->
+
+{% for object in object_list %}
+
+{% if object.is_booked_offline %}
+
+<div style="border-radius: 0.5em; border-color: #343A40;" class="bg-dark card mb-4  pb-1 container">
+    <div class="bg-dark border-white card-header d-block row">
+        <div class="pt-0 py-2">
+            <a href="{% url 'analytics:room-detail' object.pk %}" style="font-weight: 700; color:rgb(255, 255, 255); " class="float-left">{{object.room_type.name}} &nbsp; <i class="fas fa-external-link-alt"></i></a>
+            <div align="right">
+                {% if '/not/' in request.get_full_path %}
+                <p style="color:rgb(248, 228, 45)" class="font-weight-bold">
+                    <a style="margin: -1em 0; padding: 0.5em 1.8em;  font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:confirm-room-booking' object.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Confirm</a>
+                </p>
+                {% else %}
+                <p style="color:rgb(248, 228, 45)" class="font-weight-bold">
+                    &nbsp;
+                </p>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-dark card-body row pt-4">  
+
+        <div class="bg-dark text-white col-lg-5 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">User</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">
+                        {{object.user}}
+                    </p>                        
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-dark text-white col-lg-4 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Name</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">
+                        {{object.user.name}}
+                    </p>                        
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-dark text-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Phone Number</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">
+                        {{object.user.phone_number|safe}}
+                    </p>                        
+                </div>
+                
+            </div>
+        </div>
+        
+
+        <div class="bg-dark text-white col-lg-5 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Booked For</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">
+                        {% if object.no_of_days == 1 %}
+                            {{object.no_of_days}} Day
+                        {% else %}
+                            {{object.no_of_days}} Days
+                        {% endif %}
+                    </p>                        
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-dark text-white col-lg-4 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Check In - Out</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;"><span style="color: rgb(77, 255, 106);">{{object.check_in}}</span> - <span style="color: rgb(255, 221, 71);">{{object.check_out}}</span></p>                   
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bg-dark text-white col-lg-3 col-md-6 mb-3">
+            <div class="bg-dark text-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Room Amount</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">₹{{object.get_total}}</p>                   
+                </div>
+                
+            </div>
+        </div>
+
+        
+        </div>
+    </div>
+
+
+{% else %}
+
+<div style="border-radius: 0.5em; border-color: #fff;" class="card mb-4  pb-1 container">
+    <div class="bg-white card-header d-block ">
+        <div class="pt-0 py-2 row">
+            <a class="col-lg-6 col-12 p-3 py-lg-0 px-0 float-left" href="{% url 'analytics:room-detail' object.pk %}" style="font-weight: 700; color: rgb(52, 100, 255); line-height: 2.5em;" >{{object.room_type.name}} &nbsp; <i class="fas fa-external-link-alt"></i></a>
+            <div style="margin-left: 0 !important; padding-left: 0 !important; margin-right: 0 !important; padding-right: 0 !important;" class="col-lg-6 col-12 p-3 p-lg-0 px-0">
+                {% if '/not/' in request.get_full_path %}
+                <p style="color:rgb(248, 228, 45);" class="font-weight-bold d-flex">
+                    
+                    <a style="padding: 0.5em 1.5em;  font-weight:600;" class="font-weight-bold btn {% if object.seen %}btn-success {% else %} btn-outline-primary {% endif %}" href="{% url 'analytics:room-seen-update' object.pk %}">
+                        {% if object.seen %}
+                        <i class="fas fa-check"></i>&nbsp;&nbsp;Seen 
+                        {% else %}
+                        <i class="fas fa-eye"></i>&nbsp;&nbsp;View
+                        {% endif %}
+                    </a>
+    
+                    <a style="margin-left:0.5em; padding: 0.5em 1.5em;  font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:confirm-room-booking' object.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Confirm</a>
+                    <a style=" margin-left:0.5em; padding: 0.5em 1.5em; font-weight:600;" class="btn btn-outline-danger" href="{% url 'analytics:reject-room-booking' object.pk %}"><i class="fas fa-times-circle"></i>&nbsp;&nbsp;Cancel</a>
+                </p>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body row pt-4">  
+
+
+
+        <div class="{% if '/not/' in request.get_full_path %}col-lg-4{% else %}col-lg-2{% endif %} col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Booked For</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">
+                        {% if object.no_of_days == 1 %}
+                            {{object.no_of_days}} Day
+                        {% else %}
+                            {{object.no_of_days}} Days
+                        {% endif %}
+                    </p>                        
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="{% if '/not/' in request.get_full_path %}col-lg-5{% else %}col-lg-4{% endif %} col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Check In - Out</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;"><span style="color: rgb(5, 182, 34);">{{object.check_in}}</span> - <span style="color: rgb(223, 72, 2);">{{object.check_out}}</span></p>                   
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+                <div class="row mb-2">
+                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Room Amount</h6>                        
+                </div>
+                <div class="row">
+                    <p style="font-weight: 700;">₹ {{object.get_total}}</p>                   
+                </div>
+                
+            </div>
+        </div>
+
+
+{% if not '/not/' in request.get_full_path %}
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="bg-white p-3" style="border-radius: 0.5em;">
+<!--                <div class="row mb-2">-->
+<!--                    <h6 class="font-weight-bold" style="text-transform: capitalize;font-size: 0.9em;">Status</h6>-->
+<!--                </div>-->
+                <div class="row">
+                    {% if object.is_checked_out %}
+                    <a style="font-weight:600;" class="btn btn-success"><i class="fas fa-check"></i>&nbsp;&nbsp;Checked Out</a>
+                    <!-- <p style="color:rgb(226, 204, 0)" class="font-weight-bold">
+                        Checked Out
+                    </p> -->
+                    {% else %}
+                        <a style="font-weight:600;" class="btn btn-outline-success" href="{% url 'analytics:room-checkout-done' object.pk %}"><i class="fas fa-check-circle"></i>&nbsp;&nbsp;Checkout</a>
+
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+ {% endif %}
+
+        
+        </div>
+
+
+
+
+    </div>
+
+{% endif %}
+
+{% endfor %}
+
+
+
+
+<div class="d-flex justify-content-center m-4">
+    {% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+    <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center"
+        href="?page=1">&lt;&lt;</a>
+    <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center"
+        href="?page={{page_obj.previous_page_number}}">&lt;</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+    <a class="btn btn-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center"
+        href="?page={{num}}">{{num}}</a>
+    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
+        class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center"
+        href="?page={{num}}">{{num}}</a>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center"
+            href="?page={{page_obj.next_page_number}}">&gt;</a>
+        <a class="btn btn-outline-info m-1 mb-4 rounded-circle d-flex justify-content-center align-items-center"
+            href="?page={{page_obj.paginator.num_pages}}">&gt;&gt;</a>
+        {% endif %}
+
+        {% endif %}
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+
+{% endblock data %}
