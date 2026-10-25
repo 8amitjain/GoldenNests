@@ -4,7 +4,7 @@ from .local_settings import *
 import os
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-SECRET_KEY = '!wzd+ws1+apy$n6bby-2s)==s@aj6-xf-(a1&f3a%vt)fhl&bb'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-not-secret')
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
@@ -102,10 +102,10 @@ WSGI_APPLICATION = 'golden_nest.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "hsogiawj_GoldenNest",
-        "USER": "hsogiawj_GN_U",
+        "NAME": os.environ.get("DB_NAME", ""),
+        "USER": os.environ.get("DB_USER", ""),
         "PASSWORD": DB_PASS,
-        "HOST": "localhost",
+        "HOST": os.environ.get("DB_HOST", ""),
         "PORT": "3306",
     }
 }
@@ -167,7 +167,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = Email
 EMAIL_HOST_PASSWORD = Email_Pass
 
-RAZORPAY_KEY_ID = 'rzp_test_aIsPYcT8BKwf6A'
-RAZORPAY_KEY_SECRET = 'GmGYX5DTsqd6JCCokA2VcrgY'
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', '')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', '')
 
 FAST_SMS_API = 'UcHqYglQVhfF37nmeZxs0uOXGSDJ2dEKoMAwT69tWBzRyvpC4iRmbtlX5zwvKJ0UYianhP3s87eExDg2'

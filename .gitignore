@@ -1,1 +1,8 @@
 *.patch
+# secrets and data dumps stay out of the repo
+.env
+golden_nest/rzp.csv
+*.sqlite3
+db.json
+updated_db.json
+db.update
